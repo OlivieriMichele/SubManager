@@ -5,7 +5,7 @@ import androidx.compose.ui.graphics.Color
 // Colori di base (Dark Mode)
 object DarkColors {
     val background = Color(0xFF09090B)      // zinc-950
-    val surface = Color(0xFF18181B)         // zinc-900
+    val surface = Color(0xFF1E1E21)         // zinc-900
     val surfaceAlpha = Color(0xCC18181B)    // zinc-900/80 (glassmorphism)
     val border = Color(0xFF27272A)          // zinc-800
     val textPrimary = Color.White

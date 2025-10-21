@@ -29,7 +29,6 @@ fun CategoriesButton(onClick: () -> Unit) {
             .fillMaxWidth()
             .padding(bottom = 24.dp)
             .background(MaterialTheme.colorScheme.surface, RoundedCornerShape(16.dp))
-            .border(1.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(16.dp))
             .clickable(
                 interactionSource = interactionSource,
                 indication = null,

@@ -16,6 +16,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.TrendingUp
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -30,8 +31,7 @@ import com.example.submanager.ui.theme.AccentColors
 @Composable
 fun MainCard(totalMonthly: Double, totalYearly: Double, isDark: Boolean) {
     // Logica custom per il gradiente
-    val brush = if (isDark) Brush.linearGradient(listOf(AccentColors.mainGradientStart, AccentColors.mainGradientEnd))
-    else Brush.linearGradient(listOf(AccentColors.mainGradientLightStart, AccentColors.mainGradientLightEnd))
+    val brush = Brush.linearGradient(listOf(MaterialTheme.colorScheme.primary, MaterialTheme.colorScheme.secondary))
 
     Box(
         modifier = Modifier

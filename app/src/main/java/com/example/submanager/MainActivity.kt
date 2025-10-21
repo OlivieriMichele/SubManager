@@ -19,7 +19,7 @@ class MainActivity : ComponentActivity() {
             val isDark = viewModel.isDark.value
             val navController = rememberNavController()
 
-            SubManagerTheme(darkTheme = isDark) {
+            SubManagerTheme(darkTheme = isDark, dynamicColor = false) {
                 SubNavigation(navController, viewModel)
             }
         }

@@ -33,7 +33,6 @@ fun StatsCards(
             .fillMaxWidth()
             .padding(bottom = 24.dp)
             .background(MaterialTheme.colorScheme.surface, RoundedCornerShape(16.dp))
-            .border(1.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(16.dp))
             .padding(vertical = 20.dp),
         horizontalArrangement = Arrangement.SpaceEvenly
     ) {
