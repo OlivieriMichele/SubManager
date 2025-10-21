@@ -43,7 +43,6 @@ fun HomeScreen(
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
     ) {
-        // Status Bar (Placeholder per l'effetto iOS)
         StatusBarPlaceholder()
 
         LazyColumn(
@@ -121,5 +120,6 @@ private fun StatusBarPlaceholder() {
             .fillMaxWidth()
             .height(30.dp) // Altezza della Status Bar
             .background(MaterialTheme.colorScheme.background)
+
     )
 }

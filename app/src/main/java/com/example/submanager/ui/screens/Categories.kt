@@ -27,7 +27,7 @@ import com.example.submanager.model.Category
 @Composable
 fun CategoriesScreen(
     categories: List<Category>,
-    isDark: Boolean, // Mantenuto solo per la logica del gradiente personalizzato
+    isDark: Boolean, // logica del gradiente personalizzato
     onNavigateBack: () -> Unit,
     onCategoryClick: (String) -> Unit
 ) {
@@ -106,8 +106,6 @@ fun CategoriesScreen(
 
 @Composable
 private fun CategoryItem(category: Category, onClick: () -> Unit) {
-
-    // logica isDark/isSystemInDarkTheme per i colori custom del gradiente
     val gradientColors = if (isSystemInDarkTheme()) {
         listOf(category.darkGradientStart, category.darkGradientEnd)
     } else {
@@ -122,7 +120,7 @@ private fun CategoryItem(category: Category, onClick: () -> Unit) {
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = LocalIndication.current, // Explicitly pass the indication
-                onClick = { /* ... */ }
+                onClick = onClick
             )
             .padding(16.dp),
         verticalAlignment = Alignment.CenterVertically
