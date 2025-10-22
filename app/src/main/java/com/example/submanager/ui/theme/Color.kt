@@ -5,8 +5,8 @@ import androidx.compose.ui.graphics.Color
 // Colori di base (Dark Mode)
 object DarkColors {
     val background = Color(0xFF09090B)      // zinc-950
-    val surface = Color(0xFF1E1E21)         // zinc-900
-    val surfaceAlpha = Color(0xCC18181B)    // zinc-900/80 (glassmorphism)
+    val surface = Color(0xCC18181B)         // zinc-900
+    val surfaceAlpha = Color(0xFF1F1F21)    // zinc-900/80 (glassmorphism)
     val border = Color(0xFF27272A)          // zinc-800
     val textPrimary = Color.White
     val textSecondary = Color(0xFF71717A)   // gray-500
@@ -46,10 +46,10 @@ object AccentColors {
     val darkPink = Color(0xFFF9A8D4) // pink-300
 
     // Colori per le icone (Subscription Card)
-    val pastelPurple = Color(0xFFC8B6E2) // Netflix
-    val pastelBlue = Color(0xFFB8C9E8) // Spotify
-    val pastelIndigo = Color(0xFFD4C5F9) // Adobe CC
-    val pastelPink = Color(0xFFA8B5E6) // Amazon Prime
-    val pastelYellow = Color(0xFFC8B6E2) // GitHub Pro
-    val pastelGreen = Color(0xFFB8C9E8) // Planet Fitness
+    val pastelPurple = Color(0xFFAF88D5)// Netflix
+    val pastelBlue = Color(0xFFA5C4FF)// Spotify
+    val pastelIndigo = Color(0xFFC9BEE8)// Adobe CC
+    val pastelPink = Color(0xFFC29BB0)// Amazon Prime
+    val pastelYellow = Color(0xFFB4BE9F)// GitHub Pro
+    val pastelGreen = Color(0xFF338057) // Planet Fitness
 }
