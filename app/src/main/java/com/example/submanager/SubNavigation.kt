@@ -5,10 +5,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -18,6 +15,8 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.example.submanager.ui.screens.subscription.AddSubscriptionScreen
+import com.example.submanager.ui.screens.subscription.ViewSubscriptionScreen
 import com.example.submanager.ui.screens.CategoriesScreen
 import com.example.submanager.ui.screens.CategoryDetailScreen
 import com.example.submanager.ui.screens.HomeScreen
@@ -37,80 +36,76 @@ sealed class Screen(val route: String) {
 
 @Composable
 fun SubNavigation(navController: NavHostController, viewModel: SubViewModel) {
-
-    Scaffold (
-        containerColor = MaterialTheme.colorScheme.background,
-        floatingActionButton = {
-            // Mostra FAB solo in Home e Categories
-            val currentRoute = navController.currentBackStackEntry?.destination?.route
-            if (currentRoute == Screen.Home.route || currentRoute == Screen.Categories.route) {
-                FloatingActionButton(
-                    onClick = { navController.navigate(Screen.AddSubscription.route) },
-                    shape = CircleShape,
-                    containerColor = Color.Transparent,
-                    modifier = Modifier.background(
-                        brush = Brush.linearGradient(
-                            colors = listOf(
-                                Color(0xFF3B82F6),
-                                Color(0xFF8B5CF6)
-                            )
-                        ),
-                        shape = CircleShape
-                    )
-                ) {
-                    Icon(
-                        Icons.Default.Add,
-                        contentDescription = "Aggiungi abbonamento",
-                        tint = Color.White
-                    )
+    NavHost(
+        navController = navController,
+        startDestination = Screen.Home.route
+    ) {
+        composable(Screen.Home.route) {
+            HomeScreen(
+                subscriptions = viewModel.subscriptions.value,
+                totalMonthly = viewModel.getTotalMonthly(),
+                categoriesCount = viewModel.categoriesState.value.filter { it.count > 0 }.size,
+                isDark = viewModel.isDark.value,
+                onNavigateToCategories = {
+                    navController.navigate(Screen.Categories.route)
+                },
+                onToggleDarkMode = viewModel::toggleDarkMode,
+                onSubscriptionClick = { subscriptionId ->
+                    navController.navigate(Screen.ViewSubscription.createRoute(subscriptionId))
                 }
-            }
+            )
         }
-    ){  paddingValue ->
-        NavHost(
-            navController = navController,
-            startDestination = Screen.Home.route,
-            modifier = Modifier.padding(paddingValue)
-        ) {
-            composable(Screen.Home.route) {
-                HomeScreen(
-                    subscriptions = viewModel.subscriptions.value,
-                    totalMonthly = viewModel.getTotalMonthly(),
-                    categoriesCount = viewModel.categoriesState.value.filter { it.count > 0 }.size,
-                    isDark = viewModel.isDark.value,
-                    onNavigateToCategories = {
-                        navController.navigate(Screen.Categories.route)
-                    },
-                    onToggleDarkMode = viewModel::toggleDarkMode
-                )
-            }
 
-            composable(Screen.Categories.route) {
-                CategoriesScreen(
-                    categories = viewModel.categoriesState.value,
+        composable(Screen.Categories.route) {
+            CategoriesScreen(
+                categories = viewModel.categoriesState.value,
+                isDark = viewModel.isDark.value,
+                onNavigateBack = { navController.popBackStack() },
+                onCategoryClick = { categoryName ->
+                    navController.navigate(Screen.CategoryDetail.createRoute(categoryName))
+                }
+            )
+        }
+
+        composable(
+            route = Screen.CategoryDetail.route,
+            arguments = listOf(navArgument("categoryName") { type = NavType.StringType })
+        ) { backStackEntry ->
+            val categoryName = backStackEntry.arguments?.getString("categoryName")
+            if (categoryName != null) {
+                CategoryDetailScreen(
+                    categoryName = categoryName,
                     isDark = viewModel.isDark.value,
                     onNavigateBack = { navController.popBackStack() },
-                    onCategoryClick = { categoryName ->
-                        navController.navigate(Screen.CategoryDetail.createRoute(categoryName))
-                    }
+                    getCategoryDetails = viewModel::getCategoryDetails,
+                    getCategorySubscriptions = viewModel::getCategorySubscriptions
                 )
             }
+        }
 
-            composable(
-                route = Screen.CategoryDetail.route,
-                arguments = listOf(navArgument("categoryName") { type = NavType.StringType })
-            ) { backStackEntry ->
-                val categoryName = backStackEntry.arguments?.getString("categoryName")
-                if (categoryName != null) {
-                    CategoryDetailScreen(
-                        categoryName = categoryName,
-                        isDark = viewModel.isDark.value,
-                        onNavigateBack = { navController.popBackStack() },
-                        getCategoryDetails = viewModel::getCategoryDetails,
-                        getCategorySubscriptions = viewModel::getCategorySubscriptions
-                    )
+        composable(Screen.AddSubscription.route) {
+            AddSubscriptionScreen(
+                viewModel = viewModel,
+                onNavigateBack = { navController.popBackStack() },
+                onSubscriptionAdded = {
+                    navController.popBackStack()
                 }
-            }
+            )
+        }
+
+        composable(
+            route = Screen.ViewSubscription.route,
+            arguments = listOf(navArgument("subscriptionId") { type = NavType.IntType })
+        ) { backStackEntry ->
+            val subscriptionId = backStackEntry.arguments?.getInt("subscriptionId") ?: 0
+            ViewSubscriptionScreen(
+                viewModel = viewModel,
+                subscriptionId = subscriptionId,
+                onNavigateBack = { navController.popBackStack() },
+                onSubscriptionDeleted = {
+                    navController.popBackStack()
+                }
+            )
         }
     }
 }

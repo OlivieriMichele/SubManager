@@ -36,7 +36,8 @@ fun HomeScreen(
     categoriesCount: Int,
     isDark: Boolean,
     onNavigateToCategories: () -> Unit,
-    onToggleDarkMode: () -> Unit
+    onToggleDarkMode: () -> Unit,
+    onSubscriptionClick: (Int) -> Unit = {}
 ) {
     Column(
         modifier = Modifier
@@ -102,7 +103,10 @@ fun HomeScreen(
 
             // Subscriptions List
             items(subscriptions) { sub ->
-                SubscriptionItem(subscription = sub)
+                SubscriptionItem(
+                    subscription = sub,
+                    onClick = { onSubscriptionClick(sub.id) } // AGGIUNTO
+                )
                 Spacer(modifier = Modifier.height(12.dp))
             }
 
