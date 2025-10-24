@@ -1,25 +1,16 @@
 package com.example.submanager
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.example.submanager.ui.screens.subscription.AddSubscriptionScreen
-import com.example.submanager.ui.screens.subscription.ViewSubscriptionScreen
 import com.example.submanager.ui.screens.CategoriesScreen
 import com.example.submanager.ui.screens.CategoryDetailScreen
 import com.example.submanager.ui.screens.HomeScreen
+import com.example.submanager.ui.screens.subscription.AddSubscriptionScreen
+import com.example.submanager.ui.screens.subscription.ViewSubscriptionScreen
 import com.example.submanager.viewModel.SubViewModel
 
 sealed class Screen(val route: String) {

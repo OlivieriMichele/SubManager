@@ -56,6 +56,7 @@ fun SubscriptionFormScreen(
     var showCategoryDropdown by remember { mutableStateOf(false) }
     var isEditing by remember { mutableStateOf(mode != FormMode.VIEW) }
 
+    // To-Do: questo è solo per i test, implementa una funzione che prenda le vere categories
     val categories = listOf("Intrattenimento", "Software", "Fitness", "Shopping")
 
     val screenTitle = when (mode) {
@@ -82,15 +83,7 @@ fun SubscriptionFormScreen(
                     containerColor = Color.Transparent,
                     modifier = Modifier
                         .size(56.dp)
-                        .background(
-                            brush = Brush.linearGradient(
-                                colors = listOf(
-                                    Color(0xFF3B82F6),
-                                    Color(0xFF8B5CF6)
-                                )
-                            ),
-                            shape = CircleShape
-                        )
+                        .background(MaterialTheme.colorScheme.primary, shape = CircleShape)
                 ) {
                     Icon(
                         Icons.Default.Edit,
@@ -116,15 +109,7 @@ fun SubscriptionFormScreen(
                     containerColor = Color.Transparent,
                     modifier = Modifier
                         .size(56.dp)
-                        .background(
-                            brush = Brush.linearGradient(
-                                colors = listOf(
-                                    Color(0xFF3B82F6),
-                                    Color(0xFF8B5CF6)
-                                )
-                            ),
-                            shape = CircleShape
-                        )
+                        .background(MaterialTheme.colorScheme.primary, shape = CircleShape)
                 ) {
                     Icon(
                         Icons.Default.Check,
@@ -190,64 +175,6 @@ fun SubscriptionFormScreen(
             )
 
             Spacer(modifier = Modifier.height(32.dp))
-
-            if (isEditing) {
-                Button(
-                    onClick = {
-                        val newSubscription = Subscription(
-                            id = subscription?.id ?: (0..10000).random(),
-                            name = serviceName,
-                            price = price.toDoubleOrNull() ?: 0.0,
-                            color = selectedColor,
-                            nextBilling = renewalDate,
-                            category = selectedCategory
-                        )
-                        onSave(newSubscription)
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(56.dp),
-                    shape = RoundedCornerShape(16.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = Color.Transparent
-                    ),
-                    contentPadding = PaddingValues(0.dp)
-                ) {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .background(
-                                brush = Brush.linearGradient(
-                                    colors = listOf(
-                                        Color(0xFF3B82F6),
-                                        Color(0xFF8B5CF6)
-                                    )
-                                ),
-                                shape = RoundedCornerShape(16.dp)
-                            ),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Row(
-                            horizontalArrangement = Arrangement.spacedBy(8.dp),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Icon(
-                                Icons.Default.Save,
-                                contentDescription = null,
-                                tint = Color.White
-                            )
-                            Text(
-                                text = if (mode == FormMode.CREATE) "Crea Abbonamento" else "Salva Modifiche",
-                                color = Color.White,
-                                fontSize = 16.sp,
-                                fontWeight = FontWeight.Medium
-                            )
-                        }
-                    }
-                }
-            }
-
-            Spacer(modifier = Modifier.height(100.dp))
         }
     }
 }
