@@ -36,7 +36,6 @@ import com.example.submanager.ui.screens.categoryDetail.InfoCard
 @Composable
 fun CategoryDetailScreen(
     categoryName: String,
-    isDark: Boolean,
     onNavigateBack: () -> Unit,
     getCategoryDetails: (String) -> Category?, // Funzione di logica passata come callback
     getCategorySubscriptions: (String) -> List<Subscription> // Funzione di logica passata come callback
@@ -74,7 +73,7 @@ fun CategoryDetailScreen(
                 modifier = Modifier
                     .size(40.dp)
                     .background(MaterialTheme.colorScheme.surface, RoundedCornerShape(20.dp))
-                    .border(1.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(20.dp))
+                    .border(1.dp, MaterialTheme.colorScheme.outlineVariant, RoundedCornerShape(20.dp))
             ) {
                 Icon(
                     imageVector = Icons.Default.ArrowBack,

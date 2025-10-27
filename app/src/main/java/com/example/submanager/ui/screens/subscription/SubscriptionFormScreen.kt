@@ -19,6 +19,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -62,9 +63,35 @@ fun SubscriptionFormScreen(
         mutableStateOf(subscription?.color ?: SubscriptionColors.availableColors.first())
     }
     var showCategoryDropdown by remember { mutableStateOf(false) }
-    var isEditing by remember { mutableStateOf(mode != FormMode.VIEW) }
 
-    // To-Do: questo è solo per i test, implementa una funzione che prenda le vere categories
+    // Usa lo stato dal ViewModel invece di locale
+    val isEditing = if (mode == FormMode.VIEW) {
+        viewModel.isEditingState.value
+    } else {
+        true // Sempre in editing per CREATE e EDIT
+    }
+
+    val saveTrigger by viewModel.saveTrigger
+
+    LaunchedEffect(saveTrigger) {
+        if (saveTrigger > 0 && isEditing) {
+            val newSubscription = Subscription(
+                id = subscription?.id ?: (0..10000).random(),
+                name = serviceName,
+                price = price.toDoubleOrNull() ?: 0.0,
+                color = selectedColor,
+                nextBilling = renewalDate,
+                category = selectedCategory
+            )
+            onSave(newSubscription)
+
+            // Dopo il salvataggio, esci dalla modalità editing
+            if (mode == FormMode.VIEW) {
+                viewModel.resetEditingMode()
+            }
+        }
+    }
+
     val categories = listOf("Intrattenimento", "Software", "Fitness", "Shopping")
 
     val screenTitle = when (mode) {
@@ -82,51 +109,6 @@ fun SubscriptionFormScreen(
                 onNavigateBack = onNavigateBack,
                 onDelete = onDelete
             )
-        },
-        floatingActionButton = {
-            if (mode == FormMode.VIEW && !isEditing) {
-                FloatingActionButton(
-                    onClick = { isEditing = true },
-                    shape = CircleShape,
-                    containerColor = Color.Transparent,
-                    modifier = Modifier
-                        .size(56.dp)
-                        .background(MaterialTheme.colorScheme.primary, shape = CircleShape)
-                ) {
-                    Icon(
-                        Icons.Default.Edit,
-                        contentDescription = "Modifica",
-                        tint = Color.White,
-                        modifier = Modifier.size(24.dp)
-                    )
-                }
-            } else if (isEditing) {
-                FloatingActionButton(
-                    onClick = {
-                        val newSubscription = Subscription(
-                            id = subscription?.id ?: (0..10000).random(),
-                            name = serviceName,
-                            price = price.toDoubleOrNull() ?: 0.0,
-                            color = selectedColor,
-                            nextBilling = renewalDate,
-                            category = selectedCategory
-                        )
-                        onSave(newSubscription)
-                    },
-                    shape = CircleShape,
-                    containerColor = Color.Transparent,
-                    modifier = Modifier
-                        .size(56.dp)
-                        .background(MaterialTheme.colorScheme.primary, shape = CircleShape)
-                ) {
-                    Icon(
-                        Icons.Default.Check,
-                        contentDescription = "Salva",
-                        tint = Color.White,
-                        modifier = Modifier.size(28.dp)
-                    )
-                }
-            }
         }
     ) { paddingValues ->
         Column(

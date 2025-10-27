@@ -29,7 +29,7 @@ import androidx.compose.ui.unit.sp
 import com.example.submanager.ui.theme.AccentColors
 
 @Composable
-fun MainCard(totalMonthly: Double, totalYearly: Double, isDark: Boolean) {
+fun MainCard(totalMonthly: Double, totalYearly: Double) {
     // Logica custom per il gradiente
     val brush = Brush.linearGradient(listOf(MaterialTheme.colorScheme.primary, MaterialTheme.colorScheme.secondary))
 

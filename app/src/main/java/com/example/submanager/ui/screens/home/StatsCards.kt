@@ -25,8 +25,7 @@ import androidx.compose.ui.unit.sp
 fun StatsCards(
     subscriptionCount: Int,
     expiringCount: Int,
-    categoriesCount: Int,
-    isDark: Boolean
+    categoriesCount: Int
 ) {
     Row(
         modifier = Modifier
@@ -39,20 +38,19 @@ fun StatsCards(
         StatItem(
             value = subscriptionCount,
             label = "Attivi",
-            color = if (isDark) Color(0xFF60A5FA) else Color(0xFF3B82F6)
+            color = Color(0xFF60A5FA)
         )
         // Separator
         Divider(
             modifier = Modifier
                 .height(40.dp)
                 .width(1.dp),
-            // CORRETTO: outline per separatori
             color = MaterialTheme.colorScheme.outline
         )
         StatItem(
             value = expiringCount,
             label = "In scadenza",
-            color = if (isDark) Color(0xFFC084FC) else Color(0xFF9333EA)
+            color = Color(0xFF818CF8)
         )
         // Separator
         Divider(
@@ -64,7 +62,7 @@ fun StatsCards(
         StatItem(
             value = categoriesCount,
             label = "Categorie",
-            color = if (isDark) Color(0xFF818CF8) else Color(0xFF6366F1)
+            color = Color(0xFFC084FC)
         )
     }
 }

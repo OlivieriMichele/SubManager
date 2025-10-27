@@ -27,7 +27,7 @@ fun InfoCard(categoryData: Category, subCount: Int) {
             .fillMaxWidth()
             .padding(top = 24.dp)
             .background(MaterialTheme.colorScheme.surface, RoundedCornerShape(16.dp))
-            .border(1.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(16.dp))
+            .border(1.dp, MaterialTheme.colorScheme.outlineVariant, RoundedCornerShape(16.dp))
             .padding(20.dp)
     ) {
         Text(

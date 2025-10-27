@@ -27,7 +27,6 @@ import com.example.submanager.model.Category
 @Composable
 fun CategoriesScreen(
     categories: List<Category>,
-    isDark: Boolean, // logica del gradiente personalizzato
     onNavigateBack: () -> Unit,
     onCategoryClick: (String) -> Unit
 ) {
@@ -57,7 +56,7 @@ fun CategoriesScreen(
                 modifier = Modifier
                     .size(40.dp)
                     .background(MaterialTheme.colorScheme.surface, RoundedCornerShape(20.dp))
-                    .border(1.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(20.dp))
+                    .border(1.dp, MaterialTheme.colorScheme.outlineVariant, RoundedCornerShape(20.dp))
             ) {
                 Icon(
                     imageVector = Icons.Default.ArrowBack,
@@ -116,7 +115,7 @@ private fun CategoryItem(category: Category, onClick: () -> Unit) {
         modifier = Modifier
             .fillMaxWidth()
             .background(MaterialTheme.colorScheme.surface, RoundedCornerShape(16.dp))
-            .border(1.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(16.dp))
+            .border(1.dp, MaterialTheme.colorScheme.outlineVariant, RoundedCornerShape(16.dp))
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = LocalIndication.current, // Explicitly pass the indication
@@ -188,7 +187,7 @@ private fun SummaryCard() {
             .fillMaxWidth()
             .padding(top = 24.dp)
             .background(MaterialTheme.colorScheme.surface, RoundedCornerShape(16.dp))
-            .border(1.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(16.dp))
+            .border(1.dp, MaterialTheme.colorScheme.outlineVariant, RoundedCornerShape(16.dp))
             .padding(20.dp)
     ) {
         Text(

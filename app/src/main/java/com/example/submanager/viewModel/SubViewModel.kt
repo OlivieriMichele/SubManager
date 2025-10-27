@@ -8,6 +8,7 @@ import com.example.submanager.model.Category
 import com.example.submanager.ui.theme.AccentColors
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.runtime.mutableIntStateOf
 
 class SubViewModel : ViewModel() {
 
@@ -16,7 +17,23 @@ class SubViewModel : ViewModel() {
     // ===================================================================
 
     private val _isDark = mutableStateOf(true)
+    private val _isEditingState = mutableStateOf(false)
+    private val _saveTrigger = mutableIntStateOf(0)
     val isDark: State<Boolean> = _isDark
+    val isEditingState: State<Boolean> = _isEditingState
+    val saveTrigger: State<Int> = _saveTrigger
+
+    fun setEditingMode(editing: Boolean) {
+        _isEditingState.value = editing
+    }
+
+    fun resetEditingMode(){
+        _isEditingState.value = false
+    }
+
+    fun triggerSave() {
+        _saveTrigger.value += 1
+    }
 
     fun toggleDarkMode() {
         _isDark.value = !_isDark.value

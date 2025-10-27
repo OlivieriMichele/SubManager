@@ -11,6 +11,7 @@ object DarkColors {
     val textPrimary = Color.White
     val textSecondary = Color(0xFF71717A)   // gray-500
     val textTertiary = Color(0xFF52525B)    // gray-600
+    val outline = Color(0xFF2E2E75)         // zinc-800
 }
 
 // Colori di base (Light Mode)
@@ -22,6 +23,7 @@ object LightColors {
     val textPrimary = Color(0xFF111827)     // gray-900
     val textSecondary = Color(0xFF6B7280)   // gray-600
     val textTertiary = Color(0xFF9CA3AF)    // gray-400
+    val outline = Color(0xFFE5E7EB)
 }
 
 // Colori Accent e Pastel per il design del mockup (Gradients)

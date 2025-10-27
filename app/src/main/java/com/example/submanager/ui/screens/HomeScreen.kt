@@ -10,8 +10,15 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -34,7 +41,6 @@ fun HomeScreen(
     subscriptions: List<Subscription>,
     totalMonthly: Double,
     categoriesCount: Int,
-    isDark: Boolean,
     onNavigateToCategories: () -> Unit,
     onToggleDarkMode: () -> Unit,
     onSubscriptionClick: (Int) -> Unit = {}
@@ -45,6 +51,8 @@ fun HomeScreen(
             .background(MaterialTheme.colorScheme.background)
     ) {
         StatusBarPlaceholder()
+
+
 
         LazyColumn(
             modifier = Modifier
@@ -62,16 +70,14 @@ fun HomeScreen(
                 // Main Card
                 MainCard(
                     totalMonthly = totalMonthly,
-                    totalYearly = totalMonthly * 12,
-                    isDark = isDark
+                    totalYearly = totalMonthly * 12
                 )
 
                 // Stats Cards
                 StatsCards(
                     subscriptionCount = subscriptions.size,
                     expiringCount = 2, // Valore fisso del mockup
-                    categoriesCount = categoriesCount,
-                    isDark = isDark
+                    categoriesCount = categoriesCount
                 )
 
                 // Categories Button
@@ -94,7 +100,7 @@ fun HomeScreen(
                     TextButton(onClick = { /* TODO: Vedi tutti */ }) {
                         Text(
                             text = "Vedi tutti",
-                            color = if (isDark) Color(0xFF60A5FA) else Color(0xFF3B82F6),
+                            color = Color(0xFF60A5FA), //To-Do: use colorScheme
                             fontSize = 14.sp
                         )
                     }
@@ -105,7 +111,7 @@ fun HomeScreen(
             items(subscriptions) { sub ->
                 SubscriptionItem(
                     subscription = sub,
-                    onClick = { onSubscriptionClick(sub.id) } // AGGIUNTO
+                    onClick = { onSubscriptionClick(sub.id) }
                 )
                 Spacer(modifier = Modifier.height(12.dp))
             }
