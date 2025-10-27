@@ -32,7 +32,11 @@ class SubViewModel : ViewModel() {
     }
 
     fun triggerSave() {
-        _saveTrigger.value += 1
+        _saveTrigger.intValue ++
+    }
+
+    fun resetSaveTrigger() {
+        _saveTrigger.intValue = 0
     }
 
     fun toggleDarkMode() {

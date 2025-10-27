@@ -19,6 +19,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -85,10 +86,20 @@ fun SubscriptionFormScreen(
             )
             onSave(newSubscription)
 
+            // RESET del trigger dopo il salvataggio
+            viewModel.resetSaveTrigger()
+
             // Dopo il salvataggio, esci dalla modalità editing
             if (mode == FormMode.VIEW) {
                 viewModel.resetEditingMode()
             }
+        }
+    }
+
+    // Reset del trigger quando esci dalla schermata
+    DisposableEffect(Unit) {
+        onDispose {
+            viewModel.resetSaveTrigger()
         }
     }
 

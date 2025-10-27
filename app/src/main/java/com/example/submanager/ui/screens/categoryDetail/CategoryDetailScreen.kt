@@ -1,4 +1,4 @@
-package com.example.submanager.ui.screens
+package com.example.submanager.ui.screens.categoryDetail
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -29,9 +29,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.submanager.model.Category
 import com.example.submanager.model.Subscription
-import com.example.submanager.ui.screens.categoryDetail.CategoryDetailCard
-import com.example.submanager.ui.screens.categoryDetail.CategorySubscriptionItem
-import com.example.submanager.ui.screens.categoryDetail.InfoCard
 
 @Composable
 fun CategoryDetailScreen(
