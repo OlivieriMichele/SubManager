@@ -2,13 +2,14 @@ package com.example.submanager.model
 
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import java.time.LocalDate
 
 data class Subscription(
     val id: Int,
     val name: String,
     val price: Double,
     val color: Color,
-    val nextBilling: String,
+    val nextBilling: LocalDate,
     val category: String
 )
 

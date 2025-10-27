@@ -9,6 +9,7 @@ import com.example.submanager.ui.theme.AccentColors
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.runtime.mutableIntStateOf
+import java.time.LocalDate
 
 class SubViewModel : ViewModel() {
 
@@ -90,12 +91,12 @@ class SubViewModel : ViewModel() {
     // LISTA DI SOTTOSCRIZIONI: Stato reattivo
     private val _subscriptions = mutableStateOf(
         listOf(
-            Subscription(1, "Netflix", 12.99, AccentColors.pastelPurple, "20 Ott", "Intrattenimento"),
-            Subscription(2, "Spotify", 9.99, AccentColors.pastelBlue, "15 Ott", "Intrattenimento"),
-            Subscription(3, "Adobe CC", 24.99, AccentColors.pastelIndigo, "28 Ott", "Software"),
-            Subscription(4, "Amazon Prime", 4.99, AccentColors.pastelPink, "05 Nov", "Intrattenimento"),
-            Subscription(5, "GitHub Pro", 4.00, AccentColors.pastelYellow, "12 Nov", "Software"),
-            Subscription(6, "Planet Fitness", 29.99, AccentColors.pastelGreen, "01 Nov", "Fitness")
+            Subscription(1, "Netflix", 12.99, AccentColors.pastelPurple, LocalDate.of(2025,10,30), "Intrattenimento"),
+            Subscription(2, "Spotify", 9.99, AccentColors.pastelBlue, LocalDate.of(2025,10,15), "Intrattenimento"),
+            Subscription(3, "Adobe CC", 24.99, AccentColors.pastelIndigo, LocalDate.of(2025,10,28), "Software"),
+            Subscription(4, "Amazon Prime", 4.99, AccentColors.pastelPink, LocalDate.of(2025,11,5), "Intrattenimento"),
+            Subscription(5, "GitHub Pro", 4.00, AccentColors.pastelYellow, LocalDate.of(2025,11,12), "Software"),
+            Subscription(6, "Planet Fitness", 29.99, AccentColors.pastelGreen, LocalDate.of(2025,11,30), "Fitness")
         )
     )
     val subscriptions: State<List<Subscription>> = _subscriptions

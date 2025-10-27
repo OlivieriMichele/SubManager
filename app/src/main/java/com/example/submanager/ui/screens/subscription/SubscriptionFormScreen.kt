@@ -1,21 +1,13 @@
 package com.example.submanager.ui.screens.subscription
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -27,7 +19,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.submanager.model.Subscription
 import com.example.submanager.ui.screens.subscription.components.CategoryField
@@ -38,6 +29,7 @@ import com.example.submanager.ui.screens.subscription.components.PriceAndDateFie
 import com.example.submanager.ui.screens.subscription.components.ServiceNameField
 import com.example.submanager.ui.screens.subscription.components.SubscriptionColors
 import com.example.submanager.viewModel.SubViewModel
+import java.time.LocalDate
 
 enum class FormMode {
     CREATE,
@@ -57,7 +49,7 @@ fun SubscriptionFormScreen(
 ) {
     // Form States
     var price by remember { mutableStateOf(subscription?.price?.toString() ?: "") }
-    var renewalDate by remember { mutableStateOf(subscription?.nextBilling ?: "") }
+    var renewalDate by remember { mutableStateOf(subscription?.nextBilling ?: LocalDate.now()) }
     var serviceName by remember { mutableStateOf(subscription?.name ?: "") }
     var selectedCategory by remember { mutableStateOf(subscription?.category ?: "") }
     var selectedColor by remember {
@@ -65,11 +57,9 @@ fun SubscriptionFormScreen(
     }
     var showCategoryDropdown by remember { mutableStateOf(false) }
 
-    // Usa lo stato dal ViewModel invece di locale
-    val isEditing = if (mode == FormMode.VIEW) {
-        viewModel.isEditingState.value
-    } else {
-        true // Sempre in editing per CREATE e EDIT
+    val isEditing = when (mode) {
+        FormMode.VIEW -> viewModel.isEditingState.value
+        else -> true
     }
 
     val saveTrigger by viewModel.saveTrigger
@@ -96,8 +86,8 @@ fun SubscriptionFormScreen(
         }
     }
 
-    // Reset del trigger quando esci dalla schermata
     DisposableEffect(Unit) {
+        // Reset del trigger quando esci dalla schermata
         onDispose {
             viewModel.resetSaveTrigger()
         }

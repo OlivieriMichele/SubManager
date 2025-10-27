@@ -18,6 +18,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.submanager.model.Subscription
+import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -34,6 +36,9 @@ fun SubscriptionItem(
         ),
         elevation = CardDefaults.cardElevation(0.dp)
     ) {
+
+        val dateFormatter = DateTimeFormatter.ofPattern("dd MMM", Locale.ITALIAN)
+
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -70,7 +75,7 @@ fun SubscriptionItem(
                         color = MaterialTheme.colorScheme.onBackground
                     )
                     Text(
-                        text = subscription.nextBilling,
+                        text = subscription.nextBilling.format(dateFormatter),
                         fontSize = 13.sp,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
