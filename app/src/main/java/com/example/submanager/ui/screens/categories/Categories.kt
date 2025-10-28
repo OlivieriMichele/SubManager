@@ -23,6 +23,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.submanager.model.Category
+import com.example.submanager.ui.theme.AccentColors
 
 @Composable
 fun CategoriesScreen(
@@ -106,9 +107,9 @@ fun CategoriesScreen(
 @Composable
 private fun CategoryItem(category: Category, onClick: () -> Unit) {
     val gradientColors = if (isSystemInDarkTheme()) {
-        listOf(category.darkGradientStart, category.darkGradientEnd)
+        listOf(AccentColors.mainGradientStart, AccentColors.mainGradientEnd)
     } else {
-        listOf(category.lightGradientStart, category.lightGradientEnd)
+        listOf(AccentColors.mainGradientLightStart, AccentColors.mainGradientLightEnd)
     }
 
     Row(

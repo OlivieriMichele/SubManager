@@ -62,7 +62,6 @@ fun HeaderSection(onToggleDarkMode: () -> Unit) {
                 Icon(
                     imageVector = if (isDark) Icons.Default.LightMode else Icons.Default.DarkMode,
                     contentDescription = "Tema",
-                    // CORRETTO: onSurface per icona
                     tint = MaterialTheme.colorScheme.onSurface,
                     modifier = Modifier.size(18.dp)
                 )

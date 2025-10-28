@@ -24,13 +24,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.submanager.model.Category
+import com.example.submanager.ui.theme.AccentColors
 
 @Composable
 fun CategoryDetailCard(categoryData: Category) {
     val gradientColors = if (isSystemInDarkTheme()) {
-        listOf(categoryData.darkGradientStart, categoryData.darkGradientEnd)
+        listOf(AccentColors.mainGradientStart, AccentColors.mainGradientEnd)
     } else {
-        listOf(categoryData.lightGradientStart, categoryData.lightGradientEnd)
+        listOf(AccentColors.mainGradientLightStart, AccentColors.mainGradientLightEnd)
     }
 
     Row(

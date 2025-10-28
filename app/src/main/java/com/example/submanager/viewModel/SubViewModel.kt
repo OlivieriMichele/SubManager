@@ -50,41 +50,25 @@ class SubViewModel : ViewModel() {
             name = "Intrattenimento",
             count = 0,
             total = 0.0,
-            icon = Icons.Default.Tv,
-            lightGradientStart = AccentColors.lightBlue,
-            lightGradientEnd = AccentColors.lightPurple,
-            darkGradientStart = AccentColors.darkBlue,
-            darkGradientEnd = AccentColors.darkPurple
+            icon = Icons.Default.Tv
         ),
         Category(
             name = "Software",
             count = 0,
             total = 0.0,
-            icon = Icons.Default.Code,
-            lightGradientStart = AccentColors.lightPurple,
-            lightGradientEnd = AccentColors.lightIndigo,
-            darkGradientStart = AccentColors.darkPurple,
-            darkGradientEnd = AccentColors.darkIndigo
+            icon = Icons.Default.Code
         ),
         Category(
             name = "Fitness",
             count = 0,
             total = 0.0,
-            icon = Icons.Default.FitnessCenter,
-            lightGradientStart = AccentColors.lightIndigo,
-            lightGradientEnd = AccentColors.lightBlue,
-            darkGradientStart = AccentColors.darkIndigo,
-            darkGradientEnd = AccentColors.darkBlue
+            icon = Icons.Default.FitnessCenter
         ),
         Category(
             name = "Shopping",
             count = 0,
             total = 0.0,
-            icon = Icons.Default.ShoppingCart,
-            lightGradientStart = AccentColors.lightPurple,
-            lightGradientEnd = AccentColors.lightPink,
-            darkGradientStart = AccentColors.darkPurple,
-            darkGradientEnd = AccentColors.darkPink
+            icon = Icons.Default.ShoppingCart
         )
     )
 
