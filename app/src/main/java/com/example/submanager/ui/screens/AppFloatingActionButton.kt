@@ -14,55 +14,49 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-
-enum class FabType {
-    ADD,
-    EDIT,
-    SAVE,
-    NONE
-}
+import com.example.submanager.Screen
+import com.example.submanager.viewModel.SubViewModel
 
 @Composable
 fun AppFloatingActionButton(
-    fabType: FabType,
-    onClick: () -> Unit,
+    screen: Screen?,
+    viewModel: SubViewModel,
+    onAdd: () -> Unit,
+    onEdit: () -> Unit,
+    onSave: () -> Unit,
+    onAddCategory: () -> Unit,
     modifier: Modifier = Modifier
-) {
-    if (fabType == FabType.NONE) return
+){
+    // Determina icona e azione in base alla schermata
+    val (icon, description, action) = when (screen) {
+        Screen.Home -> Triple(Icons.Default.Add, "Aggiungi", onAdd)
+
+        Screen.AddSubscription -> Triple(Icons.Default.Check, "Salva", onSave)
+
+        is Screen.ViewSubscription -> {
+            if (viewModel.isEditingState.value)
+                Triple(Icons.Default.Check, "Salva", onSave)
+            else
+                Triple(Icons.Default.Edit, "Modifica", onEdit)
+        }
+
+        Screen.Categories -> Triple(Icons.Default.Add, "Aggiungi", onAddCategory)
+
+        else -> return // nessun FAB
+    }
 
     FloatingActionButton(
-        onClick = onClick,
+        onClick = action,
         shape = CircleShape,
         modifier = modifier
             .size(56.dp)
             .background(MaterialTheme.colorScheme.primary, shape = CircleShape)
     ) {
-        when (fabType) {
-            FabType.ADD -> {
-                Icon(
-                    Icons.Default.Add,
-                    contentDescription = "Crea",
-                    tint = Color.White,
-                    modifier = Modifier.size(24.dp)
-                )
-            }
-            FabType.EDIT -> {
-                Icon(
-                    Icons.Default.Edit,
-                    contentDescription = "Modifica",
-                    tint = Color.White,
-                    modifier = Modifier.size(24.dp)
-                )
-            }
-            FabType.SAVE -> {
-                Icon(
-                    Icons.Default.Check,
-                    contentDescription = "Salva",
-                    tint = Color.White,
-                    modifier = Modifier.size(28.dp)
-                )
-            }
-            FabType.NONE -> { /* Non mostrare nulla */ }
-        }
+        Icon(
+            icon,
+            contentDescription = description,
+            tint = Color.White,
+            modifier = Modifier.size(24.dp)
+        )
     }
 }

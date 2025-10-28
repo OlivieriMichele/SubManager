@@ -14,7 +14,6 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.submanager.ui.screens.AppFloatingActionButton
-import com.example.submanager.ui.screens.FabType
 import com.example.submanager.ui.theme.SubManagerTheme
 import com.example.submanager.viewModel.SubViewModel
 
@@ -30,7 +29,6 @@ class MainActivity : ComponentActivity() {
 
             SubManagerTheme(darkTheme = isDark, dynamicColor = false) {
                 val currentBackStackEntry by navController.currentBackStackEntryAsState()
-                val isEditing by viewModel.isEditingState
                 val currentScreen = currentBackStackEntry?.getCurrentScreen()
 
                 // Reset editing mode quando cambi schermata
@@ -40,30 +38,16 @@ class MainActivity : ComponentActivity() {
                     }
                 }
 
-                // Determina tipo e azione del FAB
-                val fabType = when (currentScreen) {
-                    is Screen.Home -> FabType.ADD
-                    is Screen.AddSubscription -> FabType.SAVE
-                    is Screen.ViewSubscription -> if (isEditing) FabType.SAVE else FabType.EDIT
-                    else -> FabType.NONE
-                }
-
-                val fabAction = when (currentScreen) {
-                    is Screen.Home -> {{ navController.navigate(Screen.AddSubscription) }}
-                    is Screen.AddSubscription -> {{ viewModel.triggerSave() }}
-                    is Screen.ViewSubscription -> {
-                        if (isEditing) {{ viewModel.triggerSave() }}
-                        else {{ viewModel.setEditingMode(true) }}
-                    }
-                    else -> {{}}
-                }
-
                 Scaffold(
                     containerColor = MaterialTheme.colorScheme.background,
                     floatingActionButton = {
                         AppFloatingActionButton(
-                            fabType = fabType,
-                            onClick = fabAction
+                            screen = currentScreen,
+                            viewModel = viewModel,
+                            onAdd = { navController.navigate(Screen.AddSubscription) },
+                            onEdit = { viewModel.setEditingMode(true) },
+                            onSave = { viewModel.triggerSave() },
+                            onAddCategory = { /* To-Do: */ }
                         )
                     }
                 ) { innerPadding ->
