@@ -40,8 +40,6 @@ fun HomeScreen(
     ) {
         StatusBarPlaceholder()
 
-
-
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
