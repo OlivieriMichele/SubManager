@@ -7,6 +7,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Save
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -25,6 +26,7 @@ fun AppFloatingActionButton(
     onEdit: () -> Unit,
     onSave: () -> Unit,
     onAddCategory: () -> Unit,
+    onSaveCategory: () -> Unit,
     modifier: Modifier = Modifier
 ){
     // Determina icona e azione in base alla schermata
@@ -33,14 +35,16 @@ fun AppFloatingActionButton(
 
         Screen.AddSubscription -> Triple(Icons.Default.Check, "Salva", onSave)
 
+        Screen.Categories -> Triple(Icons.Default.Add, "Aggiungi", onAddCategory)
+
+        Screen.NewCategory -> Triple(Icons.Default.Save, "Salva Categoria", onSaveCategory)
+
         is Screen.ViewSubscription -> {
             if (viewModel.isEditingState.value)
-                Triple(Icons.Default.Check, "Salva", onSave)
+                Triple(Icons.Default.Check, "Salva Abbonamento", onSave)
             else
                 Triple(Icons.Default.Edit, "Modifica", onEdit)
         }
-
-        Screen.Categories -> Triple(Icons.Default.Add, "Aggiungi", onAddCategory)
 
         else -> return // nessun FAB
     }

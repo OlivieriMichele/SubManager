@@ -8,6 +8,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import com.example.submanager.ui.screens.CategoriesScreen
+import com.example.submanager.ui.screens.categories.NewCategoryScreen
 import com.example.submanager.ui.screens.categoryDetail.CategoryDetailScreen
 import com.example.submanager.ui.screens.home.HomeScreen
 import com.example.submanager.ui.screens.subscription.AddSubscriptionScreen
@@ -31,6 +32,9 @@ sealed interface Screen {
 
     @Serializable
     data class ViewSubscription(val subscriptionId: Int) : Screen
+
+    @Serializable
+    data object NewCategory : Screen
 }
 
 // Extension function per ottenere la schermata corrente in modo type-safe
@@ -42,6 +46,7 @@ fun NavBackStackEntry.getCurrentScreen(): Screen? {
             route.contains("CategoryDetail") -> toRoute<Screen.CategoryDetail>()
             route.contains("AddSubscription") -> Screen.AddSubscription
             route.contains("ViewSubscription") -> toRoute<Screen.ViewSubscription>()
+            route.contains("NewCategory") -> Screen.NewCategory
             else -> null
         }
     }
@@ -115,6 +120,17 @@ fun SubNavigation(
                 subscriptionId = route.subscriptionId,
                 onNavigateBack = { navController.popBackStack() },
                 onSubscriptionDeleted = {
+                    navController.popBackStack()
+                }
+            )
+        }
+
+        // New Category Screen
+        composable<Screen.NewCategory> {
+            NewCategoryScreen(
+                onNavigateBack = { navController.popBackStack() },
+                onSaveCategory = { name, budget, description, icon, gradientIndex ->
+                    viewModel.addCategory(name, budget, description, icon, gradientIndex)
                     navController.popBackStack()
                 }
             )

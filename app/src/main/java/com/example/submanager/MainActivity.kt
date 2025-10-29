@@ -47,7 +47,8 @@ class MainActivity : ComponentActivity() {
                             onAdd = { navController.navigate(Screen.AddSubscription) },
                             onEdit = { viewModel.setEditingMode(true) },
                             onSave = { viewModel.triggerSave() },
-                            onAddCategory = { /* To-Do: */ }
+                            onAddCategory = { navController.navigate(Screen.NewCategory) },
+                            onSaveCategory = { viewModel.triggerSaveCategory() }
                         )
                     }
                 ) { innerPadding ->

@@ -53,10 +53,9 @@ fun HeaderSection(onToggleDarkMode: () -> Unit) {
             IconButton(
                 onClick = onToggleDarkMode,
                 modifier = Modifier
-                    .size(40.dp)
-                    // CORRETTO: Usa Surface/Outline
-                    .background(MaterialTheme.colorScheme.surface, RoundedCornerShape(20.dp))
-                    .border(1.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(20.dp))
+                    .size(30.dp)
+                    .background(MaterialTheme.colorScheme.surface, RoundedCornerShape(30.dp))
+                    .border(1.dp, MaterialTheme.colorScheme.outlineVariant, RoundedCornerShape(30.dp))
             ) {
                 val isDark = isSystemInDarkTheme()
                 Icon(
@@ -71,9 +70,9 @@ fun HeaderSection(onToggleDarkMode: () -> Unit) {
             IconButton(
                 onClick = { /* ... */ },
                 modifier = Modifier
-                    .size(40.dp)
-                    .background(MaterialTheme.colorScheme.surface, RoundedCornerShape(20.dp))
-                    .border(1.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(20.dp))
+                    .size(30.dp)
+                    .background(MaterialTheme.colorScheme.surface, RoundedCornerShape(30.dp))
+                    .border(1.dp, MaterialTheme.colorScheme.outlineVariant, RoundedCornerShape(30.dp))
             ) {
                 Icon(
                     imageVector = Icons.Default.Notifications,

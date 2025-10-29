@@ -17,5 +17,8 @@ data class Category(
     val name: String,
     val count: Int,
     val total: Double,
-    val icon: ImageVector
+    val icon: ImageVector,
+    val budget: Double = 0.0,
+    val description: String = "",
+    val gradientIndex: Int = 0
 )

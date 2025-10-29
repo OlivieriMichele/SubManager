@@ -5,150 +5,68 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.State
 import com.example.submanager.model.Subscription
 import com.example.submanager.model.Category
-import com.example.submanager.ui.theme.AccentColors
-import androidx.compose.material.icons.filled.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.runtime.mutableIntStateOf
-import java.time.LocalDate
 
 class SubViewModel : ViewModel() {
 
-    // ===================================================================
-    // 1. STATO FISSO E DATI SORGENTE
-    // ===================================================================
-
-    private val _isDark = mutableStateOf(true)
-    private val _isEditingState = mutableStateOf(false)
-    private val _saveTrigger = mutableIntStateOf(0)
-    val isDark: State<Boolean> = _isDark
-    val isEditingState: State<Boolean> = _isEditingState
-    val saveTrigger: State<Int> = _saveTrigger
-
-    fun setEditingMode(editing: Boolean) {
-        _isEditingState.value = editing
-    }
-
-    fun resetEditingMode(){
-        _isEditingState.value = false
-    }
-
-    fun triggerSave() {
-        _saveTrigger.intValue ++
-    }
-
-    fun resetSaveTrigger() {
-        _saveTrigger.intValue = 0
-    }
-
-    fun toggleDarkMode() {
-        _isDark.value = !_isDark.value
-    }
-
-    // LISTA DI CATEGORIE: Dati fissi, usati come base per i calcoli
-    private val categories = listOf(
-        Category(
-            name = "Intrattenimento",
-            count = 0,
-            total = 0.0,
-            icon = Icons.Default.Tv
-        ),
-        Category(
-            name = "Software",
-            count = 0,
-            total = 0.0,
-            icon = Icons.Default.Code
-        ),
-        Category(
-            name = "Fitness",
-            count = 0,
-            total = 0.0,
-            icon = Icons.Default.FitnessCenter
-        ),
-        Category(
-            name = "Shopping",
-            count = 0,
-            total = 0.0,
-            icon = Icons.Default.ShoppingCart
-        )
-    )
-
-    // LISTA DI SOTTOSCRIZIONI: Stato reattivo
-    private val _subscriptions = mutableStateOf(
-        listOf(
-            Subscription(1, "Netflix", 12.99, AccentColors.pastelPurple, LocalDate.of(2025,10,30), "Intrattenimento"),
-            Subscription(2, "Spotify", 9.99, AccentColors.pastelBlue, LocalDate.of(2025,10,15), "Intrattenimento"),
-            Subscription(3, "Adobe CC", 24.99, AccentColors.pastelIndigo, LocalDate.of(2025,10,28), "Software"),
-            Subscription(4, "Amazon Prime", 4.99, AccentColors.pastelPink, LocalDate.of(2025,11,5), "Intrattenimento"),
-            Subscription(5, "GitHub Pro", 4.00, AccentColors.pastelYellow, LocalDate.of(2025,11,12), "Software"),
-            Subscription(6, "Planet Fitness", 29.99, AccentColors.pastelGreen, LocalDate.of(2025,11,30), "Fitness")
-        )
-    )
-    val subscriptions: State<List<Subscription>> = _subscriptions
-
+    // Delegati per la gestione separata
+    private val themeManager = ThemeManager()
+    private val categoryManager = CategoryManager()
+    private val subscriptionManager = SubscriptionManager()
 
     // ===================================================================
-    // 2. DATI CALCOLATI
+    // THEME MANAGEMENT
+    // ===================================================================
+
+    val isDark: State<Boolean> = themeManager.isDark
+    fun toggleDarkMode() = themeManager.toggleDarkMode()
+
+    // ===================================================================
+    // EDITING STATE
+    // ===================================================================
+
+    val isEditingState: State<Boolean> = themeManager.isEditingState
+    val saveTrigger: State<Int> = themeManager.saveTrigger
+    val saveCategoryTrigger: State<Int> = themeManager.saveCategoryTrigger
+
+    fun setEditingMode(editing: Boolean) = themeManager.setEditingMode(editing)
+    fun resetEditingMode() = themeManager.resetEditingMode()
+    fun triggerSave() = themeManager.triggerSave()
+    fun resetSaveTrigger() = themeManager.resetSaveTrigger()
+    fun triggerSaveCategory() = themeManager.triggerSaveCategory()
+    fun resetSaveCategoryTrigger() = themeManager.resetSaveCategoryTrigger()
+
+    // ===================================================================
+    // CATEGORY MANAGEMENT
     // ===================================================================
 
     val categoriesState: State<List<Category>>
-        get() {
-            val groups = subscriptions.value.groupBy { it.category }
-            val categoryStats = categories.map { category ->
-                val subs = groups[category.name] ?: emptyList()
-                val count = subs.size
-                val total = subs.sumOf { it.price }
-                category.copy(count = count, total = total)
-            }
-            return mutableStateOf(categoryStats)
+        get() = categoryManager.getCategoriesState(subscriptionManager.subscriptions.value)
+
+    fun getCategoryDetails(categoryName: String) = categoryManager.getCategoryDetails(subscriptionManager.subscriptions.value, categoryName)
+    fun getCategorySubscriptions(categoryName: String) = subscriptionManager.getCategorySubscriptions(categoryName)
+    fun addCategory(name: String, budget: Double, description: String, icon: androidx.compose.ui.graphics.vector.ImageVector, gradientIndex: Int) =
+        categoryManager.addCategory(name, budget, description, icon, gradientIndex)
+    fun updateCategory(oldName: String, name: String, budget: Double, description: String, icon: androidx.compose.ui.graphics.vector.ImageVector, gradientIndex: Int) =
+        categoryManager.updateCategory(oldName, name, budget, description, icon, gradientIndex).also {
+            subscriptionManager.updateSubscriptionCategory(oldName, name)
         }
+    fun deleteCategory(categoryName: String) {
+        categoryManager.deleteCategory(categoryName)
+        subscriptionManager.deleteSubscriptionsByCategory(categoryName)
+    }
+    fun getCategoryNames() = categoryManager.getCategoryNames()
+    fun categoryExists(name: String) = categoryManager.categoryExists(name)
 
     // ===================================================================
-    // 3. METODI DI UTILITÀ
+    // SUBSCRIPTION MANAGEMENT
     // ===================================================================
 
-    fun getTotalMonthly(): Double = subscriptions.value.sumOf { it.price }
+    val subscriptions: State<List<Subscription>> = subscriptionManager.subscriptions
 
-    fun getTotalYearly(): Double = getTotalMonthly() * 12
-
-    fun getCategorySubscriptions(categoryName: String): List<Subscription> {
-        return subscriptions.value.filter { it.category == categoryName }
-    }
-
-    fun getCategoryDetails(categoryName: String): Category? {
-        return categoriesState.value.find { it.name == categoryName }
-    }
-
-    // ===================================================================
-    // NUOVI METODI PER GESTIONE SOTTOSCRIZIONI
-    // ===================================================================
-
-    /**
-     * Ottiene una sottoscrizione tramite il suo ID
-     */
-    fun getSubscriptionById(id: Int): Subscription? {
-        return subscriptions.value.find { it.id == id }
-    }
-
-    /**
-     * Aggiunge una nuova sottoscrizione
-     */
-    fun addSubscription(subscription: Subscription) {
-        _subscriptions.value = _subscriptions.value + subscription
-    }
-
-    /**
-     * Aggiorna una sottoscrizione esistente
-     */
-    fun updateSubscription(subscription: Subscription) {
-        _subscriptions.value = _subscriptions.value.map {
-            if (it.id == subscription.id) subscription else it
-        }
-    }
-
-    /**
-     * Elimina una sottoscrizione tramite ID
-     */
-    fun deleteSubscription(id: Int) {
-        _subscriptions.value = _subscriptions.value.filter { it.id != id }
-    }
+    fun getTotalMonthly() = subscriptionManager.getTotalMonthly()
+    fun getTotalYearly() = subscriptionManager.getTotalYearly()
+    fun getSubscriptionById(id: Int) = subscriptionManager.getSubscriptionById(id)
+    fun addSubscription(subscription: Subscription) = subscriptionManager.addSubscription(subscription)
+    fun updateSubscription(subscription: Subscription) = subscriptionManager.updateSubscription(subscription)
+    fun deleteSubscription(id: Int) = subscriptionManager.deleteSubscription(id)
 }
