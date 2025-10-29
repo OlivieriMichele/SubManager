@@ -93,7 +93,7 @@ fun SubscriptionFormScreen(
         }
     }
 
-    val categories = listOf("Intrattenimento", "Software", "Fitness", "Shopping")
+    val categories = viewModel.getCategoryNames()
 
     val screenTitle = when (mode) {
         FormMode.CREATE -> "Nuovo Abbonamento"

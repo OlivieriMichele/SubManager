@@ -128,11 +128,9 @@ fun SubNavigation(
         // New Category Screen
         composable<Screen.NewCategory> {
             NewCategoryScreen(
+                viewModel = viewModel,
                 onNavigateBack = { navController.popBackStack() },
-                onSaveCategory = { name, budget, description, icon, gradientIndex ->
-                    viewModel.addCategory(name, budget, description, icon, gradientIndex)
-                    navController.popBackStack()
-                }
+                onCategorySaved = { navController.popBackStack() }
             )
         }
     }
