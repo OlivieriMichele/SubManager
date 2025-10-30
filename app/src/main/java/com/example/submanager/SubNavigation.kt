@@ -1,11 +1,13 @@
 package com.example.submanager
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.toRoute
 import com.example.submanager.ui.screens.CategoriesScreen
 import com.example.submanager.ui.screens.categories.NewCategoryScreen
@@ -58,6 +60,8 @@ fun SubNavigation(
     viewModel: SubViewModel,
     modifier: Modifier
 ) {
+    HandleNavigationEffects(navController, viewModel)
+
     NavHost(
         navController = navController,
         startDestination = Screen.Home,
@@ -132,6 +136,21 @@ fun SubNavigation(
                 onNavigateBack = { navController.popBackStack() },
                 onCategorySaved = { navController.popBackStack() }
             )
+        }
+    }
+}
+
+@Composable
+private fun HandleNavigationEffects(
+    navController: NavHostController,
+    viewModel: SubViewModel
+) {
+    val currentBackStackEntry = navController.currentBackStackEntryAsState().value
+    val currentScreen = currentBackStackEntry?.getCurrentScreen()
+
+    LaunchedEffect(currentScreen) {
+        if (currentScreen !is Screen.ViewSubscription) {
+            viewModel.resetEditingMode()
         }
     }
 }

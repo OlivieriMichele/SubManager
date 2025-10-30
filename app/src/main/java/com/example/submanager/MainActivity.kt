@@ -31,13 +31,6 @@ class MainActivity : ComponentActivity() {
                 val currentBackStackEntry by navController.currentBackStackEntryAsState()
                 val currentScreen = currentBackStackEntry?.getCurrentScreen()
 
-                // Reset editing mode quando cambi schermata
-                LaunchedEffect(currentScreen) {
-                    if (currentScreen !is Screen.ViewSubscription) {
-                        viewModel.resetEditingMode()
-                    }
-                }
-
                 Scaffold(
                     containerColor = MaterialTheme.colorScheme.background,
                     floatingActionButton = {
