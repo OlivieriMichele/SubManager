@@ -1,4 +1,4 @@
-package com.example.submanager.ui.screens
+package com.example.submanager.ui.screens.categories
 
 import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.background
@@ -26,7 +26,7 @@ import com.example.submanager.model.Category
 import com.example.submanager.ui.theme.AccentColors
 
 @Composable
-fun CategoriesScreen(
+fun CategoryScreen(
     categories: List<Category>,
     onNavigateBack: () -> Unit,
     onCategoryClick: (String) -> Unit

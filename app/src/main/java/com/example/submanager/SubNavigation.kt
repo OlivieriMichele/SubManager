@@ -9,7 +9,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.toRoute
-import com.example.submanager.ui.screens.CategoriesScreen
+import com.example.submanager.ui.screens.categories.CategoryScreen
 import com.example.submanager.ui.screens.categories.NewCategoryScreen
 import com.example.submanager.ui.screens.categoryDetail.CategoryDetailScreen
 import com.example.submanager.ui.screens.home.HomeScreen
@@ -85,7 +85,7 @@ fun SubNavigation(
 
         // Categories Screen
         composable<Screen.Categories> {
-            CategoriesScreen(
+            CategoryScreen(
                 categories = viewModel.categoriesState.value,
                 onNavigateBack = { navController.popBackStack() },
                 onCategoryClick = { categoryName ->
@@ -101,7 +101,10 @@ fun SubNavigation(
                 categoryName = route.categoryName,
                 onNavigateBack = { navController.popBackStack() },
                 getCategoryDetails = viewModel::getCategoryDetails,
-                getCategorySubscriptions = viewModel::getCategorySubscriptions
+                getCategorySubscriptions = viewModel::getCategorySubscriptions,
+                onDeleteCategory = { categoryName ->
+                    viewModel.deleteCategory(categoryName)
+                }
             )
         }
 

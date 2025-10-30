@@ -13,16 +13,12 @@ class SubViewModel : ViewModel() {
     private val categoryManager = CategoryManager()
     private val subscriptionManager = SubscriptionManager()
 
-    // ===================================================================
     // THEME MANAGEMENT
-    // ===================================================================
 
     val isDark: State<Boolean> = themeManager.isDark
     fun toggleDarkMode() = themeManager.toggleDarkMode()
 
-    // ===================================================================
     // EDITING STATE
-    // ===================================================================
 
     val isEditingState: State<Boolean> = themeManager.isEditingState
     val saveTrigger: State<Int> = themeManager.saveTrigger
@@ -35,9 +31,7 @@ class SubViewModel : ViewModel() {
     fun triggerSaveCategory() = themeManager.triggerSaveCategory()
     fun resetSaveCategoryTrigger() = themeManager.resetSaveCategoryTrigger()
 
-    // ===================================================================
     // CATEGORY MANAGEMENT
-    // ===================================================================
 
     val categoriesState: State<List<Category>>
         get() = categoryManager.getCategoriesState(subscriptionManager.subscriptions.value)
@@ -57,9 +51,7 @@ class SubViewModel : ViewModel() {
     fun getCategoryNames() = categoryManager.getCategoryNames()
     fun categoryExists(name: String) = categoryManager.categoryExists(name)
 
-    // ===================================================================
     // SUBSCRIPTION MANAGEMENT
-    // ===================================================================
 
     val subscriptions: State<List<Subscription>> = subscriptionManager.subscriptions
 

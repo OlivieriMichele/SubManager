@@ -17,7 +17,7 @@ class CategoryManager {
                 count = 0,
                 total = 0.0,
                 icon = Icons.Default.Tv,
-                budget = 0.0,
+                budget = 20.0,
                 description = "",
                 gradientIndex = 0
             ),
@@ -26,7 +26,7 @@ class CategoryManager {
                 count = 0,
                 total = 0.0,
                 icon = Icons.Default.Code,
-                budget = 0.0,
+                budget = 50.0,
                 description = "",
                 gradientIndex = 1
             ),
@@ -35,7 +35,7 @@ class CategoryManager {
                 count = 0,
                 total = 0.0,
                 icon = Icons.Default.FitnessCenter,
-                budget = 0.0,
+                budget = 40.0,
                 description = "",
                 gradientIndex = 2
             ),
@@ -44,8 +44,17 @@ class CategoryManager {
                 count = 0,
                 total = 0.0,
                 icon = Icons.Default.ShoppingCart,
-                budget = 0.0,
+                budget = 50.0,
                 description = "",
+                gradientIndex = 0
+            ),
+            Category(
+                name = "Casa",
+                count = 0,
+                total = 0.0,
+                icon = Icons.Default.AccountBalance,
+                budget = 400.0,
+                description = "Generiche spese per la casa",
                 gradientIndex = 0
             )
         )
