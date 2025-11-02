@@ -154,15 +154,15 @@ fun SubNavigation(
         composable<Screen.Insights> {
             InsigthsScreen(
                 totalMonthly = viewModel.getTotalMonthly(),
-                lastMonthTotal = 85.85, // Da calcolare nel ViewModel
+                lastMonthTotal = 85.85, // Todo: Da calcolare nel ViewModel
                 categories = viewModel.categoriesState.value,
-                last5MonthsData = listOf(
+                last5MonthsData = listOf( // Todo: Da prendere/calcolare dal database, questi sono solo per test
                     MonthData("Giu", 87.20),
                     MonthData("Lug", 87.20),
                     MonthData("Ago", 87.20),
                     MonthData("Set", 87.20),
                     MonthData("Ott", 87.20)
-                ), // Da calcolare nel ViewModel
+                ),
                 onNavigateBack = { navController.popBackStack() }
             )
         }

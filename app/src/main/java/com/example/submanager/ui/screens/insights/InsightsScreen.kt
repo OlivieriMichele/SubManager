@@ -19,6 +19,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.submanager.model.Category
 import com.example.submanager.model.MonthData
+import com.example.submanager.ui.screens.insights.components.BudgetComparisonCard
+import com.example.submanager.ui.screens.insights.components.CategoryDistributionCard
+import com.example.submanager.ui.screens.insights.components.ComparisonCard
+import com.example.submanager.ui.screens.insights.components.MonthlyTrendCard
+import com.example.submanager.ui.screens.insights.components.SummaryCard
 
 @Composable
 fun InsigthsScreen(
@@ -36,10 +41,10 @@ fun InsigthsScreen(
 
     val averagePerService = categories.sumOf { it.total } / categories.sumOf { it.count }.coerceAtLeast(1)
 
-    val mostExpensiveSubscription = "Planet Fitness" // Da calcolare dal ViewModel
+    val mostExpensiveSubscription = "Planet Fitness" // Todo: Da calcolare dal ViewModel
     val mostExpensiveCategory = categories.maxByOrNull { it.total }?.name ?: "N/A"
     val yearlySpending = totalMonthly * 12
-    val potentialSavings = 59.88 // Da calcolare
+    val potentialSavings = 59.88 // Todo: Da calcolare
 
     Column(
         modifier = Modifier
@@ -104,7 +109,6 @@ fun InsigthsScreen(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
-                    /* Todo:
                     ComparisonCard(
                         modifier = Modifier.weight(1f),
                         title = "vs mese scorso",
@@ -118,33 +122,33 @@ fun InsigthsScreen(
                         title = "Media per servizio",
                         value = "€${String.format("%.2f", averagePerService)}",
                         subtitle = "8 servizi"
-                    ) */
+                    )
                 }
             }
 
             item {
-                /* Todo: Category Distribution Chart
-                CategoryDistributionCard(categories = categories) */
+                // Category Distribution Chart
+                CategoryDistributionCard(categories = categories)
             }
 
             item {
-                /* Todo: Last 5 Months Trend
-                MonthlyTrendCard(monthsData = last5MonthsData) */
+                // Last 5 Months Trend
+                MonthlyTrendCard(monthsData = last5MonthsData)
             }
 
             item {
-                /* Todo: Budget vs Spending Comparison
-                BudgetComparisonCard(categories = categories) */
+                // Budget vs Spending Comparison
+                BudgetComparisonCard(categories = categories)
             }
 
             item {
-                /* Todo: Summary Card
+                // Summary Card
                 SummaryCard(
                     mostExpensiveSubscription = mostExpensiveSubscription,
                     mostExpensiveCategory = mostExpensiveCategory,
                     yearlySpending = yearlySpending,
                     potentialSavings = potentialSavings
-                ) */
+                )
             }
 
             item {
