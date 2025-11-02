@@ -31,7 +31,8 @@ fun HomeScreen(
     categoriesCount: Int,
     onNavigateToCategories: () -> Unit,
     onToggleDarkMode: () -> Unit,
-    onSubscriptionClick: (Int) -> Unit = {}
+    onSubscriptionClick: (Int) -> Unit = {},
+    onNavigareToInsights: () -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -56,7 +57,8 @@ fun HomeScreen(
                 // Main Card
                 MainCard(
                     totalMonthly = totalMonthly,
-                    totalYearly = totalMonthly * 12
+                    totalYearly = totalMonthly * 12,
+                    onNavigateToInsights = onNavigareToInsights
                 )
 
                 // Stats Cards
@@ -86,7 +88,7 @@ fun HomeScreen(
                     TextButton(onClick = { /* TODO: Vedi tutti */ }) {
                         Text(
                             text = "Vedi tutti",
-                            color = Color(0xFF60A5FA), //To-Do: use colorScheme
+                            color = Color(0xFF60A5FA), //Todo: use colorScheme
                             fontSize = 14.sp
                         )
                     }
@@ -114,7 +116,7 @@ private fun StatusBarPlaceholder() {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .height(30.dp) // Altezza della Status Bar
+            .height(20.dp) // Altezza della Status Bar
             .background(MaterialTheme.colorScheme.background)
 
     )

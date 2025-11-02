@@ -16,6 +16,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.TrendingUp
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -29,7 +30,7 @@ import androidx.compose.ui.unit.sp
 import com.example.submanager.ui.theme.AccentColors
 
 @Composable
-fun MainCard(totalMonthly: Double, totalYearly: Double) {
+fun MainCard(totalMonthly: Double, totalYearly: Double, onNavigateToInsights: () -> Unit) {
     // Logica custom per il gradiente
     val brush = Brush.linearGradient(listOf(MaterialTheme.colorScheme.primary, MaterialTheme.colorScheme.secondary))
 
@@ -67,12 +68,16 @@ fun MainCard(totalMonthly: Double, totalYearly: Double) {
                         .border(1.dp, Color.White.copy(alpha = 0.4f), RoundedCornerShape(16.dp)),
                     contentAlignment = Alignment.Center
                 ) {
-                    Icon(
-                        imageVector = Icons.Default.TrendingUp,
-                        contentDescription = "Trend",
-                        tint = Color.White,
-                        modifier = Modifier.size(24.dp)
-                    )
+                    IconButton(
+                        onClick = onNavigateToInsights
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.TrendingUp,
+                            contentDescription = "Trend",
+                            tint = Color.White,
+                            modifier = Modifier.size(24.dp)
+                        )
+                    }
                 }
             }
 

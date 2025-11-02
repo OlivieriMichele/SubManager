@@ -9,10 +9,12 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.toRoute
+import com.example.submanager.model.MonthData
 import com.example.submanager.ui.screens.categories.CategoryScreen
 import com.example.submanager.ui.screens.categories.NewCategoryScreen
 import com.example.submanager.ui.screens.categoryDetail.CategoryDetailScreen
 import com.example.submanager.ui.screens.home.HomeScreen
+import com.example.submanager.ui.screens.insights.InsigthsScreen
 import com.example.submanager.ui.screens.subscription.AddSubscriptionScreen
 import com.example.submanager.ui.screens.subscription.ViewSubscriptionScreen
 import com.example.submanager.viewModel.SubViewModel
@@ -37,6 +39,9 @@ sealed interface Screen {
 
     @Serializable
     data object NewCategory : Screen
+
+    @Serializable
+    data object Insights : Screen
 }
 
 // Extension function per ottenere la schermata corrente in modo type-safe
@@ -49,6 +54,7 @@ fun NavBackStackEntry.getCurrentScreen(): Screen? {
             route.contains("AddSubscription") -> Screen.AddSubscription
             route.contains("ViewSubscription") -> toRoute<Screen.ViewSubscription>()
             route.contains("NewCategory") -> Screen.NewCategory
+            route.contains("Insights") -> Screen.Insights
             else -> null
         }
     }
@@ -79,6 +85,9 @@ fun SubNavigation(
                 onToggleDarkMode = viewModel::toggleDarkMode,
                 onSubscriptionClick = { subscriptionId ->
                     navController.navigate(Screen.ViewSubscription(subscriptionId))
+                },
+                onNavigareToInsights = {
+                    navController.navigate(Screen.Insights)
                 }
             )
         }
@@ -138,6 +147,23 @@ fun SubNavigation(
                 viewModel = viewModel,
                 onNavigateBack = { navController.popBackStack() },
                 onCategorySaved = { navController.popBackStack() }
+            )
+        }
+
+        // Insights Screen
+        composable<Screen.Insights> {
+            InsigthsScreen(
+                totalMonthly = viewModel.getTotalMonthly(),
+                lastMonthTotal = 85.85, // Da calcolare nel ViewModel
+                categories = viewModel.categoriesState.value,
+                last5MonthsData = listOf(
+                    MonthData("Giu", 87.20),
+                    MonthData("Lug", 87.20),
+                    MonthData("Ago", 87.20),
+                    MonthData("Set", 87.20),
+                    MonthData("Ott", 87.20)
+                ), // Da calcolare nel ViewModel
+                onNavigateBack = { navController.popBackStack() }
             )
         }
     }

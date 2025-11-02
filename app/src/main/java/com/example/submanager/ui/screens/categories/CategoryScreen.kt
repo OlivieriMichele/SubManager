@@ -40,7 +40,7 @@ fun CategoryScreen(
         // Status Bar Placeholder (come in HomeScreen)
         Spacer(
             modifier = Modifier
-                .height(30.dp)
+                .height(20.dp)
                 .background(MaterialTheme.colorScheme.background)
         )
 
@@ -203,14 +203,14 @@ private fun SummaryCard() {
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
             Text(text = "Categoria più costosa", fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
             Text(text = "Fitness", fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurface)
-            // To-Do: replica con dati dinamici
+            // TODO: replica con dati dinamici
         }
         Divider(color = MaterialTheme.colorScheme.outline, thickness = 1.dp, modifier = Modifier.padding(vertical = 12.dp))
 
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
             Text(text = "Con più servizi", fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
             Text(text = "Intrattenimento", fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurface)
-            // To-Do: replica con dati dinamici
+            // TODO: replica con dati dinamici
         }
     }
 }

@@ -22,3 +22,11 @@ data class Category(
     val description: String = "",
     val gradientIndex: Int = 0
 )
+
+
+
+// Data class per i dati mensili
+data class MonthData(
+    val month: String,
+    val total: Double
+)

@@ -33,7 +33,7 @@ fun CategoryDetailScreen(
     var showDeleteDialog by remember { mutableStateOf(false) }
 
     if (categoryData == null) {
-        // Gestione errore o caricamento
+        // TODO: Gestione errore o caricamento
         return
     }
 
