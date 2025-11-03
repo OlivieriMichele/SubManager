@@ -22,16 +22,19 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.submanager.model.Category
+import com.example.submanager.ui.theme.AccentColors
 import kotlin.math.cos
 import kotlin.math.sin
 
 @Composable
 fun CategoryDistributionCard(categories: List<Category>) {
-    val colors = listOf( // Todo: use colorScheme
-        Color(0xFFB8B5FF),
-        Color(0xFFD9B5FF),
-        Color(0xFFB5D9FF),
-        Color(0xFFFFC7B5)
+    val colors = listOf( // Todo: use colorScheme and a separator in the graph
+        AccentColors.pastelPurple,
+        AccentColors.pastelGreen,
+        AccentColors.pastelBlue,
+        AccentColors.pastelIndigo,
+        AccentColors.pastelPink,
+        AccentColors.pastelYellow
     )
 
     val total = categories.sumOf { it.total }
