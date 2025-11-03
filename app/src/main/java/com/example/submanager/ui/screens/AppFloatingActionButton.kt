@@ -29,6 +29,7 @@ fun AppFloatingActionButton(
     onSaveCategory: () -> Unit,
     modifier: Modifier = Modifier
 ){
+    // Todo: bug se clicco su salva senza aver inserito i dati
     // Determina icona e azione in base alla schermata
     val (icon, description, action) = when (screen) {
         Screen.Home -> Triple(Icons.Default.Add, "Aggiungi", onAdd)

@@ -28,7 +28,6 @@ import com.example.submanager.ui.theme.AccentColors
 @Composable
 fun CategoryScreen(
     categories: List<Category>,
-    onNavigateBack: () -> Unit,
     onCategoryClick: (String) -> Unit
 ) {
 

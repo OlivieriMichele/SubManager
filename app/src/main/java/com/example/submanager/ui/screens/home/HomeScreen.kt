@@ -2,7 +2,6 @@ package com.example.submanager.ui.screens.home
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -30,9 +29,8 @@ fun HomeScreen(
     totalMonthly: Double,
     categoriesCount: Int,
     onNavigateToCategories: () -> Unit,
-    onToggleDarkMode: () -> Unit,
     onSubscriptionClick: (Int) -> Unit = {},
-    onNavigareToInsights: () -> Unit
+    onNavigateToInsights: () -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -52,7 +50,7 @@ fun HomeScreen(
                 MainCard(
                     totalMonthly = totalMonthly,
                     totalYearly = totalMonthly * 12,
-                    onNavigateToInsights = onNavigareToInsights
+                    onNavigateToInsights = onNavigateToInsights
                 )
 
                 // Stats Cards

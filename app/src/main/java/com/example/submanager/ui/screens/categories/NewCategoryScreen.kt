@@ -54,9 +54,9 @@ import com.example.submanager.viewModel.SubViewModel
 @Composable
 fun NewCategoryScreen(
     viewModel: SubViewModel,
-    onNavigateBack: () -> Unit,
     onCategorySaved: () -> Unit = {}
 ) {
+    // Todo: scomponi in elementi separati per argomenti
     var budget by remember { mutableStateOf("") }
     var categoryName by remember { mutableStateOf("") }
     var description by remember { mutableStateOf("") }

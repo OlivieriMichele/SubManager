@@ -13,8 +13,7 @@ import com.example.submanager.viewModel.SubViewModel
 fun ViewSubscriptionScreen(
     viewModel: SubViewModel,
     subscriptionId: Int,
-    onNavigateBack: () -> Unit,
-    onSubscriptionDeleted: () -> Unit
+    onNavigateBack: () -> Unit
 ) {
     // Trova l'abbonamento dal ViewModel
     val subscription = viewModel.subscriptions.value.find { it.id == subscriptionId }
@@ -24,14 +23,9 @@ fun ViewSubscriptionScreen(
             viewModel = viewModel,
             mode = FormMode.VIEW,
             subscription = subscription,
-            onNavigateBack = onNavigateBack,
             onSave = { updatedSub ->
                 viewModel.updateSubscription(updatedSub)
                 onNavigateBack()
-            },
-            onDelete = {
-                viewModel.deleteSubscription(subscriptionId)
-                onSubscriptionDeleted()
             }
         )
     } else {

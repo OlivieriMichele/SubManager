@@ -31,7 +31,6 @@ fun InsigthsScreen(
     lastMonthTotal: Double,
     categories: List<Category>,
     last5MonthsData: List<MonthData>, // Todo: just for test, take from database
-    onNavigateBack: () -> Unit
 ) {
     val percentageChange = if (lastMonthTotal > 0) {
         ((totalMonthly - lastMonthTotal) / lastMonthTotal * 100)

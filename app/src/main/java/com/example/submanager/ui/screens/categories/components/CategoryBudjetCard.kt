@@ -1,4 +1,4 @@
-package com.example.submanager.ui.screens.categoryDetail
+package com.example.submanager.ui.screens.categories.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border

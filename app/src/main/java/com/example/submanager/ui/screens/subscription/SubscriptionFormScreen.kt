@@ -42,9 +42,7 @@ fun SubscriptionFormScreen(
     viewModel: SubViewModel,
     mode: FormMode,
     subscription: Subscription? = null,
-    onNavigateBack: () -> Unit,
-    onSave: (Subscription) -> Unit = {},
-    onDelete: () -> Unit = {}
+    onSave: (Subscription) -> Unit = {}
 ) {
     // Form States
     var price by remember { mutableStateOf(subscription?.price?.toString() ?: "") }
@@ -93,12 +91,6 @@ fun SubscriptionFormScreen(
     }
 
     val categories = viewModel.getCategoryNames()
-
-    val screenTitle = when (mode) {
-        FormMode.CREATE -> "Nuovo Abbonamento"
-        FormMode.EDIT -> "Modifica Abbonamento"
-        FormMode.VIEW -> "Dettaglio"
-    }
 
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background

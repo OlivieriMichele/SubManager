@@ -10,9 +10,9 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.toRoute
 import com.example.submanager.model.MonthData
+import com.example.submanager.ui.screens.categories.CategoryDetailScreen
 import com.example.submanager.ui.screens.categories.CategoryScreen
 import com.example.submanager.ui.screens.categories.NewCategoryScreen
-import com.example.submanager.ui.screens.categoryDetail.CategoryDetailScreen
 import com.example.submanager.ui.screens.home.HomeScreen
 import com.example.submanager.ui.screens.insights.InsigthsScreen
 import com.example.submanager.ui.screens.subscription.AddSubscriptionScreen
@@ -82,11 +82,10 @@ fun SubNavigation(
                 onNavigateToCategories = {
                     navController.navigate(Screen.Categories)
                 },
-                onToggleDarkMode = viewModel::toggleDarkMode,
                 onSubscriptionClick = { subscriptionId ->
                     navController.navigate(Screen.ViewSubscription(subscriptionId))
                 },
-                onNavigareToInsights = {
+                onNavigateToInsights = {
                     navController.navigate(Screen.Insights)
                 }
             )
@@ -96,7 +95,6 @@ fun SubNavigation(
         composable<Screen.Categories> {
             CategoryScreen(
                 categories = viewModel.categoriesState.value,
-                onNavigateBack = { navController.popBackStack() },
                 onCategoryClick = { categoryName ->
                     navController.navigate(Screen.CategoryDetail(categoryName))
                 }
@@ -108,12 +106,8 @@ fun SubNavigation(
             val route = backStackEntry.toRoute<Screen.CategoryDetail>()
             CategoryDetailScreen(
                 categoryName = route.categoryName,
-                onNavigateBack = { navController.popBackStack() },
                 getCategoryDetails = viewModel::getCategoryDetails,
-                getCategorySubscriptions = viewModel::getCategorySubscriptions,
-                onDeleteCategory = { categoryName ->
-                    viewModel.deleteCategory(categoryName)
-                }
+                getCategorySubscriptions = viewModel::getCategorySubscriptions
             )
         }
 
@@ -121,7 +115,6 @@ fun SubNavigation(
         composable<Screen.AddSubscription> {
             AddSubscriptionScreen(
                 viewModel = viewModel,
-                onNavigateBack = { navController.popBackStack() },
                 onSubscriptionAdded = {
                     navController.popBackStack()
                 }
@@ -134,10 +127,7 @@ fun SubNavigation(
             ViewSubscriptionScreen(
                 viewModel = viewModel,
                 subscriptionId = route.subscriptionId,
-                onNavigateBack = { navController.popBackStack() },
-                onSubscriptionDeleted = {
-                    navController.popBackStack()
-                }
+                onNavigateBack = { navController.popBackStack() }
             )
         }
 
@@ -145,7 +135,6 @@ fun SubNavigation(
         composable<Screen.NewCategory> {
             NewCategoryScreen(
                 viewModel = viewModel,
-                onNavigateBack = { navController.popBackStack() },
                 onCategorySaved = { navController.popBackStack() }
             )
         }
@@ -162,8 +151,7 @@ fun SubNavigation(
                     MonthData("Ago", 87.20),
                     MonthData("Set", 87.20),
                     MonthData("Ott", 87.20)
-                ),
-                onNavigateBack = { navController.popBackStack() }
+                )
             )
         }
     }
