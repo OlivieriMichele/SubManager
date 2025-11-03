@@ -1,7 +1,6 @@
 package com.example.submanager.viewModel
 
 import androidx.lifecycle.ViewModel
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.State
 import com.example.submanager.model.Subscription
 import com.example.submanager.model.Category
@@ -9,27 +8,27 @@ import com.example.submanager.model.Category
 class SubViewModel : ViewModel() {
 
     // Delegati per la gestione separata
-    private val themeManager = ThemeManager()
+    private val handler = Handler()
     private val categoryManager = CategoryManager()
     private val subscriptionManager = SubscriptionManager()
 
     // THEME MANAGEMENT
 
-    val isDark: State<Boolean> = themeManager.isDark
-    fun toggleDarkMode() = themeManager.toggleDarkMode()
+    val isDark: State<Boolean> = handler.isDark
+    fun toggleDarkMode() = handler.toggleDarkMode()
 
     // EDITING STATE
 
-    val isEditingState: State<Boolean> = themeManager.isEditingState
-    val saveTrigger: State<Int> = themeManager.saveTrigger
-    val saveCategoryTrigger: State<Int> = themeManager.saveCategoryTrigger
+    val isEditingState: State<Boolean> = handler.isEditingState
+    val saveTrigger: State<Int> = handler.saveTrigger
+    val saveCategoryTrigger: State<Int> = handler.saveCategoryTrigger
 
-    fun setEditingMode(editing: Boolean) = themeManager.setEditingMode(editing)
-    fun resetEditingMode() = themeManager.resetEditingMode()
-    fun triggerSave() = themeManager.triggerSave()
-    fun resetSaveTrigger() = themeManager.resetSaveTrigger()
-    fun triggerSaveCategory() = themeManager.triggerSaveCategory()
-    fun resetSaveCategoryTrigger() = themeManager.resetSaveCategoryTrigger()
+    fun setEditingMode(editing: Boolean) = handler.setEditingMode(editing)
+    fun resetEditingMode() = handler.resetEditingMode()
+    fun triggerSave() = handler.triggerSave()
+    fun resetSaveTrigger() = handler.resetSaveTrigger()
+    fun triggerSaveCategory() = handler.triggerSaveCategory()
+    fun resetSaveCategoryTrigger() = handler.resetSaveCategoryTrigger()
 
     // CATEGORY MANAGEMENT
 

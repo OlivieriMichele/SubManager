@@ -150,14 +150,13 @@ fun AppHeader(
                 Spacer(modifier = Modifier.width(16.dp))
             }
 
-            // Title Todo: da controllare
             Text(
                 text = title,
                 fontSize = when (screen) {
-                    Screen.Home -> 24.sp
+                    Screen.Home -> 26.sp
                     Screen.NewCategory -> 28.sp
                     is Screen.ViewSubscription,
-                    Screen.AddSubscription -> 20.sp
+                    Screen.AddSubscription -> 24.sp
                     else -> 32.sp
                 },
                 fontWeight = when (screen) {

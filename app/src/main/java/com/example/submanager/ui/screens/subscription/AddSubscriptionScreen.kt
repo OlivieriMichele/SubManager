@@ -12,7 +12,7 @@ fun AddSubscriptionScreen(
         viewModel = viewModel,
         mode = FormMode.CREATE,
         onSave = { newSub ->
-            viewModel.addSubscription(newSub)
+            if (newSub.name != "") viewModel.addSubscription(newSub)
             onSubscriptionAdded()
         }
     )

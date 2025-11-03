@@ -26,7 +26,6 @@ fun AppFloatingActionButton(
     navController: NavController,
     viewModel: SubViewModel
 ){
-    // Todo: bug se clicco su salva senza aver inserito i dati
     fun setEdit(): () -> Unit = { viewModel.setEditingMode(true) }
     fun save(): () -> Unit = { viewModel.triggerSave()}
     fun saveCategory(): () -> Unit = { viewModel.triggerSaveCategory()}
