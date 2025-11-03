@@ -44,11 +44,7 @@ class MainActivity : ComponentActivity() {
                         AppFloatingActionButton(
                             screen = currentScreen,
                             viewModel = viewModel,
-                            onAdd = { navController.navigate(Screen.AddSubscription) },
-                            onEdit = { viewModel.setEditingMode(true) },
-                            onSave = { viewModel.triggerSave() },
-                            onAddCategory = { navController.navigate(Screen.NewCategory) },
-                            onSaveCategory = { viewModel.triggerSaveCategory() }
+                            navController = navController
                         )
                     }
                 ) { innerPadding ->
