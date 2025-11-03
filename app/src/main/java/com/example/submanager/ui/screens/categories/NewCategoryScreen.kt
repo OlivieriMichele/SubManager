@@ -114,44 +114,6 @@ fun NewCategoryScreen(
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
     ) {
-        // Status Bar Placeholder
-        Spacer(
-            modifier = Modifier
-                .height(30.dp)
-                .background(MaterialTheme.colorScheme.background)
-        )
-
-        // Header To-Do: aggiorna rendendolo un oggetto a parte
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 24.dp)
-                .padding(top = 16.dp, bottom = 24.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            IconButton(
-                onClick = onNavigateBack,
-                modifier = Modifier
-                    .size(40.dp)
-                    .background(MaterialTheme.colorScheme.surface, RoundedCornerShape(20.dp))
-                    .border(1.dp, MaterialTheme.colorScheme.outlineVariant, RoundedCornerShape(20.dp))
-            ) {
-                Icon(
-                    imageVector = Icons.Default.ArrowBack,
-                    contentDescription = "Indietro",
-                    tint = MaterialTheme.colorScheme.onSurface,
-                    modifier = Modifier.size(20.dp)
-                )
-            }
-            Spacer(modifier = Modifier.width(16.dp))
-            Text(
-                text = "Nuova Categoria",
-                fontSize = 28.sp,
-                color = MaterialTheme.colorScheme.onBackground,
-                fontWeight = FontWeight.Bold
-            )
-        }
-
         Column(
             modifier = Modifier
                 .fillMaxSize()

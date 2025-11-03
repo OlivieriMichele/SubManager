@@ -29,11 +29,11 @@ import kotlin.math.sin
 @Composable
 fun CategoryDistributionCard(categories: List<Category>) {
     val colors = listOf( // Todo: use colorScheme and a separator in the graph
-        AccentColors.pastelPurple,
+        AccentColors.pastelPink,
         AccentColors.pastelGreen,
         AccentColors.pastelBlue,
         AccentColors.pastelIndigo,
-        AccentColors.pastelPink,
+        AccentColors.pastelPurple,
         AccentColors.pastelYellow
     )
 

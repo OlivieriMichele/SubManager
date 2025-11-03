@@ -37,50 +37,6 @@ fun CategoryScreen(
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
     ) {
-        // Status Bar Placeholder (come in HomeScreen)
-        Spacer(
-            modifier = Modifier
-                .height(20.dp)
-                .background(MaterialTheme.colorScheme.background)
-        )
-
-        // Header
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 24.dp)
-                .padding(top = 16.dp, bottom = 32.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            IconButton(
-                onClick = onNavigateBack,
-                modifier = Modifier
-                    .size(40.dp)
-                    .background(MaterialTheme.colorScheme.surface, RoundedCornerShape(20.dp))
-                    .border(1.dp, MaterialTheme.colorScheme.outlineVariant, RoundedCornerShape(20.dp))
-            ) {
-                Icon(
-                    imageVector = Icons.Default.ArrowBack,
-                    contentDescription = "Indietro",
-                    tint = MaterialTheme.colorScheme.onSurface,
-                    modifier = Modifier.size(20.dp)
-                )
-            }
-            Spacer(modifier = Modifier.width(16.dp))
-            Column {
-                Text(
-                    text = "Categorie",
-                    fontSize = 32.sp,
-                    color = MaterialTheme.colorScheme.onBackground,
-                    fontWeight = FontWeight.Bold
-                )
-                Text(
-                    text = "Organizza i tuoi abbonamenti",
-                    fontSize = 14.sp,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            }
-        }
 
         LazyColumn(
             modifier = Modifier

@@ -37,97 +37,11 @@ fun CategoryDetailScreen(
         return
     }
 
-    // Dialog di conferma eliminazione
-    if (showDeleteDialog) {
-        AlertDialog(
-            onDismissRequest = { showDeleteDialog = false },
-            title = {
-                Text("Elimina Categoria")
-            },
-            text = {
-                Text("Sei sicuro di voler eliminare questa categoria? Verranno eliminati anche tutti gli abbonamenti associati.")
-            },
-            confirmButton = {
-                TextButton(
-                    onClick = {
-                        onDeleteCategory(categoryName)
-                        showDeleteDialog = false
-                        onNavigateBack()
-                    },
-                    colors = ButtonDefaults.textButtonColors(
-                        contentColor = Color(0xFFFF6B6B)
-                    )
-                ) {
-                    Text("Elimina")
-                }
-            },
-            dismissButton = {
-                TextButton(onClick = { showDeleteDialog = false }) {
-                    Text("Annulla")
-                }
-            }
-        )
-    }
-
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
     ) {
-        // Status Bar Placeholder
-        Spacer(
-            modifier = Modifier
-                .height(30.dp)
-                .background(MaterialTheme.colorScheme.background)
-        )
-
-        // Header
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 24.dp)
-                .padding(top = 16.dp, bottom = 32.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            IconButton(
-                onClick = onNavigateBack,
-                modifier = Modifier
-                    .size(40.dp)
-                    .background(MaterialTheme.colorScheme.surface, RoundedCornerShape(20.dp))
-                    .border(1.dp, MaterialTheme.colorScheme.outlineVariant, RoundedCornerShape(20.dp))
-            ) {
-                Icon(
-                    imageVector = Icons.Default.ArrowBack,
-                    contentDescription = "Indietro",
-                    tint = MaterialTheme.colorScheme.onSurface,
-                    modifier = Modifier.size(20.dp)
-                )
-            }
-            Spacer(modifier = Modifier.width(16.dp))
-            Text(
-                text = categoryName,
-                fontSize = 32.sp,
-                color = MaterialTheme.colorScheme.onBackground,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.weight(1f)
-            )
-
-            // Delete Button
-            IconButton(
-                onClick = { showDeleteDialog = true },
-                modifier = Modifier
-                    .size(40.dp)
-                    .background(Color(0xFFFF6B6B).copy(alpha = 0.15f), RoundedCornerShape(20.dp))
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Delete,
-                    contentDescription = "Elimina categoria",
-                    tint = Color(0xFFFF6B6B),
-                    modifier = Modifier.size(20.dp)
-                )
-            }
-        }
-
         // Content
         LazyColumn(
             modifier = Modifier

@@ -39,7 +39,6 @@ fun HomeScreen(
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
     ) {
-        StatusBarPlaceholder()
 
         LazyColumn(
             modifier = Modifier
@@ -48,11 +47,6 @@ fun HomeScreen(
         ) {
             item {
                 Spacer(modifier = Modifier.height(16.dp))
-
-                // Header Section
-                HeaderSection(
-                    onToggleDarkMode = onToggleDarkMode
-                )
 
                 // Main Card
                 MainCard(
@@ -109,15 +103,4 @@ fun HomeScreen(
             }
         }
     }
-}
-
-@Composable
-private fun StatusBarPlaceholder() {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(20.dp) // Altezza della Status Bar
-            .background(MaterialTheme.colorScheme.background)
-
-    )
 }

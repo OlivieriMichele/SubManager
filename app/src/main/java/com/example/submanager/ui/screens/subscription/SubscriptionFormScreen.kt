@@ -23,7 +23,6 @@ import androidx.compose.ui.unit.dp
 import com.example.submanager.model.Subscription
 import com.example.submanager.ui.screens.subscription.components.CategoryField
 import com.example.submanager.ui.screens.subscription.components.ColorPicker
-import com.example.submanager.ui.screens.subscription.components.FormTopBar
 import com.example.submanager.ui.screens.subscription.components.IconPreview
 import com.example.submanager.ui.screens.subscription.components.PriceAndDateFields
 import com.example.submanager.ui.screens.subscription.components.ServiceNameField
@@ -102,15 +101,7 @@ fun SubscriptionFormScreen(
     }
 
     Scaffold(
-        containerColor = MaterialTheme.colorScheme.background,
-        topBar = {
-            FormTopBar(
-                title = screenTitle,
-                showDeleteButton = mode != FormMode.CREATE,
-                onNavigateBack = onNavigateBack,
-                onDelete = onDelete
-            )
-        }
+        containerColor = MaterialTheme.colorScheme.background
     ) { paddingValues ->
         Column(
             modifier = Modifier

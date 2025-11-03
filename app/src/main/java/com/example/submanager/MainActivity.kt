@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.submanager.ui.screens.AppFloatingActionButton
+import com.example.submanager.ui.screens.AppHeader
 import com.example.submanager.ui.theme.SubManagerTheme
 import com.example.submanager.viewModel.SubViewModel
 
@@ -32,6 +33,13 @@ class MainActivity : ComponentActivity() {
 
                 Scaffold(
                     containerColor = MaterialTheme.colorScheme.background,
+                    topBar = {
+                        AppHeader(
+                            screen = currentScreen,
+                            viewModel = viewModel,
+                            navController = navController
+                        )
+                    },
                     floatingActionButton = {
                         AppFloatingActionButton(
                             screen = currentScreen,
