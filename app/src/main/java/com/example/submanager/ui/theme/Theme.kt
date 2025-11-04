@@ -84,7 +84,7 @@ fun SubManagerTheme(
         // Questa chiamata risolve Unresolved reference: SideEffect, WindowCompat e Variable expected
         SideEffect {
             val window = (view.context as Activity).window
-            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = darkTheme
+            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = !darkTheme
         }
     }
 
