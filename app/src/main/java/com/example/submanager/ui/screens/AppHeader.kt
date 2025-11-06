@@ -15,8 +15,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.example.submanager.Screen
+import com.example.submanager.data.repositories.ThemeRepository
 import com.example.submanager.viewModel.SubViewModel
 
 /**
@@ -26,14 +28,15 @@ import com.example.submanager.viewModel.SubViewModel
 @Composable
 fun AppHeader(
     screen: Screen?,
-    viewModel: SubViewModel,
+    viewModel: SubViewModel, // Temporaneo, nella fase 2/3 di refactoring lo eliminerò
     navController: NavController,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    themeViewModel: ThemeViewModel // aggiunto nella fase uno di refacoting
 ) {
     // State per il dialog di conferma eliminazione
     var showDeleteDialog by remember { mutableStateOf(false) }
     var itemToDelete by remember { mutableStateOf<String?>(null) }
-    val isDarkTheme = viewModel.isDark.value
+    val isDarkTheme by themeViewModel.isDarkMode.collectAsStateWithLifecycle()
 
     // Determina il titolo in base alla schermata
     val title = when (screen) {
@@ -172,7 +175,7 @@ fun AppHeader(
             if (showHomeActions) {
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)){
                     IconButton(
-                        onClick = { viewModel.toggleDarkMode() },
+                        onClick = { themeViewModel.toggleDarkMode() },
                         modifier = Modifier
                             .size(30.dp)
                             .background(MaterialTheme.colorScheme.surface, RoundedCornerShape(30.dp))

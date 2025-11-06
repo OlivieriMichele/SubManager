@@ -1,4 +1,7 @@
 package com.example.submanager.model
 
-class Theme {
+enum class Theme {
+    Light,
+    Dark,
+    System
 }

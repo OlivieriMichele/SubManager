@@ -10,21 +10,26 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.submanager.ui.screens.AppFloatingActionButton
 import com.example.submanager.ui.screens.AppHeader
+import com.example.submanager.ui.screens.ThemeViewModel
 import com.example.submanager.ui.theme.SubManagerTheme
 import com.example.submanager.viewModel.SubViewModel
+import org.koin.android.ext.android.inject
+import org.koin.androidx.compose.koinViewModel
 
 class MainActivity : ComponentActivity() {
-    private val viewModel: SubViewModel by viewModels()
+    private val viewModel: SubViewModel by viewModels() // Temporaneo, rimosso nelle prossime fasi di refacotring
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            val isDark = viewModel.isDark.value
+            val themeViewModel = koinViewModel<ThemeViewModel>()
+            val isDark by themeViewModel.isDarkMode.collectAsStateWithLifecycle()
             val navController = rememberNavController()
 
             SubManagerTheme(darkTheme = isDark, dynamicColor = false) {
@@ -37,6 +42,7 @@ class MainActivity : ComponentActivity() {
                         AppHeader(
                             screen = currentScreen,
                             viewModel = viewModel,
+                            themeViewModel = themeViewModel,
                             navController = navController
                         )
                     },

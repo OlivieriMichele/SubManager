@@ -22,26 +22,19 @@ import kotlinx.serialization.Serializable
 
 // Definizione type-safe delle route
 sealed interface Screen {
-    @Serializable
-    data object Home : Screen
+    @Serializable data object Home : Screen
 
-    @Serializable
-    data object Categories : Screen
+    @Serializable data object Categories : Screen
 
-    @Serializable
-    data class CategoryDetail(val categoryName: String) : Screen
+    @Serializable data class CategoryDetail(val categoryName: String) : Screen
 
-    @Serializable
-    data object AddSubscription : Screen
+    @Serializable data object AddSubscription : Screen
 
-    @Serializable
-    data class ViewSubscription(val subscriptionId: Int) : Screen
+    @Serializable data class ViewSubscription(val subscriptionId: Int) : Screen
 
-    @Serializable
-    data object NewCategory : Screen
+    @Serializable data object NewCategory : Screen
 
-    @Serializable
-    data object Insights : Screen
+    @Serializable data object Insights : Screen
 }
 
 // Extension function per ottenere la schermata corrente in modo type-safe

@@ -12,10 +12,7 @@ class SubViewModel : ViewModel() {
     private val categoryManager = CategoryManager()
     private val subscriptionManager = SubscriptionManager()
 
-    // THEME MANAGEMENT
-
-    val isDark: State<Boolean> = handler.isDark
-    fun toggleDarkMode() = handler.toggleDarkMode()
+    // THEME MANAGEMENT ELIMINATO PER USARE DATA_STORE
 
     // EDITING STATE
 

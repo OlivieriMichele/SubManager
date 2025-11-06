@@ -5,8 +5,6 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 
 class Handler {
-    private val _isDark = mutableStateOf(true)
-    val isDark: State<Boolean> = _isDark
 
     private val _isEditingState = mutableStateOf(false)
     val isEditingState: State<Boolean> = _isEditingState
@@ -16,10 +14,6 @@ class Handler {
 
     private val _saveCategoryTrigger = mutableIntStateOf(0)
     val saveCategoryTrigger: State<Int> = _saveCategoryTrigger
-
-    fun toggleDarkMode() {
-        _isDark.value = !_isDark.value
-    }
 
     fun setEditingMode(editing: Boolean) {
         _isEditingState.value = editing

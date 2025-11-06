@@ -41,6 +41,12 @@ android {
 }
 
 dependencies {
+    // Koin
+    implementation(libs.koin.android)
+    implementation(libs.koin.androidx.compose)
+    implementation(libs.androidx.datastore.preferences)
+    implementation(libs.androidx.lifecycle.runtime.compose)
+
     implementation("androidx.navigation:navigation-compose:2.8.9")
     implementation("io.ktor:ktor-serialization-kotlinx-json:2.3.8")
     implementation("androidx.compose.material:material-icons-extended:1.5.4")
