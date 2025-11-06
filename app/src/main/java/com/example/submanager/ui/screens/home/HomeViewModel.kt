@@ -62,6 +62,7 @@ class HomeViewModel(
             viewModelScope.launch {}
         }
 
+        // Todo: sposta in subscription
         override fun deleteSubscription(id: Int) {
             viewModelScope.launch {
                 subscriptionRepository.deleteSubscription(id)

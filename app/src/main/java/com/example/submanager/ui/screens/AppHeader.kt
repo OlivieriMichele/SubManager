@@ -93,6 +93,7 @@ fun AppHeader(
                                 viewModel.deleteCategory(itemToDelete!!)
                             }
                             is Screen.ViewSubscription -> {
+                                // usare la delete del homeViewModel
                                 viewModel.deleteSubscription(screen.subscriptionId)
                             }
                             else -> {}
