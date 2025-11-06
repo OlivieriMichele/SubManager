@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -25,9 +26,8 @@ import com.example.submanager.model.Subscription
 
 @Composable
 fun HomeScreen(
-    subscriptions: List<Subscription>,
-    totalMonthly: Double,
-    categoriesCount: Int,
+    state: HomeState,
+    actions: HomeActions,
     onNavigateToCategories: () -> Unit,
     onSubscriptionClick: (Int) -> Unit = {},
     onNavigateToInsights: () -> Unit
@@ -37,6 +37,23 @@ fun HomeScreen(
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
     ) {
+        if (state.isLoading) {
+            CircularProgressIndicator(
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .padding(top = 32.dp)
+            )
+            return@Column
+        }
+
+        if (state.error != null) {
+            Text(
+                text = "Errore: ${state.error}",
+                color = MaterialTheme.colorScheme.error,
+                modifier = Modifier.padding(16.dp)
+            )
+            return@Column
+        }
 
         LazyColumn(
             modifier = Modifier
@@ -48,16 +65,16 @@ fun HomeScreen(
 
                 // Main Card
                 MainCard(
-                    totalMonthly = totalMonthly,
-                    totalYearly = totalMonthly * 12,
+                    totalMonthly = state.totalMonthly,
+                    totalYearly = state.totalYearly,
                     onNavigateToInsights = onNavigateToInsights
                 )
 
                 // Stats Cards
                 StatsCards(
-                    subscriptionCount = subscriptions.size,
-                    expiringCount = 2, // Valore fisso del mockup
-                    categoriesCount = categoriesCount
+                    subscriptionCount = state.subscriptions.size,
+                    expiringCount = state.expiringCount,
+                    categoriesCount = state.activeCategoriesCount
                 )
 
                 // Categories Button
@@ -88,7 +105,7 @@ fun HomeScreen(
             }
 
             // Subscriptions List
-            items(subscriptions) { sub ->
+            items(state.subscriptions) { sub ->
                 SubscriptionItem(
                     subscription = sub,
                     onClick = { onSubscriptionClick(sub.id) }

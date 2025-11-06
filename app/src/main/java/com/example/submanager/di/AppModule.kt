@@ -3,8 +3,11 @@ package com.example.submanager.di
 import android.content.Context
 import androidx.datastore.preferences.preferencesDataStore
 import com.example.submanager.data.local.PreferencesManager
+import com.example.submanager.data.repositories.CategoryRepository
+import com.example.submanager.data.repositories.SubscriptionRepository
 import com.example.submanager.data.repositories.ThemeRepository
 import com.example.submanager.ui.screens.ThemeViewModel
+import com.example.submanager.ui.screens.home.HomeViewModel
 // import com.example.submanager.data.repositories.CategoryRepository
 // import com.example.submanager.data.repositories.SubscriptionRepository
 // import com.example.submanager.ui.screens.home.HomeViewModel
@@ -21,22 +24,16 @@ val Context.dataStore by preferencesDataStore(name = "submanager_prefs")
  */
 val appModule = module {
 
-    // ========== DATA LAYER ==========
-
-    // DataStore singleton
     single { androidContext().dataStore }
 
-    // Preferences Manager (gestisce operazioni DataStore)
     single { PreferencesManager(get()) }
-
-    // Repositories (singoli per dominio)
-    // single { SubscriptionRepository(get()) }
-    // single { CategoryRepository(get()) }
+    single { SubscriptionRepository() }
+    single { CategoryRepository() }
     single { ThemeRepository(get()) }
 
     // ========== PRESENTATION LAYER ==========
 
     // ViewModels (uno per schermata/feature)
-    // viewModel { HomeViewModel(get(), get()) }
     viewModel { ThemeViewModel(get()) }
+    viewModel { HomeViewModel(get(), get()) }
 }

@@ -2,7 +2,9 @@ package com.example.submanager.ui
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -14,26 +16,22 @@ import com.example.submanager.ui.screens.categories.CategoryDetailScreen
 import com.example.submanager.ui.screens.categories.CategoryScreen
 import com.example.submanager.ui.screens.categories.NewCategoryScreen
 import com.example.submanager.ui.screens.home.HomeScreen
+import com.example.submanager.ui.screens.home.HomeViewModel
 import com.example.submanager.ui.screens.insights.InsigthsScreen
 import com.example.submanager.ui.screens.subscription.AddSubscriptionScreen
 import com.example.submanager.ui.screens.subscription.ViewSubscriptionScreen
 import com.example.submanager.viewModel.SubViewModel
 import kotlinx.serialization.Serializable
+import org.koin.androidx.compose.koinViewModel
 
 // Definizione type-safe delle route
 sealed interface Screen {
     @Serializable data object Home : Screen
-
     @Serializable data object Categories : Screen
-
     @Serializable data class CategoryDetail(val categoryName: String) : Screen
-
     @Serializable data object AddSubscription : Screen
-
     @Serializable data class ViewSubscription(val subscriptionId: Int) : Screen
-
     @Serializable data object NewCategory : Screen
-
     @Serializable data object Insights : Screen
 }
 
@@ -56,7 +54,7 @@ fun NavBackStackEntry.getCurrentScreen(): Screen? {
 @Composable
 fun SubNavigation(
     navController: NavHostController,
-    viewModel: SubViewModel,
+    viewModel: SubViewModel, // Todo: temporaneo, da rimuovere a finre refactory
     modifier: Modifier
 ) {
     HandleNavigationEffects(navController, viewModel)
@@ -68,19 +66,17 @@ fun SubNavigation(
     ) {
         // Home Screen
         composable<Screen.Home> {
+            val homeViewModel = koinViewModel<HomeViewModel>()
+            val homeState by homeViewModel.state.collectAsStateWithLifecycle()
+
             HomeScreen(
-                subscriptions = viewModel.subscriptions.value,
-                totalMonthly = viewModel.getTotalMonthly(),
-                categoriesCount = viewModel.categoriesState.value.filter { it.count > 0 }.size,
-                onNavigateToCategories = {
-                    navController.navigate(Screen.Categories)
-                },
+                state = homeState,
+                actions = homeViewModel.actions,
+                onNavigateToCategories = { navController.navigate(Screen.Categories) },
                 onSubscriptionClick = { subscriptionId ->
                     navController.navigate(Screen.ViewSubscription(subscriptionId))
                 },
-                onNavigateToInsights = {
-                    navController.navigate(Screen.Insights)
-                }
+                onNavigateToInsights = { navController.navigate(Screen.Insights) }
             )
         }
 
