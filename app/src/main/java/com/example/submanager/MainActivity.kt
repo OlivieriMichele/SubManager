@@ -13,12 +13,13 @@ import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.submanager.ui.SubNavigation
+import com.example.submanager.ui.getCurrentScreen
 import com.example.submanager.ui.screens.AppFloatingActionButton
 import com.example.submanager.ui.screens.AppHeader
 import com.example.submanager.ui.screens.ThemeViewModel
 import com.example.submanager.ui.theme.SubManagerTheme
 import com.example.submanager.viewModel.SubViewModel
-import org.koin.android.ext.android.inject
 import org.koin.androidx.compose.koinViewModel
 
 class MainActivity : ComponentActivity() {

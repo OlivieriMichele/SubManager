@@ -16,7 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.submanager.Screen
+import com.example.submanager.ui.Screen
 import com.example.submanager.viewModel.SubViewModel
 
 @Composable

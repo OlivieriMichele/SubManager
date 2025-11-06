@@ -1,4 +1,4 @@
-package com.example.submanager
+package com.example.submanager.ui
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect

@@ -34,7 +34,7 @@ class PreferencesManager(
     }
 
     /*
-    Todo: update toggle with model.Theme to use system settings like teacher ex
+    Todo: update toggle with model.Theme to use system settings like teacher exercise
     companion object {
         private val THEME_KEY = stringPreferencesKey("theme")
     }

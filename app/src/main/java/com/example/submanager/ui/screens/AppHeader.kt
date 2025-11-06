@@ -17,8 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
-import com.example.submanager.Screen
-import com.example.submanager.data.repositories.ThemeRepository
+import com.example.submanager.ui.Screen
 import com.example.submanager.viewModel.SubViewModel
 
 /**
