@@ -1,12 +1,7 @@
-# NomeApp
-
-SubManager
+# SubManager
 
 ---
-
-## ✨ Overview
-
-Una frase di contesto, tipo:  
+  
 _A simple and modern mobile app to track your monthly expenses, focus on subscriptions.. Still work-in-progress._
 
 ---
@@ -25,10 +20,6 @@ _A simple and modern mobile app to track your monthly expenses, focus on subscri
 
 ---
 
-## 📸 Screenshots
-
-Puoi inserire gli screenshot in fila orizzontale come nell’immagine che hai mostrato:  
-```html
 <p align="center">
   <img src="screenshot/Screenshot_1_SubManager.jpg" width="250" />
   <img src="screenshot/Screenshot_2_SubManager.jpg" width="250" />
