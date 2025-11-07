@@ -1,14 +1,10 @@
 # SubManager
-
----
   
 _A simple and modern mobile app to track your monthly expenses, focus on subscriptions.. Still work-in-progress._
 
----
+## Features
 
-## 🧩 Features
-
-- Lista sintetica delle funzioni principali:
+Lista delle Funzioni principali:
   - Mockup in figma
   - 🌙 Impostazioni con toggle tema
   - Pagina con una lista di item (sub o category)
@@ -17,8 +13,6 @@ _A simple and modern mobile app to track your monthly expenses, focus on subscri
   - 📊 Grafici e data visualization
   - Persistenza dati su database e DataStore
   - Funzionalità di ricerca e filtri
-
----
 
 <p align="center">
   <img src="screenshot/Screenshot_1_SubManager.jpg" width="250" />

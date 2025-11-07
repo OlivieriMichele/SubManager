@@ -57,7 +57,7 @@ class HomeViewModel(
 
     val actions = object : HomeActions {
         override fun refreshData() {
-            // TODO: Quando avrai Room DB, qui ricaricherai i dati
+            // TODO: Quando avrò Room DB, ricara i dati
             // Per ora non fa nulla perché i dati sono già reattivi
             viewModelScope.launch {}
         }

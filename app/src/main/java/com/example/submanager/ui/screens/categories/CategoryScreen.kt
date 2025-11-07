@@ -27,7 +27,7 @@ import com.example.submanager.ui.theme.AccentColors
 
 @Composable
 fun CategoryScreen(
-    categories: List<Category>,
+    state: CategoryListState,
     onCategoryClick: (String) -> Unit
 ) {
 
@@ -42,7 +42,7 @@ fun CategoryScreen(
                 .fillMaxSize()
                 .padding(horizontal = 24.dp)
         ) {
-            items(categories) { category ->
+            items(state.categories) { category ->
                 CategoryItem(
                     category = category,
                     onClick = { onCategoryClick(category.name) }
@@ -52,7 +52,7 @@ fun CategoryScreen(
 
             item {
                 // Summary Card
-                SummaryCard()
+                SummaryCard(state)
                 Spacer(modifier = Modifier.height(120.dp)) // Spazio per Bottom Nav
             }
         }
@@ -136,7 +136,7 @@ private fun CategoryItem(category: Category, onClick: () -> Unit) {
 }
 
 @Composable
-private fun SummaryCard() {
+private fun SummaryCard(state: CategoryListState) {
 
     Column(
         modifier = Modifier
@@ -157,15 +157,13 @@ private fun SummaryCard() {
         // Categoria più costosa
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
             Text(text = "Categoria più costosa", fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
-            Text(text = "Fitness", fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurface)
-            // TODO: replica con dati dinamici
+            Text(text = state.mostExpensiveCategory ?: "N/A", fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurface)
         }
         Divider(color = MaterialTheme.colorScheme.outline, thickness = 1.dp, modifier = Modifier.padding(vertical = 12.dp))
 
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
             Text(text = "Con più servizi", fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
-            Text(text = "Intrattenimento", fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurface)
-            // TODO: replica con dati dinamici
+            Text(text = state.categoryWithMostServices ?: "N/A", fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurface)
         }
     }
 }

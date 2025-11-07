@@ -14,6 +14,7 @@ import androidx.navigation.toRoute
 import com.example.submanager.model.MonthData
 import com.example.submanager.ui.screens.categories.CategoryDetailScreen
 import com.example.submanager.ui.screens.categories.CategoryScreen
+import com.example.submanager.ui.screens.categories.CategoryViewModel
 import com.example.submanager.ui.screens.categories.NewCategoryScreen
 import com.example.submanager.ui.screens.home.HomeScreen
 import com.example.submanager.ui.screens.home.HomeViewModel
@@ -82,8 +83,11 @@ fun SubNavigation(
 
         // Categories Screen
         composable<Screen.Categories> {
+            val viewModel = koinViewModel<CategoryViewModel>()
+            val state by viewModel.categoryListState.collectAsStateWithLifecycle()
+
             CategoryScreen(
-                categories = viewModel.categoriesState.value,
+                state = state,
                 onCategoryClick = { categoryName ->
                     navController.navigate(Screen.CategoryDetail(categoryName))
                 }
@@ -93,10 +97,16 @@ fun SubNavigation(
         // Category Detail Screen
         composable<Screen.CategoryDetail> { backStackEntry ->
             val route = backStackEntry.toRoute<Screen.CategoryDetail>()
+            val viewModel = koinViewModel<CategoryViewModel>()
+            val state by viewModel.categoryDetailState.collectAsStateWithLifecycle()
+
+            LaunchedEffect(route.categoryName) {
+                viewModel.actions.loadCategoryDetail(route.categoryName)
+            }
+
             CategoryDetailScreen(
-                categoryName = route.categoryName,
-                getCategoryDetails = viewModel::getCategoryDetails,
-                getCategorySubscriptions = viewModel::getCategorySubscriptions
+                state = state,
+                onSubscriptionClick = {id -> navController.navigate(Screen.ViewSubscription(id))}
             )
         }
 

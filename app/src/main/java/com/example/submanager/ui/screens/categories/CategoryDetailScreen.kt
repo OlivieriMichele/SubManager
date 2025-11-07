@@ -29,12 +29,11 @@ import com.example.submanager.ui.screens.categories.components.CategorySubscript
 
 @Composable
 fun CategoryDetailScreen(
-    categoryName: String,
-    getCategoryDetails: (String) -> Category?,
-    getCategorySubscriptions: (String) -> List<Subscription>
+    state: CategoryDetailState,
+    onSubscriptionClick: (Int) -> Unit = {}
 ) {
-    val categoryData = getCategoryDetails(categoryName)
-    val categorySubs = getCategorySubscriptions(categoryName)
+    val categoryData = state.category
+    val categorySubs = state.subscriptions
 
     if (categoryData == null) {
         // TODO: Gestione errore o caricamento
