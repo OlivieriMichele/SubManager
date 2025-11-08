@@ -1,7 +1,6 @@
 package com.example.submanager.data.repositories
 
 import androidx.compose.ui.graphics.Color
-import com.example.submanager.data.local.PreferencesManager
 import com.example.submanager.model.Subscription
 import com.example.submanager.ui.theme.AccentColors
 import kotlinx.coroutines.flow.Flow

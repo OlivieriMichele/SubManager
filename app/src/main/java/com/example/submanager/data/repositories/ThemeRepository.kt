@@ -1,7 +1,6 @@
 package com.example.submanager.data.repositories
 
 import com.example.submanager.data.local.PreferencesManager
-import com.example.submanager.model.Theme
 import kotlinx.coroutines.flow.Flow
 
 /**

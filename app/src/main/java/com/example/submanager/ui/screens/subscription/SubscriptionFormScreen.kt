@@ -10,8 +10,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -19,15 +17,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.submanager.model.Subscription
 import com.example.submanager.ui.screens.subscription.components.CategoryField
 import com.example.submanager.ui.screens.subscription.components.ColorPicker
 import com.example.submanager.ui.screens.subscription.components.IconPreview
 import com.example.submanager.ui.screens.subscription.components.PriceAndDateFields
 import com.example.submanager.ui.screens.subscription.components.ServiceNameField
 import com.example.submanager.ui.screens.subscription.components.SubscriptionColors
-import com.example.submanager.viewModel.SubViewModel
-import java.time.LocalDate
 
 @Composable
 fun SubscriptionFormScreen(

@@ -19,12 +19,9 @@ import com.example.submanager.ui.screens.AppFloatingActionButton
 import com.example.submanager.ui.screens.AppHeader
 import com.example.submanager.ui.screens.ThemeViewModel
 import com.example.submanager.ui.theme.SubManagerTheme
-import com.example.submanager.viewModel.SubViewModel
 import org.koin.androidx.compose.koinViewModel
 
 class MainActivity : ComponentActivity() {
-    private val viewModel: SubViewModel by viewModels() // Temporaneo, rimosso nelle prossime fasi di refacotring
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -42,7 +39,6 @@ class MainActivity : ComponentActivity() {
                     topBar = {
                         AppHeader(
                             screen = currentScreen,
-                            viewModel = viewModel,
                             themeViewModel = themeViewModel,
                             navController = navController
                         )
@@ -50,12 +46,11 @@ class MainActivity : ComponentActivity() {
                     floatingActionButton = {
                         AppFloatingActionButton(
                             screen = currentScreen,
-                            viewModel = viewModel,
                             navController = navController
                         )
                     }
                 ) { innerPadding ->
-                    SubNavigation(navController, viewModel, Modifier.padding(innerPadding))
+                    SubNavigation(navController, Modifier.padding(innerPadding))
                 }
             }
         }

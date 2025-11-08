@@ -18,23 +18,19 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.example.submanager.ui.Screen
-import com.example.submanager.viewModel.SubViewModel
+import com.example.submanager.ui.screens.categories.CategoryViewModel
+import com.example.submanager.ui.screens.subscription.SubscriptionViewModel
+import org.koin.androidx.compose.koinViewModel
 
-/**
- * Header unificato dell'app completamente autonomo.
- * Gestisce automaticamente tutte le azioni (navigazione, tema, delete, ecc.)
- */
 @Composable
 fun AppHeader(
     screen: Screen?,
-    viewModel: SubViewModel, // Temporaneo, nella fase 2/3 di refactoring lo eliminerò
     navController: NavController,
-    modifier: Modifier = Modifier,
-    themeViewModel: ThemeViewModel // aggiunto nella fase uno di refacoting
+    themeViewModel: ThemeViewModel,
+    modifier: Modifier = Modifier
 ) {
     // State per il dialog di conferma eliminazione
     var showDeleteDialog by remember { mutableStateOf(false) }
-    var itemToDelete by remember { mutableStateOf<String?>(null) }
     val isDarkTheme by themeViewModel.isDarkMode.collectAsStateWithLifecycle()
 
     // Determina il titolo in base alla schermata
@@ -44,75 +40,22 @@ fun AppHeader(
         Screen.Categories -> "Categorie"
         Screen.NewCategory -> "Nuova Categoria"
         Screen.Insights -> "Statistiche"
-        is Screen.ViewSubscription -> {
-            if (viewModel.isEditingState.value)
-                "Modifica Abbonamento"
-            else
-                "Dettaglio"
-        }
+        is Screen.ViewSubscription -> "Dettaglio"
         is Screen.CategoryDetail -> screen.categoryName
         else -> return // nessun header
     }
 
-    // Determina se mostrare il back button
+    // Determina se mostrare i vari elementi
     val showBackButton = screen != Screen.Home
-
-    // Determina se mostrare le azioni Home (tema e notifiche)
     val showHomeActions = screen == Screen.Home
+    val showDeleteButton = screen is Screen.CategoryDetail || screen is Screen.ViewSubscription
 
-    // Determina se mostrare il bottone delete
-    val showDeleteButton = when (screen) {
-        is Screen.CategoryDetail -> true
-        is Screen.ViewSubscription -> !viewModel.isEditingState.value
-        else -> false
-    }
-
-    // Dialog di conferma eliminazione
-    if (showDeleteDialog && itemToDelete != null) {
-        AlertDialog(
-            onDismissRequest = { showDeleteDialog = false },
-            title = {
-                Text(
-                    if (screen is Screen.CategoryDetail) "Elimina Categoria"
-                    else "Elimina Abbonamento"
-                )
-            },
-            text = {
-                Text(
-                    if (screen is Screen.CategoryDetail)
-                        "Sei sicuro di voler eliminare questa categoria? Verranno eliminati anche tutti gli abbonamenti associati."
-                    else
-                        "Sei sicuro di voler eliminare questo abbonamento?"
-                )
-            },
-            confirmButton = {
-                TextButton(
-                    onClick = {
-                        when (screen) {
-                            is Screen.CategoryDetail -> {
-                                viewModel.deleteCategory(itemToDelete!!)
-                            }
-                            is Screen.ViewSubscription -> {
-                                // usare la delete del homeViewModel
-                                viewModel.deleteSubscription(screen.subscriptionId)
-                            }
-                            else -> {}
-                        }
-                        showDeleteDialog = false
-                        navController.popBackStack()
-                    },
-                    colors = ButtonDefaults.textButtonColors(
-                        contentColor = Color(0xFFFF6B6B)
-                    )
-                ) {
-                    Text("Elimina")
-                }
-            },
-            dismissButton = {
-                TextButton(onClick = { showDeleteDialog = false }) {
-                    Text("Annulla")
-                }
-            }
+    // ========== DIALOG DI CONFERMA DELETE ==========
+    if (showDeleteDialog) {
+        DeleteConfirmationDialog(
+            screen = screen,
+            navController = navController,
+            onDismiss = { showDeleteDialog = false }
         )
     }
 
@@ -133,38 +76,28 @@ fun AppHeader(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 24.dp)
-                .padding(
-                    top = 16.dp,
-                    bottom = 24.dp
-                ),
+                .padding(top = 16.dp, bottom = 24.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             // Back Button
             if (showBackButton) {
                 CircularBackButton(
-                    onClick = {
-                        // Reset editing mode se necessario
-                        if (screen is Screen.ViewSubscription && viewModel.isEditingState.value) {
-                            viewModel.resetEditingMode()
-                        }
-                        navController.popBackStack()
-                    }
+                    onClick = { navController.popBackStack() }
                 )
                 Spacer(modifier = Modifier.width(16.dp))
             }
 
+            // Title
             Text(
                 text = title,
                 fontSize = when (screen) {
                     Screen.Home -> 26.sp
                     Screen.NewCategory -> 28.sp
-                    is Screen.ViewSubscription,
-                    Screen.AddSubscription -> 24.sp
+                    is Screen.ViewSubscription, Screen.AddSubscription -> 24.sp
                     else -> 32.sp
                 },
                 fontWeight = when (screen) {
-                    is Screen.ViewSubscription,
-                    Screen.AddSubscription -> FontWeight.Medium
+                    is Screen.ViewSubscription, Screen.AddSubscription -> FontWeight.Medium
                     else -> FontWeight.Bold
                 },
                 color = MaterialTheme.colorScheme.onBackground,
@@ -173,7 +106,8 @@ fun AppHeader(
 
             // Home Actions (theme + notifications)
             if (showHomeActions) {
-                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)){
+                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    // Theme Toggle
                     IconButton(
                         onClick = { themeViewModel.toggleDarkMode() },
                         modifier = Modifier
@@ -189,6 +123,7 @@ fun AppHeader(
                         )
                     }
 
+                    // Notifications
                     IconButton(
                         onClick = { /* TODO: gestire notifiche */ },
                         modifier = Modifier
@@ -209,14 +144,7 @@ fun AppHeader(
             // Delete Button
             if (showDeleteButton) {
                 IconButton(
-                    onClick = {
-                        itemToDelete = when (screen) {
-                            is Screen.CategoryDetail -> screen.categoryName
-                            is Screen.ViewSubscription -> screen.subscriptionId.toString()
-                            else -> null
-                        }
-                        showDeleteDialog = true
-                    },
+                    onClick = { showDeleteDialog = true },
                     modifier = Modifier
                         .size(40.dp)
                         .background(
@@ -237,7 +165,71 @@ fun AppHeader(
 }
 
 /**
- * Bottone indietro circolare con bordo
+ * Dialog di conferma eliminazione - AUTONOMO
+ * Ottiene il ViewModel necessario e gestisce la delete internamente
+ */
+@Composable
+private fun DeleteConfirmationDialog(
+    screen: Screen?,
+    navController: NavController,
+    onDismiss: () -> Unit,
+    subscriptionViewModel: SubscriptionViewModel = koinViewModel(),
+    categoryViewModel: CategoryViewModel = koinViewModel()
+) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = {
+            Text(
+                if (screen is Screen.CategoryDetail) "Elimina Categoria"
+                else "Elimina Abbonamento"
+            )
+        },
+        text = {
+            Text(
+                if (screen is Screen.CategoryDetail)
+                    "Sei sicuro di voler eliminare questa categoria? Verranno eliminati anche tutti gli abbonamenti associati."
+                else
+                    "Sei sicuro di voler eliminare questo abbonamento?"
+            )
+        },
+        confirmButton = {
+            TextButton(
+                onClick = {
+                    // ========== LOGICA DELETE AUTONOMA ==========
+                    when (screen) {
+                        is Screen.CategoryDetail -> {
+                            // Ottiene CategoryViewModel e chiama delete
+                            categoryViewModel.actions.deleteCategory(screen.categoryName) {
+                                navController.popBackStack()
+                            }
+                        }
+                        is Screen.ViewSubscription -> {
+                            // Ottiene SubscriptionViewModel e chiama delete
+                            subscriptionViewModel.actions.deleteSubscription(screen.subscriptionId) {
+                                navController.popBackStack()
+                            }
+                        }
+                        else -> {}
+                    }
+                    onDismiss()
+                },
+                colors = ButtonDefaults.textButtonColors(
+                    contentColor = Color(0xFFFF6B6B)
+                )
+            ) {
+                Text("Elimina")
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismiss) {
+                Text("Annulla")
+            }
+        }
+    )
+}
+
+/**
+ * Bottone indietro circolare
  */
 @Composable
 private fun CircularBackButton(

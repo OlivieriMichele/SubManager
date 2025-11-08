@@ -12,55 +12,96 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.example.submanager.ui.Screen
-import com.example.submanager.viewModel.SubViewModel
+import com.example.submanager.ui.screens.categories.CategoryViewModel
+import com.example.submanager.ui.screens.subscription.SubscriptionViewModel
+import com.example.submanager.ui.theme.CategoryIcons
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun AppFloatingActionButton(
-    modifier: Modifier = Modifier,
     screen: Screen?,
     navController: NavController,
-    viewModel: SubViewModel
-){
-    fun setEdit(): () -> Unit = { viewModel.setEditingMode(true) }
-    fun save(): () -> Unit = { viewModel.triggerSave()}
-    fun saveCategory(): () -> Unit = { viewModel.triggerSaveCategory()}
-    fun addCategory(): () -> Unit = { navController.navigate(Screen.NewCategory) }
-    fun addSubscription(): () -> Unit = { navController.navigate(Screen.AddSubscription) }
+    modifier: Modifier = Modifier
+) {
+    var icon = Icons.Default.Add
+    var description = ""
+    var onClick: () -> Unit = {}
 
-    // Determine icon and action in order to currentScreen
-    val (icon, description, action) = when (screen) {
-        Screen.Home -> Triple(Icons.Default.Add, "Aggiungi", addSubscription())
-
-        Screen.AddSubscription -> Triple(Icons.Default.Check, "Salva", save())
-
-        Screen.Categories -> Triple(Icons.Default.Add, "Aggiungi", addCategory())
-
-        Screen.NewCategory -> Triple(Icons.Default.Save, "Salva Categoria", saveCategory())
-
-        is Screen.ViewSubscription -> {
-            if (viewModel.isEditingState.value)
-                Triple(Icons.Default.Check, "Salva Abbonamento", save())
-            else
-                Triple(Icons.Default.Edit, "Modifica", setEdit())
+    when (screen) {
+        Screen.Home -> {
+            icon = Icons.Default.Add
+            description = "Aggiungi Abbonamento"
+            onClick = { navController.navigate(Screen.AddSubscription) }
         }
 
-        else -> return // nessun FAB
+        Screen.AddSubscription -> {
+            val viewModel = koinViewModel<SubscriptionViewModel>()
+            icon = Icons.Default.Check
+            description = "Salva"
+            onClick = {
+                viewModel.actions.saveSubscription {
+                    navController.popBackStack()
+                }
+            }
+        }
+
+        is Screen.ViewSubscription -> {
+            val viewModel = koinViewModel<SubscriptionViewModel>()
+            val state by viewModel.state.collectAsStateWithLifecycle()
+            if (state.isEditing) {
+                icon = Icons.Default.Check
+                description = "Salva"
+                onClick = {
+                    viewModel.actions.saveSubscription {
+                        navController.popBackStack()
+                    }
+                }
+            } else {
+                icon = Icons.Default.Edit
+                description = "Modifica"
+                onClick = { viewModel.actions.setEditMode(true) }
+            }
+        }
+
+        Screen.Categories -> {
+            icon = Icons.Default.Add
+            description = "Aggiungi Categoria"
+            onClick = { navController.navigate(Screen.NewCategory) }
+        }
+
+        Screen.NewCategory -> {
+            val viewModel = koinViewModel<CategoryViewModel>()
+            val state by viewModel.categoryFormState.collectAsStateWithLifecycle()
+            icon = Icons.Default.Save
+            description = "Salva Categoria"
+            onClick = {
+                val selectedIcon = CategoryIcons.availableIcons[state.selectedIconIndex]
+                viewModel.saveCategoryWithIcon(selectedIcon) {
+                    navController.popBackStack()
+                }
+            }
+        }
+
+        // ALTRO → nessun FAB
+        else -> return
     }
 
     FloatingActionButton(
-        onClick = action,
+        onClick = onClick,
         shape = CircleShape,
         modifier = modifier
             .size(56.dp)
-            .background(MaterialTheme.colorScheme.primary, shape = CircleShape)
+            .background(MaterialTheme.colorScheme.primary, CircleShape)
     ) {
         Icon(
-            icon,
+            imageVector = icon,
             contentDescription = description,
             tint = Color.White,
             modifier = Modifier.size(24.dp)
