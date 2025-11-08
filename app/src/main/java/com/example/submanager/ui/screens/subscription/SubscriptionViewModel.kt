@@ -19,7 +19,7 @@ data class SubscriptionFormState(
     val price: String = "",
     val renewalDate: LocalDate = LocalDate.now(),
     val selectedCategory: String = "",
-    val selectedColor: Color = Color.Blue,
+    val selectedColor: Color = Color.DarkGray,
     val availableCategories: List<String> = emptyList(),
     val isEditing: Boolean = true,  // false = VIEW mode
     val isSaving: Boolean = false,

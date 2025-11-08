@@ -29,65 +29,12 @@ import com.example.submanager.ui.screens.subscription.components.SubscriptionCol
 import com.example.submanager.viewModel.SubViewModel
 import java.time.LocalDate
 
-enum class FormMode {
-    CREATE,
-    VIEW
-}
-
 @Composable
 fun SubscriptionFormScreen(
-    viewModel: SubViewModel,
-    mode: FormMode,
-    subscription: Subscription? = null,
-    onSave: (Subscription) -> Unit = {}
+    state: SubscriptionFormState,
+    actions: SubscriptionActions
 ) {
-    // Form States
-    var price by remember { mutableStateOf(subscription?.price?.toString() ?: "") }
-    var renewalDate by remember { mutableStateOf(subscription?.nextBilling ?: LocalDate.now()) }
-    var serviceName by remember { mutableStateOf(subscription?.name ?: "") }
-    var selectedCategory by remember { mutableStateOf(subscription?.category ?: "") }
-    var selectedColor by remember {
-        mutableStateOf(subscription?.color ?: SubscriptionColors.availableColors.first())
-    }
     var showCategoryDropdown by remember { mutableStateOf(false) }
-
-    val isEditing = when (mode) {
-        FormMode.VIEW -> viewModel.isEditingState.value
-        else -> true
-    }
-
-    val saveTrigger by viewModel.saveTrigger
-
-    LaunchedEffect(saveTrigger) {
-        if (saveTrigger > 0 && isEditing) {
-            val newSubscription = Subscription(
-                id = subscription?.id ?: (0..10000).random(),
-                name = serviceName,
-                price = price.toDoubleOrNull() ?: 0.0,
-                color = selectedColor,
-                nextBilling = renewalDate,
-                category = selectedCategory
-            )
-            onSave(newSubscription)
-
-            // RESET del trigger dopo il salvataggio
-            viewModel.resetSaveTrigger()
-
-            // Dopo il salvataggio, esci dalla modalità editing
-            if (mode == FormMode.VIEW) {
-                viewModel.resetEditingMode()
-            }
-        }
-    }
-
-    DisposableEffect(Unit) {
-        // Reset del trigger quando esci dalla schermata
-        onDispose {
-            viewModel.resetSaveTrigger()
-        }
-    }
-
-    val categories = viewModel.getCategoryNames()
 
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background
@@ -102,47 +49,47 @@ fun SubscriptionFormScreen(
             Spacer(modifier = Modifier.height(24.dp))
 
             IconPreview(
-                serviceName = serviceName,
-                color = selectedColor,
+                serviceName = state.serviceName,
+                color = state.selectedColor,
                 modifier = Modifier.align(Alignment.CenterHorizontally)
             )
 
             Spacer(modifier = Modifier.height(32.dp))
 
             PriceAndDateFields(
-                price = price,
-                onPriceChange = { if (isEditing) price = it },
-                renewalDate = renewalDate,
-                onRenewalDateChange = { if (isEditing) renewalDate = it },
-                enabled = isEditing
+                price = state.price,
+                onPriceChange = { actions.setPrice(it) },
+                renewalDate = state.renewalDate,
+                onRenewalDateChange = { actions.setRenewalDate(it) },
+                enabled = state.isEditing
             )
 
             Spacer(modifier = Modifier.height(24.dp))
 
             ServiceNameField(
-                serviceName = serviceName,
-                onServiceNameChange = { if (isEditing) serviceName = it },
-                enabled = isEditing
+                serviceName = state.serviceName,
+                onServiceNameChange = { actions.setServiceName(it) },
+                enabled = state.isEditing
             )
 
             Spacer(modifier = Modifier.height(24.dp))
 
             CategoryField(
-                selectedCategory = selectedCategory,
-                onCategorySelected = { selectedCategory = it },
-                categories = categories,
+                selectedCategory = state.selectedCategory,
+                onCategorySelected = { actions.setCategory(it) },
+                categories = state.availableCategories,
                 showDropdown = showCategoryDropdown,
                 onDropdownToggle = { showCategoryDropdown = it },
-                enabled = isEditing
+                enabled = state.isEditing
             )
 
             Spacer(modifier = Modifier.height(24.dp))
 
             ColorPicker(
-                selectedColor = selectedColor,
+                selectedColor = state.selectedColor,
                 availableColors = SubscriptionColors.availableColors,
-                onColorSelected = { selectedColor = it },
-                enabled = isEditing
+                onColorSelected = { actions.setColor(it) },
+                enabled = state.isEditing
             )
 
             Spacer(modifier = Modifier.height(32.dp))

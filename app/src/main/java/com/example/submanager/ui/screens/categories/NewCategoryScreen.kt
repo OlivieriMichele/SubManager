@@ -46,6 +46,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -53,16 +54,12 @@ import com.example.submanager.viewModel.SubViewModel
 
 @Composable
 fun NewCategoryScreen(
-    viewModel: SubViewModel,
-    onCategorySaved: () -> Unit = {}
+    state: CategoryFormState,
+    actions: CategoryActions,
+    onSave: (ImageVector) -> Unit
 ) {
     // Todo: scomponi in elementi separati per argomenti
-    var budget by remember { mutableStateOf("") }
-    var categoryName by remember { mutableStateOf("") }
-    var description by remember { mutableStateOf("") }
-    var selectedIconIndex by remember { mutableIntStateOf(0) }
-    var selectedGradientIndex by remember { mutableIntStateOf(0) }
-
+    // Todo: aggiorna per rendere più icone selezionabili
     val availableIcons = listOf(
         Icons.Default.ShoppingCart,
         Icons.Default.Build,
@@ -73,41 +70,12 @@ fun NewCategoryScreen(
         Icons.Default.Home
     )
 
-    // To-Do: aggiorna per rendere più icone selezionabili
+    // Todo: aggiorna per rendere più icone selezionabili
     val gradientOptions = listOf(
         listOf(Color(0xFFB8B5FF), Color(0xFFDED9FF)),
         listOf(Color(0xFFD9B5FF), Color(0xFFEFDEFF)),
         listOf(Color(0xFFB5D9FF), Color(0xFFDEF0FF))
     )
-
-    val saveCategoryTrigger by viewModel.saveCategoryTrigger
-
-    LaunchedEffect(saveCategoryTrigger) {
-        if (saveCategoryTrigger > 0) {
-            val budgetValue = budget.toDoubleOrNull() ?: 0.0
-
-            viewModel.addCategory(
-                name = categoryName,
-                budget = budgetValue,
-                description = description,
-                icon = availableIcons[selectedIconIndex],
-                gradientIndex = selectedGradientIndex
-            )
-
-            // RESET del trigger dopo il salvataggio
-            viewModel.resetSaveCategoryTrigger()
-
-            // Callback per navigare indietro
-            onCategorySaved()
-        }
-    }
-
-    DisposableEffect(Unit) {
-        // Reset del trigger quando esci dalla schermata
-        onDispose {
-            viewModel.resetSaveCategoryTrigger()
-        }
-    }
 
     Column(
         modifier = Modifier
@@ -126,13 +94,14 @@ fun NewCategoryScreen(
                 modifier = Modifier
                     .size(80.dp)
                     .background(
-                        brush = Brush.linearGradient(gradientOptions[selectedGradientIndex]),
+                        brush = Brush.linearGradient(
+                            gradientOptions[state.selectedGradientIndex]),
                         shape = RoundedCornerShape(20.dp)
                     ),
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
-                    imageVector = availableIcons[selectedIconIndex],
+                    imageVector = availableIcons[state.selectedIconIndex],
                     contentDescription = null,
                     tint = Color.White,
                     modifier = Modifier.size(40.dp)
@@ -153,8 +122,8 @@ fun NewCategoryScreen(
                 Spacer(modifier = Modifier.height(8.dp))
 
                 OutlinedTextField(
-                    value = categoryName,
-                    onValueChange = { categoryName = it },
+                    value = state.name,
+                    onValueChange = { actions.setName(it) },
                     placeholder = {
                         Text("Es. Intrattenimento", color = MaterialTheme.colorScheme.onSurfaceVariant)
                     },
@@ -186,8 +155,8 @@ fun NewCategoryScreen(
                 Spacer(modifier = Modifier.height(8.dp))
 
                 OutlinedTextField(
-                    value = budget,
-                    onValueChange = { budget = it },
+                    value = state.budget,
+                    onValueChange = { actions.setBudget(it) },
                     placeholder = {
                         Text("50,00", color = MaterialTheme.colorScheme.onSurfaceVariant)
                     },
@@ -226,8 +195,8 @@ fun NewCategoryScreen(
                 Spacer(modifier = Modifier.height(8.dp))
 
                 OutlinedTextField(
-                    value = description,
-                    onValueChange = { description = it },
+                    value = state.description,
+                    onValueChange = { actions.setDescription(it) },
                     placeholder = {
                         Text("Breve descrizione della categoria", color = MaterialTheme.colorScheme.onSurfaceVariant)
                     },
@@ -268,7 +237,7 @@ fun NewCategoryScreen(
                             modifier = Modifier
                                 .size(48.dp)
                                 .background(
-                                    color = if (selectedIconIndex == index)
+                                    color = if (state.selectedIconIndex == index)
                                         MaterialTheme.colorScheme.primaryContainer
                                     else
                                         MaterialTheme.colorScheme.surface,
@@ -276,7 +245,7 @@ fun NewCategoryScreen(
                                 )
                                 .border(
                                     width = 1.dp,
-                                    color = if (selectedIconIndex == index)
+                                    color = if (state.selectedIconIndex == index)
                                         MaterialTheme.colorScheme.primary
                                     else
                                         MaterialTheme.colorScheme.outlineVariant,
@@ -285,13 +254,13 @@ fun NewCategoryScreen(
                                 .clickable(
                                     interactionSource = remember { MutableInteractionSource() },
                                     indication = null
-                                ) { selectedIconIndex = index },
+                                ) { actions.setIconIndex(index) },
                             contentAlignment = Alignment.Center
                         ) {
                             Icon(
                                 imageVector = icon,
                                 contentDescription = null,
-                                tint = if (selectedIconIndex == index)
+                                tint = if (state.selectedIconIndex == index)
                                     MaterialTheme.colorScheme.onPrimaryContainer
                                 else
                                     MaterialTheme.colorScheme.onSurface,
@@ -329,17 +298,17 @@ fun NewCategoryScreen(
                                     shape = RoundedCornerShape(12.dp)
                                 )
                                 .border(
-                                    width = if (selectedGradientIndex == index) 3.dp else 0.dp,
-                                    color = if (selectedGradientIndex == index) Color.White else Color.Transparent,
+                                    width = if (state.selectedGradientIndex == index) 3.dp else 0.dp,
+                                    color = if (state.selectedGradientIndex == index) Color.White else Color.Transparent,
                                     shape = RoundedCornerShape(12.dp)
                                 )
                                 .clickable(
                                     interactionSource = remember { MutableInteractionSource() },
                                     indication = null
-                                ) { selectedGradientIndex = index },
+                                ) { actions.setGradientIndex(index) },
                             contentAlignment = Alignment.Center
                         ) {
-                            if (selectedGradientIndex == index) {
+                            if (state.selectedGradientIndex == index) {
                                 Icon(
                                     Icons.Default.Check,
                                     contentDescription = null,
@@ -350,6 +319,23 @@ fun NewCategoryScreen(
                         }
                     }
                 }
+            }
+
+            if (state.validationError != null) {  // ← DA STATE
+                Spacer(modifier = Modifier.height(16.dp))
+                Text(
+                    text = state.validationError,
+                    color = MaterialTheme.colorScheme.error,
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Medium,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(
+                            MaterialTheme.colorScheme.errorContainer,
+                            RoundedCornerShape(8.dp)
+                        )
+                        .padding(12.dp)
+                )
             }
 
             Spacer(modifier = Modifier.height(120.dp)) // Spazio per Bottom Nav

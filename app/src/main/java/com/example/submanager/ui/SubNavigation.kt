@@ -1,5 +1,7 @@
 package com.example.submanager.ui
 
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -20,6 +22,7 @@ import com.example.submanager.ui.screens.home.HomeScreen
 import com.example.submanager.ui.screens.home.HomeViewModel
 import com.example.submanager.ui.screens.insights.InsigthsScreen
 import com.example.submanager.ui.screens.subscription.AddSubscriptionScreen
+import com.example.submanager.ui.screens.subscription.SubscriptionViewModel
 import com.example.submanager.ui.screens.subscription.ViewSubscriptionScreen
 import com.example.submanager.viewModel.SubViewModel
 import kotlinx.serialization.Serializable
@@ -112,29 +115,57 @@ fun SubNavigation(
 
         // Add Subscription Screen
         composable<Screen.AddSubscription> {
+            val viewModel = koinViewModel<SubscriptionViewModel>()
+            val state by viewModel.state.collectAsStateWithLifecycle()
+
             AddSubscriptionScreen(
-                viewModel = viewModel,
-                onSubscriptionAdded = {
-                    navController.popBackStack()
-                }
+                state = state,
+                actions = viewModel.actions
             )
         }
 
         // View Subscription Screen
         composable<Screen.ViewSubscription> { backStackEntry ->
             val route = backStackEntry.toRoute<Screen.ViewSubscription>()
+            val viewModel = koinViewModel<SubscriptionViewModel>()
+            val state by viewModel.state.collectAsStateWithLifecycle()
+
+            // Carica la subscription quando entri nella schermata
+            LaunchedEffect(route.subscriptionId) {
+                viewModel.actions.loadSubscription(route.subscriptionId)
+            }
+
             ViewSubscriptionScreen(
-                viewModel = viewModel,
-                subscriptionId = route.subscriptionId,
-                onNavigateBack = { navController.popBackStack() }
+                state = state,
+                actions = viewModel.actions
             )
         }
 
         // New Category Screen
         composable<Screen.NewCategory> {
+            val viewModel = koinViewModel<CategoryViewModel>()
+            val state by viewModel.categoryFormState.collectAsStateWithLifecycle()
+
+            // Todo: sposta in un oggetto condiviso magari dinamico
+            val availableIcons = listOf(
+                Icons.Default.ShoppingCart,
+                Icons.Default.Build,
+                Icons.Default.Favorite,
+                Icons.Default.Email,
+                Icons.Default.DateRange,
+                Icons.Default.Face,
+                Icons.Default.Home
+            )
+
             NewCategoryScreen(
-                viewModel = viewModel,
-                onCategorySaved = { navController.popBackStack() }
+                state = state,
+                actions = viewModel.actions,
+                onSave = { selectedIcon ->
+                    val icon = availableIcons[state.selectedIconIndex]
+                    viewModel.saveCategoryWithIcon(icon) {
+                        navController.popBackStack()
+                    }
+                }
             )
         }
 
