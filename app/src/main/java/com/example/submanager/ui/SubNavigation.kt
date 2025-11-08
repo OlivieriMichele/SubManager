@@ -20,6 +20,7 @@ import com.example.submanager.ui.screens.categories.CategoryViewModel
 import com.example.submanager.ui.screens.categories.NewCategoryScreen
 import com.example.submanager.ui.screens.home.HomeScreen
 import com.example.submanager.ui.screens.home.HomeViewModel
+import com.example.submanager.ui.screens.insights.InsightsViewModel
 import com.example.submanager.ui.screens.insights.InsigthsScreen
 import com.example.submanager.ui.screens.subscription.AddSubscriptionScreen
 import com.example.submanager.ui.screens.subscription.SubscriptionViewModel
@@ -28,7 +29,6 @@ import com.example.submanager.viewModel.SubViewModel
 import kotlinx.serialization.Serializable
 import org.koin.androidx.compose.koinViewModel
 
-// Definizione type-safe delle route
 sealed interface Screen {
     @Serializable data object Home : Screen
     @Serializable data object Categories : Screen
@@ -61,8 +61,6 @@ fun SubNavigation(
     viewModel: SubViewModel, // Todo: temporaneo, da rimuovere a finre refactory
     modifier: Modifier
 ) {
-    HandleNavigationEffects(navController, viewModel)
-
     NavHost(
         navController = navController,
         startDestination = Screen.Home,
@@ -86,8 +84,8 @@ fun SubNavigation(
 
         // Categories Screen
         composable<Screen.Categories> {
-            val viewModel = koinViewModel<CategoryViewModel>()
-            val state by viewModel.categoryListState.collectAsStateWithLifecycle()
+            val categoryViewModel = koinViewModel<CategoryViewModel>()
+            val state by categoryViewModel.categoryListState.collectAsStateWithLifecycle()
 
             CategoryScreen(
                 state = state,
@@ -100,11 +98,11 @@ fun SubNavigation(
         // Category Detail Screen
         composable<Screen.CategoryDetail> { backStackEntry ->
             val route = backStackEntry.toRoute<Screen.CategoryDetail>()
-            val viewModel = koinViewModel<CategoryViewModel>()
-            val state by viewModel.categoryDetailState.collectAsStateWithLifecycle()
+            val categoryDetailViewModel = koinViewModel<CategoryViewModel>()
+            val state by categoryDetailViewModel.categoryDetailState.collectAsStateWithLifecycle()
 
             LaunchedEffect(route.categoryName) {
-                viewModel.actions.loadCategoryDetail(route.categoryName)
+                categoryDetailViewModel.actions.loadCategoryDetail(route.categoryName)
             }
 
             CategoryDetailScreen(
@@ -115,36 +113,36 @@ fun SubNavigation(
 
         // Add Subscription Screen
         composable<Screen.AddSubscription> {
-            val viewModel = koinViewModel<SubscriptionViewModel>()
-            val state by viewModel.state.collectAsStateWithLifecycle()
+            val addViewModel = koinViewModel<SubscriptionViewModel>()
+            val state by addViewModel.state.collectAsStateWithLifecycle()
 
             AddSubscriptionScreen(
                 state = state,
-                actions = viewModel.actions
+                actions = addViewModel.actions
             )
         }
 
         // View Subscription Screen
         composable<Screen.ViewSubscription> { backStackEntry ->
             val route = backStackEntry.toRoute<Screen.ViewSubscription>()
-            val viewModel = koinViewModel<SubscriptionViewModel>()
-            val state by viewModel.state.collectAsStateWithLifecycle()
+            val viewViewModel = koinViewModel<SubscriptionViewModel>()
+            val state by viewViewModel.state.collectAsStateWithLifecycle()
 
             // Carica la subscription quando entri nella schermata
             LaunchedEffect(route.subscriptionId) {
-                viewModel.actions.loadSubscription(route.subscriptionId)
+                viewViewModel.actions.loadSubscription(route.subscriptionId)
             }
 
             ViewSubscriptionScreen(
                 state = state,
-                actions = viewModel.actions
+                actions = viewViewModel.actions
             )
         }
 
         // New Category Screen
         composable<Screen.NewCategory> {
-            val viewModel = koinViewModel<CategoryViewModel>()
-            val state by viewModel.categoryFormState.collectAsStateWithLifecycle()
+            val newViewModel = koinViewModel<CategoryViewModel>()
+            val state by newViewModel.categoryFormState.collectAsStateWithLifecycle()
 
             // Todo: sposta in un oggetto condiviso magari dinamico
             val availableIcons = listOf(
@@ -159,10 +157,10 @@ fun SubNavigation(
 
             NewCategoryScreen(
                 state = state,
-                actions = viewModel.actions,
-                onSave = { selectedIcon ->
+                actions = newViewModel.actions,
+                onSave = {
                     val icon = availableIcons[state.selectedIconIndex]
-                    viewModel.saveCategoryWithIcon(icon) {
+                    newViewModel.saveCategoryWithIcon(icon) {
                         navController.popBackStack()
                     }
                 }
@@ -171,33 +169,9 @@ fun SubNavigation(
 
         // Insights Screen
         composable<Screen.Insights> {
-            InsigthsScreen(
-                totalMonthly = viewModel.getTotalMonthly(),
-                lastMonthTotal = 85.85, // Todo: Da calcolare nel ViewModel
-                categories = viewModel.categoriesState.value,
-                last5MonthsData = listOf( // Todo: Da prendere/calcolare dal database, questi sono solo per test
-                    MonthData("Giu", 87.20),
-                    MonthData("Lug", 87.20),
-                    MonthData("Ago", 87.20),
-                    MonthData("Set", 87.20),
-                    MonthData("Ott", 87.20)
-                )
-            )
-        }
-    }
-}
-
-@Composable
-private fun HandleNavigationEffects(
-    navController: NavHostController,
-    viewModel: SubViewModel
-) {
-    val currentBackStackEntry = navController.currentBackStackEntryAsState().value
-    val currentScreen = currentBackStackEntry?.getCurrentScreen()
-
-    LaunchedEffect(currentScreen) {
-        if (currentScreen !is Screen.ViewSubscription) {
-            viewModel.resetEditingMode()
+            val insightsViewModel = koinViewModel<InsightsViewModel>()
+            val state by insightsViewModel.state.collectAsStateWithLifecycle()
+            InsigthsScreen(state = state)
         }
     }
 }

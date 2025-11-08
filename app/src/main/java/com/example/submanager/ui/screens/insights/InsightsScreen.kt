@@ -27,30 +27,13 @@ import com.example.submanager.ui.screens.insights.components.SummaryCard
 
 @Composable
 fun InsigthsScreen(
-    totalMonthly: Double,
-    lastMonthTotal: Double,
-    categories: List<Category>,
-    last5MonthsData: List<MonthData>, // Todo: just for test, take from database
+    state: InsightsState
 ) {
-    val percentageChange = if (lastMonthTotal > 0) {
-        ((totalMonthly - lastMonthTotal) / lastMonthTotal * 100)
-    } else {
-        0.0
-    }
-
-    val averagePerService = categories.sumOf { it.total } / categories.sumOf { it.count }.coerceAtLeast(1)
-
-    val mostExpensiveSubscription = "Planet Fitness" // Todo: Da calcolare dal ViewModel
-    val mostExpensiveCategory = categories.maxByOrNull { it.total }?.name ?: "N/A"
-    val yearlySpending = totalMonthly * 12
-    val potentialSavings = 59.88 // Todo: Da calcolare
-
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
     ) {
-        // Content
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
@@ -66,15 +49,18 @@ fun InsigthsScreen(
                     ComparisonCard(
                         modifier = Modifier.weight(1f),
                         title = "vs mese scorso",
-                        value = if (percentageChange >= 0) "+€${String.format("%.2f", percentageChange)}" else "-€${String.format("%.2f", -percentageChange)}",
-                        percentage = "${if (percentageChange >= 0) "+" else ""}${String.format("%.0f", percentageChange)}%",
-                        isPositive = percentageChange < 0
+                        value = if (state.percentageChange >= 0)
+                            "+€${String.format("%.2f", state.percentageChange)}"
+                        else
+                            "-€${String.format("%.2f", -state.percentageChange)}",
+                        percentage = "${if (state.percentageChange >= 0) "+" else ""}${String.format("%.0f", state.percentageChange)}%",
+                        isPositive = state.percentageChange < 0
                     )
 
                     ComparisonCard(
                         modifier = Modifier.weight(1f),
                         title = "Media per servizio",
-                        value = "€${String.format("%.2f", averagePerService)}",
+                        value = "€${String.format("%.2f", state.averagePerService)}",
                         subtitle = "8 servizi"
                     )
                 }
@@ -82,26 +68,26 @@ fun InsigthsScreen(
 
             item {
                 // Category Distribution Chart
-                CategoryDistributionCard(categories = categories)
+                CategoryDistributionCard(categories = state.categories)
             }
 
             item {
                 // Last 5 Months Trend
-                MonthlyTrendCard(monthsData = last5MonthsData)
+                MonthlyTrendCard(monthsData = state.last5MonthsData)
             }
 
             item {
                 // Budget vs Spending Comparison
-                BudgetComparisonCard(categories = categories)
+                BudgetComparisonCard(categories = state.categories)
             }
 
             item {
                 // Summary Card
                 SummaryCard(
-                    mostExpensiveSubscription = mostExpensiveSubscription,
-                    mostExpensiveCategory = mostExpensiveCategory,
-                    yearlySpending = yearlySpending,
-                    potentialSavings = potentialSavings
+                    mostExpensiveSubscription = state.mostExpensiveSubscription ?: "N/A",
+                    mostExpensiveCategory = state.mostExpensiveCategory ?: "N/A",
+                    yearlySpending = state.totalMonthly,
+                    potentialSavings = state.potentialSavings
                 )
             }
 
