@@ -8,6 +8,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import com.example.submanager.ui.screens.viewModel.SubscriptionActions
+import com.example.submanager.ui.screens.viewModel.SubscriptionFormState
 
 @Composable
 fun ViewSubscriptionScreen(

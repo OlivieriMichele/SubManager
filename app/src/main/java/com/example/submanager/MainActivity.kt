@@ -4,7 +4,6 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.viewModels
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -17,7 +16,7 @@ import com.example.submanager.ui.SubNavigation
 import com.example.submanager.ui.getCurrentScreen
 import com.example.submanager.ui.screens.AppFloatingActionButton
 import com.example.submanager.ui.screens.AppHeader
-import com.example.submanager.ui.screens.ThemeViewModel
+import com.example.submanager.ui.screens.viewModel.ThemeViewModel
 import com.example.submanager.ui.theme.SubManagerTheme
 import org.koin.androidx.compose.koinViewModel
 

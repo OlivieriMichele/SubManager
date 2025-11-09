@@ -19,8 +19,8 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.example.submanager.ui.Screen
-import com.example.submanager.ui.screens.categories.CategoryViewModel
-import com.example.submanager.ui.screens.subscription.SubscriptionViewModel
+import com.example.submanager.ui.screens.viewModel.CategoryViewModel
+import com.example.submanager.ui.screens.viewModel.SubscriptionViewModel
 import com.example.submanager.ui.theme.CategoryIcons
 import org.koin.androidx.compose.koinViewModel
 

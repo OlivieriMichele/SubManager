@@ -34,6 +34,8 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.submanager.ui.screens.viewModel.CategoryActions
+import com.example.submanager.ui.screens.viewModel.CategoryFormState
 import com.example.submanager.ui.theme.CategoryIcons
 
 @Composable

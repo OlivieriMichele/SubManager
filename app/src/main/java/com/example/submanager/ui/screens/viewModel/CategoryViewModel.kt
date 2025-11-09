@@ -1,4 +1,4 @@
-package com.example.submanager.ui.screens.categories
+package com.example.submanager.ui.screens.viewModel
 
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.ui.graphics.vector.ImageVector

@@ -6,11 +6,11 @@ import com.example.submanager.data.local.PreferencesManager
 import com.example.submanager.data.repositories.CategoryRepository
 import com.example.submanager.data.repositories.SubscriptionRepository
 import com.example.submanager.data.repositories.ThemeRepository
-import com.example.submanager.ui.screens.ThemeViewModel
-import com.example.submanager.ui.screens.categories.CategoryViewModel
-import com.example.submanager.ui.screens.home.HomeViewModel
-import com.example.submanager.ui.screens.insights.InsightsViewModel
-import com.example.submanager.ui.screens.subscription.SubscriptionViewModel
+import com.example.submanager.ui.screens.viewModel.ThemeViewModel
+import com.example.submanager.ui.screens.viewModel.CategoryViewModel
+import com.example.submanager.ui.screens.viewModel.HomeViewModel
+import com.example.submanager.ui.screens.viewModel.InsightsViewModel
+import com.example.submanager.ui.screens.viewModel.SubscriptionViewModel
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module

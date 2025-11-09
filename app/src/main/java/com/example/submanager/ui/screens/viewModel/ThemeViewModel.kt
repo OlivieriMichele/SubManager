@@ -1,4 +1,4 @@
-package com.example.submanager.ui.screens
+package com.example.submanager.ui.screens.viewModel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

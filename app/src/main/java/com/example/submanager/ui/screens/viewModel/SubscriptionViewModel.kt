@@ -1,4 +1,4 @@
-package com.example.submanager.ui.screens.subscription
+package com.example.submanager.ui.screens.viewModel
 
 import android.util.Log
 import androidx.compose.ui.graphics.Color

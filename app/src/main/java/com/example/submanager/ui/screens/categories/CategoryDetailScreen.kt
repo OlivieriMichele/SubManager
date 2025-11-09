@@ -24,6 +24,7 @@ import com.example.submanager.ui.screens.categories.components.CategoryBudgetCar
 import com.example.submanager.ui.screens.categories.components.CategoryDescriptionCard
 import com.example.submanager.ui.screens.categories.components.CategoryStatisticsCard
 import com.example.submanager.ui.screens.categories.components.CategorySubscriptionItem
+import com.example.submanager.ui.screens.viewModel.CategoryDetailState
 
 @Composable
 fun CategoryDetailScreen(
