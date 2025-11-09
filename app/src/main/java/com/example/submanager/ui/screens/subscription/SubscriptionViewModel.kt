@@ -1,5 +1,6 @@
 package com.example.submanager.ui.screens.subscription
 
+import android.util.Log
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -56,9 +57,16 @@ class SubscriptionViewModel(
     init {
         viewModelScope.launch {
             categoryRepository.categories.collect { categories ->
+                val categoryNames = categories.map { it.name }
                 _state.update { currentState ->
                     currentState.copy(
-                        availableCategories = categories.map { it.name }
+                        availableCategories = categoryNames,
+                        // ⚠️ FIX: Se non c'è categoria selezionata, usa la prima disponibile
+                        selectedCategory = if (currentState.selectedCategory.isBlank() && categoryNames.isNotEmpty()) {
+                            categoryNames.first()
+                        } else {
+                            currentState.selectedCategory
+                        }
                     )
                 }
             }
@@ -67,6 +75,7 @@ class SubscriptionViewModel(
 
     val actions = object : SubscriptionActions {
         override fun setServiceName(name: String) {
+            Log.d("SubscriptionVM", "setServiceName: '$name'")
             _state.update {
                 it.copy(serviceName = name, validationError = null)
             }
@@ -74,6 +83,7 @@ class SubscriptionViewModel(
 
         override fun setPrice(price: String) {
             if (price.isEmpty() || price.matches(Regex("^\\d*\\.?\\d{0,2}$"))) {
+                Log.d("SubscriptionVM", "setPrice: '$price'")
                 _state.update {
                     it.copy(price = price, validationError = null)
                 }
@@ -85,6 +95,7 @@ class SubscriptionViewModel(
         }
 
         override fun setCategory(category: String) {
+            Log.d("SubscriptionVM", "setCategory: '$category'")
             _state.update {
                 it.copy(selectedCategory = category, validationError = null)
             }
@@ -124,7 +135,10 @@ class SubscriptionViewModel(
         override fun saveSubscription(onSuccess: () -> Unit) {
             val currentState = _state.value
 
+            Log.d("SubscriptionVM", "saveSubscription called with state: $currentState")
+
             if (currentState.serviceName.isBlank()) {
+                Log.e("SubscriptionVM", "Validation failed: serviceName is blank")
                 _state.update {
                     it.copy(validationError = "Il nome è obbligatorio")
                 }
@@ -133,19 +147,22 @@ class SubscriptionViewModel(
 
             val priceValue = currentState.price.toDoubleOrNull()
             if (priceValue == null || priceValue <= 0) {
+                Log.e("SubscriptionVM", "Validation failed: invalid price '${currentState.price}'")
                 _state.update {
-                    it.copy(validationError = "Inserisci un prezzo valido")
+                    it.copy(validationError = "Inserisci un prezzo valido (es: 9.99)")
                 }
                 return
             }
 
             if (currentState.selectedCategory.isBlank()) {
+                Log.e("SubscriptionVM", "Validation failed: no category selected")
                 _state.update {
                     it.copy(validationError = "Seleziona una categoria")
                 }
                 return
             }
 
+            Log.d("SubscriptionVM", "Validation passed, saving...")
             _state.update { it.copy(isSaving = true, validationError = null) }
 
             viewModelScope.launch {
@@ -159,16 +176,21 @@ class SubscriptionViewModel(
                         category = currentState.selectedCategory
                     )
 
+                    Log.d("SubscriptionVM", "Saving subscription: $subscription")
+
                     if (currentState.subscriptionId != null) {
                         subscriptionRepository.updateSubscription(subscription)
+                        Log.d("SubscriptionVM", "Subscription updated")
                     } else {
                         subscriptionRepository.addSubscription(subscription)
+                        Log.d("SubscriptionVM", "Subscription added")
                     }
 
                     _state.update { it.copy(isSaving = false, isEditing = false) }
                     onSuccess()
 
                 } catch (e: Exception) {
+                    Log.e("SubscriptionVM", "Error saving subscription", e)
                     _state.update {
                         it.copy(
                             isSaving = false,
@@ -195,7 +217,8 @@ class SubscriptionViewModel(
         override fun resetForm() {
             _state.update { currentState ->
                 SubscriptionFormState(
-                    availableCategories = currentState.availableCategories
+                    availableCategories = currentState.availableCategories,
+                    selectedCategory = currentState.availableCategories.firstOrNull() ?: ""
                 )
             }
         }

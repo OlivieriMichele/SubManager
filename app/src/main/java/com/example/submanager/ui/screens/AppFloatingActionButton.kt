@@ -43,11 +43,15 @@ fun AppFloatingActionButton(
 
         Screen.AddSubscription -> {
             val viewModel = koinViewModel<SubscriptionViewModel>()
+            val state by viewModel.state.collectAsStateWithLifecycle()
+
             icon = Icons.Default.Check
             description = "Salva"
             onClick = {
-                viewModel.actions.saveSubscription {
-                    navController.popBackStack()
+                if (!state.isSaving) {
+                    viewModel.actions.saveSubscription {
+                        navController.popBackStack()
+                    }
                 }
             }
         }
@@ -59,8 +63,10 @@ fun AppFloatingActionButton(
                 icon = Icons.Default.Check
                 description = "Salva"
                 onClick = {
-                    viewModel.actions.saveSubscription {
-                        navController.popBackStack()
+                    if (!state.isSaving) {
+                        viewModel.actions.saveSubscription {
+                            navController.popBackStack()
+                        }
                     }
                 }
             } else {
