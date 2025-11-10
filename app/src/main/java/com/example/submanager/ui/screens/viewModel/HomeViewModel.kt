@@ -4,8 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.submanager.data.repositories.CategoryRepository
 import com.example.submanager.data.repositories.SubscriptionRepository
-import com.example.submanager.model.Category
-import com.example.submanager.model.Subscription
+import com.example.submanager.data.models.Category
+import com.example.submanager.data.models.Subscription
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine

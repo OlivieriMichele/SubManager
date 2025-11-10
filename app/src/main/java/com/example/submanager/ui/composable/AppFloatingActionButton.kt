@@ -1,4 +1,4 @@
-package com.example.submanager.ui.screens
+package com.example.submanager.ui.composable
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.size

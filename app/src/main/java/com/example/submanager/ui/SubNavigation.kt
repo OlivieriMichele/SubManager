@@ -1,13 +1,5 @@
 package com.example.submanager.ui
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Build
-import androidx.compose.material.icons.filled.DateRange
-import androidx.compose.material.icons.filled.Email
-import androidx.compose.material.icons.filled.Face
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -20,15 +12,15 @@ import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import com.example.submanager.ui.screens.categories.CategoryDetailScreen
 import com.example.submanager.ui.screens.categories.CategoryScreen
-import com.example.submanager.ui.screens.viewModel.CategoryViewModel
 import com.example.submanager.ui.screens.categories.NewCategoryScreen
 import com.example.submanager.ui.screens.home.HomeScreen
-import com.example.submanager.ui.screens.viewModel.HomeViewModel
-import com.example.submanager.ui.screens.viewModel.InsightsViewModel
 import com.example.submanager.ui.screens.insights.InsigthsScreen
 import com.example.submanager.ui.screens.subscription.AddSubscriptionScreen
-import com.example.submanager.ui.screens.viewModel.SubscriptionViewModel
 import com.example.submanager.ui.screens.subscription.ViewSubscriptionScreen
+import com.example.submanager.ui.screens.viewModel.CategoryViewModel
+import com.example.submanager.ui.screens.viewModel.HomeViewModel
+import com.example.submanager.ui.screens.viewModel.InsightsViewModel
+import com.example.submanager.ui.screens.viewModel.SubscriptionViewModel
 import kotlinx.serialization.Serializable
 import org.koin.androidx.compose.koinViewModel
 

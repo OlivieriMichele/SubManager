@@ -21,10 +21,8 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.submanager.model.Category
+import com.example.submanager.data.models.Category
 import com.example.submanager.ui.theme.AccentColors
-import kotlin.math.cos
-import kotlin.math.sin
 
 @Composable
 fun CategoryDistributionCard(categories: List<Category>) {

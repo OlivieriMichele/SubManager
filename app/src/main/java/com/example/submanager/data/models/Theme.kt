@@ -1,4 +1,4 @@
-package com.example.submanager.model
+package com.example.submanager.data.models
 
 enum class Theme {
     Light,

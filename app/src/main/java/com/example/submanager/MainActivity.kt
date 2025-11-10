@@ -14,8 +14,8 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.submanager.ui.SubNavigation
 import com.example.submanager.ui.getCurrentScreen
-import com.example.submanager.ui.screens.AppFloatingActionButton
-import com.example.submanager.ui.screens.AppHeader
+import com.example.submanager.ui.composable.AppFloatingActionButton
+import com.example.submanager.ui.composable.AppHeader
 import com.example.submanager.ui.screens.viewModel.CategoryViewModel
 import com.example.submanager.ui.screens.viewModel.SubscriptionViewModel
 import com.example.submanager.ui.screens.viewModel.ThemeViewModel

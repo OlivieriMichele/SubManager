@@ -1,4 +1,4 @@
-package com.example.submanager.model
+package com.example.submanager.data.models
 
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
