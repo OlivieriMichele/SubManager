@@ -16,7 +16,7 @@ class SubManagerApplication : Application() {
         super.onCreate()
 
         startKoin {
-            androidLogger(Level.ERROR)
+            androidLogger()
             androidContext(this@SubManagerApplication)
             modules(appModule)
         }

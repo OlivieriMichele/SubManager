@@ -22,7 +22,7 @@ data class SubscriptionFormState(
     val selectedCategory: String = "",
     val selectedColor: Color = Color.DarkGray,
     val availableCategories: List<String> = emptyList(),
-    val isEditing: Boolean = true,  // false = VIEW mode
+    val isEditing: Boolean = false,  // true = EDIT mode
     val isSaving: Boolean = false,
     val error: String? = null,
     val validationError: String? = null
@@ -61,7 +61,6 @@ class SubscriptionViewModel(
                 _state.update { currentState ->
                     currentState.copy(
                         availableCategories = categoryNames,
-                        // ⚠️ FIX: Se non c'è categoria selezionata, usa la prima disponibile
                         selectedCategory = if (currentState.selectedCategory.isBlank() && categoryNames.isNotEmpty()) {
                             categoryNames.first()
                         } else {
@@ -106,10 +105,12 @@ class SubscriptionViewModel(
         }
 
         override fun setEditMode(editing: Boolean) {
+            Log.d("SubscriptionVM", "setEditMode: $editing")
             _state.update { it.copy(isEditing = editing) }
         }
 
         override fun loadSubscription(id: Int) {
+            Log.d("SubscriptionVM", "loadSubscription: $id")
             val subscription = subscriptionRepository.getSubscriptionById(id)
 
             if (subscription != null) {
@@ -122,7 +123,7 @@ class SubscriptionViewModel(
                         selectedCategory = subscription.category,
                         selectedColor = subscription.color,
                         availableCategories = it.availableCategories,
-                        isEditing = false  // VIEW mode di default
+                        isEditing = false  // default in view mode
                     )
                 }
             } else {
@@ -205,6 +206,7 @@ class SubscriptionViewModel(
             viewModelScope.launch {
                 try {
                     subscriptionRepository.deleteSubscription(id)
+                    resetForm() // Reset dopo eliminazione
                     onSuccess()
                 } catch (e: Exception) {
                     _state.update {
@@ -215,10 +217,12 @@ class SubscriptionViewModel(
         }
 
         override fun resetForm() {
+            Log.d("SubscriptionVM", "resetForm called")
             _state.update { currentState ->
                 SubscriptionFormState(
                     availableCategories = currentState.availableCategories,
-                    selectedCategory = currentState.availableCategories.firstOrNull() ?: ""
+                    selectedCategory = currentState.availableCategories.firstOrNull() ?: "",
+                    isEditing = false  // SEMPRE false al reset
                 )
             }
         }

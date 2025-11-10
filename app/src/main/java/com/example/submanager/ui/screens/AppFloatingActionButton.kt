@@ -42,14 +42,14 @@ fun AppFloatingActionButton(
         }
 
         Screen.AddSubscription -> {
-            val viewModel = koinViewModel<SubscriptionViewModel>()
-            val state by viewModel.state.collectAsStateWithLifecycle()
+            val subscriptionViewModel = koinViewModel<SubscriptionViewModel>()
+            val state by subscriptionViewModel.state.collectAsStateWithLifecycle()
 
             icon = Icons.Default.Check
             description = "Salva"
             onClick = {
                 if (!state.isSaving) {
-                    viewModel.actions.saveSubscription {
+                    subscriptionViewModel.actions.saveSubscription {
                         navController.popBackStack()
                     }
                 }
@@ -57,14 +57,15 @@ fun AppFloatingActionButton(
         }
 
         is Screen.ViewSubscription -> {
-            val viewModel = koinViewModel<SubscriptionViewModel>()
-            val state by viewModel.state.collectAsStateWithLifecycle()
+            val subscriptionViewModel = koinViewModel<SubscriptionViewModel>()
+            val state by subscriptionViewModel.state.collectAsStateWithLifecycle()
+
             if (state.isEditing) {
                 icon = Icons.Default.Check
                 description = "Salva"
                 onClick = {
                     if (!state.isSaving) {
-                        viewModel.actions.saveSubscription {
+                        subscriptionViewModel.actions.saveSubscription {
                             navController.popBackStack()
                         }
                     }
@@ -72,7 +73,7 @@ fun AppFloatingActionButton(
             } else {
                 icon = Icons.Default.Edit
                 description = "Modifica"
-                onClick = { viewModel.actions.setEditMode(true) }
+                onClick = { subscriptionViewModel.actions.setEditMode(true) }
             }
         }
 
@@ -83,19 +84,18 @@ fun AppFloatingActionButton(
         }
 
         Screen.NewCategory -> {
-            val viewModel = koinViewModel<CategoryViewModel>()
-            val state by viewModel.categoryFormState.collectAsStateWithLifecycle()
+            val categoryViewModel = koinViewModel<CategoryViewModel>()
+            val state by categoryViewModel.categoryFormState.collectAsStateWithLifecycle()
             icon = Icons.Default.Save
             description = "Salva Categoria"
             onClick = {
                 val selectedIcon = CategoryIcons.availableIcons[state.selectedIconIndex]
-                viewModel.saveCategoryWithIcon(selectedIcon) {
+                categoryViewModel.saveCategoryWithIcon(selectedIcon) {
                     navController.popBackStack()
                 }
             }
         }
 
-        // ALTRO → nessun FAB
         else -> return
     }
 

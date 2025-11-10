@@ -16,6 +16,8 @@ import com.example.submanager.ui.SubNavigation
 import com.example.submanager.ui.getCurrentScreen
 import com.example.submanager.ui.screens.AppFloatingActionButton
 import com.example.submanager.ui.screens.AppHeader
+import com.example.submanager.ui.screens.viewModel.CategoryViewModel
+import com.example.submanager.ui.screens.viewModel.SubscriptionViewModel
 import com.example.submanager.ui.screens.viewModel.ThemeViewModel
 import com.example.submanager.ui.theme.SubManagerTheme
 import org.koin.androidx.compose.koinViewModel
@@ -25,6 +27,8 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
+            val subscriptionViewModel = koinViewModel<SubscriptionViewModel>()
+            val categoryViewModel = koinViewModel<CategoryViewModel>()
             val themeViewModel = koinViewModel<ThemeViewModel>()
             val isDark by themeViewModel.isDarkMode.collectAsStateWithLifecycle()
             val navController = rememberNavController()
@@ -49,7 +53,11 @@ class MainActivity : ComponentActivity() {
                         )
                     }
                 ) { innerPadding ->
-                    SubNavigation(navController, Modifier.padding(innerPadding))
+                    SubNavigation(
+                        navController,
+                        subscriptionViewModel,
+                        categoryViewModel,
+                        Modifier.padding(innerPadding))
                 }
             }
         }

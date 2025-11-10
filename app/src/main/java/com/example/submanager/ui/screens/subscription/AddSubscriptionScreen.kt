@@ -9,6 +9,7 @@ fun AddSubscriptionScreen(
     state: SubscriptionFormState,
     actions: SubscriptionActions
 ) {
+    actions.setEditMode(true)
     SubscriptionFormScreen(
         state = state,
         actions = actions

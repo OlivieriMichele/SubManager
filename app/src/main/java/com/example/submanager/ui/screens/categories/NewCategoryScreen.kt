@@ -41,8 +41,7 @@ import com.example.submanager.ui.theme.CategoryIcons
 @Composable
 fun NewCategoryScreen(
     state: CategoryFormState,
-    actions: CategoryActions,
-    onSave: (ImageVector) -> Unit
+    actions: CategoryActions
 ) {
     val availableIcons = CategoryIcons.availableIcons
     val gradientOptions = CategoryIcons.gradientOptions

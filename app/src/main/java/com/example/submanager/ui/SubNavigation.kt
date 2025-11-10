@@ -61,6 +61,8 @@ fun NavBackStackEntry.getCurrentScreen(): Screen? {
 @Composable
 fun SubNavigation(
     navController: NavHostController,
+    subscriptionViewModel: SubscriptionViewModel,
+    categoryViewModel: CategoryViewModel,
     modifier: Modifier
 ) {
     NavHost(
@@ -86,7 +88,6 @@ fun SubNavigation(
 
         // Categories Screen
         composable<Screen.Categories> {
-            val categoryViewModel = koinViewModel<CategoryViewModel>()
             val state by categoryViewModel.categoryListState.collectAsStateWithLifecycle()
 
             CategoryScreen(
@@ -115,58 +116,34 @@ fun SubNavigation(
 
         // Add Subscription Screen
         composable<Screen.AddSubscription> {
-            val addViewModel = koinViewModel<SubscriptionViewModel>()
-            val state by addViewModel.state.collectAsStateWithLifecycle()
+            val state by subscriptionViewModel.state.collectAsStateWithLifecycle()
 
             AddSubscriptionScreen(
                 state = state,
-                actions = addViewModel.actions
+                actions = subscriptionViewModel.actions
             )
         }
 
         // View Subscription Screen
         composable<Screen.ViewSubscription> { backStackEntry ->
             val route = backStackEntry.toRoute<Screen.ViewSubscription>()
-            val viewViewModel = koinViewModel<SubscriptionViewModel>()
-            val state by viewViewModel.state.collectAsStateWithLifecycle()
+            val state by subscriptionViewModel.state.collectAsStateWithLifecycle()
 
             // Carica la subscription quando entri nella schermata
             LaunchedEffect(route.subscriptionId) {
-                viewViewModel.actions.loadSubscription(route.subscriptionId)
+                subscriptionViewModel.actions.loadSubscription(route.subscriptionId)
             }
 
             ViewSubscriptionScreen(
                 state = state,
-                actions = viewViewModel.actions
+                actions = subscriptionViewModel.actions
             )
         }
 
         // New Category Screen
         composable<Screen.NewCategory> {
-            val newViewModel = koinViewModel<CategoryViewModel>()
-            val state by newViewModel.categoryFormState.collectAsStateWithLifecycle()
-
-            // Todo: sposta in un oggetto condiviso magari dinamico
-            val availableIcons = listOf(
-                Icons.Default.ShoppingCart,
-                Icons.Default.Build,
-                Icons.Default.Favorite,
-                Icons.Default.Email,
-                Icons.Default.DateRange,
-                Icons.Default.Face,
-                Icons.Default.Home
-            )
-
-            NewCategoryScreen(
-                state = state,
-                actions = newViewModel.actions,
-                onSave = {
-                    val icon = availableIcons[state.selectedIconIndex]
-                    newViewModel.saveCategoryWithIcon(icon) {
-                        navController.popBackStack()
-                    }
-                }
-            )
+            val state by categoryViewModel.categoryFormState.collectAsStateWithLifecycle()
+            NewCategoryScreen(state = state, actions = categoryViewModel.actions)
         }
 
         // Insights Screen

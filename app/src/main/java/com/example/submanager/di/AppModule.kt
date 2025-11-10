@@ -24,7 +24,7 @@ val Context.dataStore by preferencesDataStore(name = "submanager_prefs")
  */
 val appModule = module {
 
-    single { androidContext().dataStore }
+    single { get<Context>().dataStore }
 
     single { PreferencesManager(get()) }
     single { SubscriptionRepository() }
