@@ -1,39 +1,34 @@
 package com.example.submanager.ui.screens.viewModel
 
+import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.runtime.Composable
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewModelScope
+import com.example.submanager.data.models.Theme
 import com.example.submanager.data.repositories.ThemeRepository
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
-/**
- * ViewModel leggero dedicato SOLO alla gestione del tema
- */
+data class ThemeState(val theme: Theme)
+
 class ThemeViewModel(
     private val themeRepository: ThemeRepository
 ) : ViewModel() {
 
-    // Espone il tema come StateFlow per la UI
-    val isDarkMode: StateFlow<Boolean> = themeRepository.isDarkMode.stateIn(
+    val state = themeRepository.theme
+        .map{ ThemeState(it) }
+        .stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(),
-        initialValue = true
+        initialValue = ThemeState(Theme.System)
     )
 
-    /**
-     * Toggle del tema - gestisce la coroutine internamente
-     * Può essere chiamato da qualsiasi parte della UI senza problemi
-     */
-    fun toggleDarkMode() = viewModelScope.launch {
-            themeRepository.toggleDarkMode()
-        }
+    fun changeTheme(theme: Theme) = viewModelScope.launch {
+        themeRepository.setTheme(theme)
+    }
 
-    /**
-     * Set esplicito del tema (opzionale, ma utile)
-     */
-    fun setDarkMode(enabled: Boolean) = viewModelScope.launch {
-            themeRepository.setDarkMode(enabled)
-        }
 }

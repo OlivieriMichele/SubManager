@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -12,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.submanager.data.models.Theme
 import com.example.submanager.ui.SubNavigation
 import com.example.submanager.ui.getCurrentScreen
 import com.example.submanager.ui.composable.AppFloatingActionButton
@@ -30,10 +32,15 @@ class MainActivity : ComponentActivity() {
             val subscriptionViewModel = koinViewModel<SubscriptionViewModel>()
             val categoryViewModel = koinViewModel<CategoryViewModel>()
             val themeViewModel = koinViewModel<ThemeViewModel>()
-            val isDark by themeViewModel.isDarkMode.collectAsStateWithLifecycle()
+            val themeState by themeViewModel.state.collectAsStateWithLifecycle()
             val navController = rememberNavController()
+            val darkTheme = when (themeState.theme) {
+                Theme.Dark -> true
+                Theme.Light -> false
+                Theme.System -> isSystemInDarkTheme()
+            }
 
-            SubManagerTheme(darkTheme = isDark, dynamicColor = false) {
+            SubManagerTheme(darkTheme, dynamicColor = false) {
                 val currentBackStackEntry by navController.currentBackStackEntryAsState()
                 val currentScreen = currentBackStackEntry?.getCurrentScreen()
 

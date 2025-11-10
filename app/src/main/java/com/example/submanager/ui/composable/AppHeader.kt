@@ -3,6 +3,7 @@ package com.example.submanager.ui.composable
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -22,6 +23,7 @@ import com.example.submanager.ui.screens.viewModel.CategoryViewModel
 import com.example.submanager.ui.screens.viewModel.SubscriptionViewModel
 import com.example.submanager.ui.screens.viewModel.ThemeViewModel
 import org.koin.androidx.compose.koinViewModel
+import com.example.submanager.data.models.Theme
 
 @Composable
 fun AppHeader(
@@ -32,7 +34,9 @@ fun AppHeader(
 ) {
     // State per il dialog di conferma eliminazione
     var showDeleteDialog by remember { mutableStateOf(false) }
-    val isDarkTheme by themeViewModel.isDarkMode.collectAsStateWithLifecycle()
+    var showThemeDialog by remember { mutableStateOf(false) }
+
+    val themeState by themeViewModel.state.collectAsStateWithLifecycle()
 
     // Determina il titolo in base alla schermata
     val title = when (screen) {
@@ -57,6 +61,18 @@ fun AppHeader(
             screen = screen,
             navController = navController,
             onDismiss = { showDeleteDialog = false }
+        )
+    }
+
+    // ========== DIALOG SELEZIONE TEMA ==========
+    if (showThemeDialog) {
+        ThemeSelectionDialog(
+            currentTheme = themeState.theme,
+            onThemeSelected = { theme ->
+                themeViewModel.changeTheme(theme)
+                showThemeDialog = false
+            },
+            onDismiss = { showThemeDialog = false }
         )
     }
 
@@ -110,15 +126,19 @@ fun AppHeader(
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     // Theme Toggle
                     IconButton(
-                        onClick = { themeViewModel.toggleDarkMode() },
+                        onClick = { showThemeDialog = true },
                         modifier = Modifier
                             .size(30.dp)
                             .background(MaterialTheme.colorScheme.surface, RoundedCornerShape(30.dp))
                             .border(1.dp, MaterialTheme.colorScheme.outlineVariant, RoundedCornerShape(30.dp))
                     ) {
                         Icon(
-                            imageVector = if (isDarkTheme) Icons.Default.LightMode else Icons.Default.DarkMode,
-                            contentDescription = if (isDarkTheme) "Tema chiaro" else "Tema scuro",
+                            imageVector = when(themeState.theme) {
+                                Theme.Light -> Icons.Default.LightMode
+                                Theme.Dark -> Icons.Default.DarkMode
+                                Theme.System -> Icons.Default.Contrast
+                            },
+                            contentDescription = "Cambia tema",
                             tint = MaterialTheme.colorScheme.onSurface,
                             modifier = Modifier.size(18.dp)
                         )
@@ -250,4 +270,78 @@ private fun CircularBackButton(
             modifier = Modifier.size(20.dp)
         )
     }
+}
+
+/**
+ * Dialog per la selezione del tema
+ */
+@Composable
+private fun ThemeSelectionDialog(
+    currentTheme: Theme,
+    onThemeSelected: (Theme) -> Unit,
+    onDismiss: () -> Unit
+) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = {
+            Text(
+                "Scegli Tema",
+                style = MaterialTheme.typography.headlineSmall
+            )
+        },
+        text = {
+            Column(
+                modifier = Modifier.selectableGroup()
+            ) {
+                Theme.entries.forEach { theme ->
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(56.dp)
+                            .padding(horizontal = 8.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        RadioButton(
+                            selected = (theme == currentTheme),
+                            onClick = { onThemeSelected(theme) }
+                        )
+                        Spacer(modifier = Modifier.width(16.dp))
+                        Icon(
+                            imageVector = when (theme) {
+                                Theme.Light -> Icons.Default.LightMode
+                                Theme.Dark -> Icons.Default.DarkMode
+                                Theme.System -> Icons.Default.Contrast
+                            },
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.onSurface,
+                            modifier = Modifier.size(24.dp)
+                        )
+                        Spacer(modifier = Modifier.width(12.dp))
+                        Column {
+                            Text(
+                                text = when (theme) {
+                                    Theme.Light -> "Chiaro"
+                                    Theme.Dark -> "Scuro"
+                                    Theme.System -> "Sistema"
+                                },
+                                style = MaterialTheme.typography.bodyLarge
+                            )
+                            if (theme == Theme.System) {
+                                Text(
+                                    text = "Segue le impostazioni del dispositivo",
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        confirmButton = {
+            TextButton(onClick = onDismiss) {
+                Text("Chiudi")
+            }
+        }
+    )
 }

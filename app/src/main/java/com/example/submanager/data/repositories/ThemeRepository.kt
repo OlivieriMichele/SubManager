@@ -1,6 +1,7 @@
 package com.example.submanager.data.repositories
 
 import com.example.submanager.data.local.PreferencesManager
+import com.example.submanager.data.models.Theme
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -9,13 +10,9 @@ import kotlinx.coroutines.flow.Flow
 class ThemeRepository(
     private val preferencesManager: PreferencesManager
 ) {
-    val isDarkMode: Flow<Boolean> = preferencesManager.isDarkMode
+    val theme: Flow<Theme> = preferencesManager.theme
 
-    suspend fun setDarkMode(enabled: Boolean) {
-        preferencesManager.setDarkMode(enabled)
-    }
-
-    suspend fun toggleDarkMode() {
-        preferencesManager.toggleDarkMode()
+    suspend fun setTheme(theme: Theme){
+        preferencesManager.setTheme(theme)
     }
 }
