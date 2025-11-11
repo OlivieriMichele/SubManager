@@ -53,10 +53,11 @@ fun NavBackStackEntry.getCurrentScreen(): Screen? {
 @Composable
 fun SubNavigation(
     navController: NavHostController,
-    subscriptionViewModel: SubscriptionViewModel,
-    categoryViewModel: CategoryViewModel,
     modifier: Modifier
 ) {
+    val subscriptionViewModel = koinViewModel<SubscriptionViewModel>()
+    val categoryViewModel = koinViewModel<CategoryViewModel>()
+
     NavHost(
         navController = navController,
         startDestination = Screen.Home,

@@ -49,7 +49,6 @@ class MainActivity : ComponentActivity() {
                     topBar = {
                         AppHeader(
                             screen = currentScreen,
-                            themeViewModel = themeViewModel,
                             navController = navController
                         )
                     },
@@ -62,8 +61,6 @@ class MainActivity : ComponentActivity() {
                 ) { innerPadding ->
                     SubNavigation(
                         navController,
-                        subscriptionViewModel,
-                        categoryViewModel,
                         Modifier.padding(innerPadding))
                 }
             }

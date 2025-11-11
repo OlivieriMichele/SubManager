@@ -35,18 +35,20 @@ import com.example.submanager.ui.composable.components.DeleteConfirmationDialog
 import com.example.submanager.ui.composable.components.HeaderActionButtons
 import com.example.submanager.ui.composable.components.ThemeSelectionDialog
 import com.example.submanager.ui.screens.viewModel.ThemeViewModel
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun AppHeader(
     screen: Screen?,
     navController: NavController,
-    themeViewModel: ThemeViewModel,
     modifier: Modifier = Modifier
 ) {
+    val themeViewModel = koinViewModel<ThemeViewModel>()
+    val themeState by themeViewModel.state.collectAsStateWithLifecycle()
+
     // State management
     var showDeleteDialog by remember { mutableStateOf(false) }
     var showThemeDialog by remember { mutableStateOf(false) }
-    val themeState by themeViewModel.state.collectAsStateWithLifecycle()
 
     // Screen configuration
     val title = when (screen) {
