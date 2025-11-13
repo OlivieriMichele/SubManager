@@ -5,6 +5,9 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface SubscriptionDao {
+    /**
+     * Osserva TUTTE le subscriptions (reattivo: Flow si aggiorna al cambiamento del db)
+     */
     @Query("SELECT * FROM subscriptions ORDER BY name ASC")
     fun observeAll(): Flow<List<SubscriptionEntity>>
 
