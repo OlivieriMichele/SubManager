@@ -2,6 +2,7 @@ package com.example.submanager.di
 
 import android.content.Context
 import androidx.datastore.preferences.preferencesDataStore
+import com.example.submanager.data.database.SubManagerDatabase
 import com.example.submanager.data.local.PreferencesManager
 import com.example.submanager.data.repositories.CategoryRepository
 import com.example.submanager.data.repositories.SubscriptionRepository
@@ -23,13 +24,21 @@ val Context.dataStore by preferencesDataStore(name = "submanager_prefs")
  * 3. ViewModels (layer presentazione)
  */
 val appModule = module {
-
+    // DataStore per preferences
     single { get<Context>().dataStore }
-
     single { PreferencesManager(get()) }
-    single { SubscriptionRepository() }
-    single { CategoryRepository() }
-    single { ThemeRepository(get()) }
+
+    // Room Database (singleton)
+    single { SubManagerDatabase.getDatabase(androidContext()) }
+
+    // DAOs
+    single { get<SubManagerDatabase>().subscriptionDao() }
+    single { get<SubManagerDatabase>().categoryDao() }
+
+    // Repositories
+    single { SubscriptionRepository(get()) }
+    single { CategoryRepository(get(),get()) } // riceve subscriptionDao
+    single { ThemeRepository(get()) } // riceve subscription e category Dao
 
     viewModel { ThemeViewModel(get()) }
     viewModel { HomeViewModel(get(), get()) }

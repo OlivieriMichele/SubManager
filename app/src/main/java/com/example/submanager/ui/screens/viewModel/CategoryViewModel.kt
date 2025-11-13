@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -101,10 +102,10 @@ class CategoryViewModel(
 
         override fun loadCategoryDetail(categoryName: String) {
             viewModelScope.launch {
-                val subscriptions = subscriptionRepository.subscriptions.value
+                val subscriptions = subscriptionRepository.subscriptions.first()
                 val categoriesWithStats = categoryRepository.getCategoriesWithStats(subscriptions)
                 val category = categoriesWithStats.find { it.name == categoryName }
-                val categorySubs = subscriptionRepository.getSubscriptionsByCategory(categoryName)
+                val categorySubs = subscriptionRepository.getSubscriptionsByCategory(categoryName).first()
 
                 if (category != null) {
                     val average = if (categorySubs.isNotEmpty()) {
@@ -191,18 +192,17 @@ class CategoryViewModel(
                 return
             }
 
-            // Verifica se categoria già esistente
-            if (categoryRepository.categoryExists(currentState.name)) {
-                _categoryFormState.update {
-                    it.copy(validationError = "Categoria già esistente")
-                }
-                return
-            }
-
             _categoryFormState.update { it.copy(isSaving = true, validationError = null) }
 
             viewModelScope.launch {
-                try {
+                try {// Verifica se categoria già esistente
+                    if (categoryRepository.categoryExists(currentState.name)) {
+                        _categoryFormState.update {
+                            it.copy(validationError = "Categoria già esistente")
+                        }
+                        return@launch
+                    }
+
                     // Le icone devono essere passate dalla UI per ora usiamo un placeholder
                     categoryRepository.addCategory(
                         name = currentState.name,
@@ -257,17 +257,16 @@ class CategoryViewModel(
             return
         }
 
-        if (categoryRepository.categoryExists(currentState.name)) {
-            _categoryFormState.update {
-                it.copy(validationError = "Categoria già esistente")
-            }
-            return
-        }
-
         _categoryFormState.update { it.copy(isSaving = true, validationError = null) }
 
         viewModelScope.launch {
             try {
+                if (categoryRepository.categoryExists(currentState.name)) {
+                    _categoryFormState.update {
+                        it.copy(validationError = "Categoria già esistente")
+                    }
+                    return@launch
+                }
                 categoryRepository.addCategory(
                     name = currentState.name,
                     budget = budgetValue,

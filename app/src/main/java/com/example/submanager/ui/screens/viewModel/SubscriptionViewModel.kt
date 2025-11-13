@@ -111,24 +111,26 @@ class SubscriptionViewModel(
 
         override fun loadSubscription(id: Int) {
             Log.d("SubscriptionVM", "loadSubscription: $id")
-            val subscription = subscriptionRepository.getSubscriptionById(id)
+            viewModelScope.launch {
+                val subscription = subscriptionRepository.getSubscriptionById(id)
 
-            if (subscription != null) {
-                _state.update {
-                    SubscriptionFormState(
-                        subscriptionId = subscription.id,
-                        serviceName = subscription.name,
-                        price = subscription.price.toString(),
-                        renewalDate = subscription.nextBilling,
-                        selectedCategory = subscription.category,
-                        selectedColor = subscription.color,
-                        availableCategories = it.availableCategories,
-                        isEditing = false  // default in view mode
-                    )
-                }
-            } else {
-                _state.update {
-                    it.copy(error = "Subscription non trovata")
+                if (subscription != null) {
+                    _state.update {
+                        SubscriptionFormState(
+                            subscriptionId = subscription.id,
+                            serviceName = subscription.name,
+                            price = subscription.price.toString(),
+                            renewalDate = subscription.nextBilling,
+                            selectedCategory = subscription.category,
+                            selectedColor = subscription.color,
+                            availableCategories = it.availableCategories,
+                            isEditing = false  // default in view mode
+                        )
+                    }
+                } else {
+                    _state.update {
+                        it.copy(error = "Subscription non trovata")
+                    }
                 }
             }
         }
@@ -169,7 +171,7 @@ class SubscriptionViewModel(
             viewModelScope.launch {
                 try {
                     val subscription = Subscription(
-                        id = currentState.subscriptionId ?: generateNewId(),
+                        id = currentState.subscriptionId ?: 0,
                         name = currentState.serviceName,
                         price = priceValue,
                         color = currentState.selectedColor,
@@ -226,9 +228,5 @@ class SubscriptionViewModel(
                 )
             }
         }
-    }
-
-    private fun generateNewId(): Int {
-        return (subscriptionRepository.subscriptions.value.maxOfOrNull { it.id } ?: 0) + 1
     }
 }

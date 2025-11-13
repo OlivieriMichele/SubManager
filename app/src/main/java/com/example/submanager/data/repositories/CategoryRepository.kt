@@ -7,34 +7,48 @@ import androidx.compose.material.icons.filled.FitnessCenter
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material.icons.filled.Tv
 import androidx.compose.ui.graphics.vector.ImageVector
+import com.example.submanager.data.database.CategoryDAOs
+import com.example.submanager.data.database.CategoryEntity
+import com.example.submanager.data.database.SubscriptionDAOs
+import com.example.submanager.data.database.toCategory
 import com.example.submanager.data.models.Category
+import com.example.submanager.data.models.IconMapper
 import com.example.submanager.data.models.Subscription
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.map
 
 /**
  * Repository per la gestione delle Categories
  */
-class CategoryRepository() {
-    private val _categories = MutableStateFlow(
-        listOf(
-            Category("Intrattenimento", 0, 0.0, Icons.Default.Tv, 20.0, "", 0),
-            Category("Software", 0, 0.0, Icons.Default.Code, 50.0, "", 1),
-            Category("Fitness", 0, 0.0, Icons.Default.FitnessCenter, 40.0, "", 2),
-            Category("Shopping", 0, 0.0, Icons.Default.ShoppingCart, 50.0, "", 0),
-            Category("Casa", 0, 0.0, Icons.Default.AccountBalance, 400.0, "Generiche spese per la casa", 0)
-        )
-    )
+class CategoryRepository(
+    private val categoryDao: CategoryDAOs,
+    private val subscriptionDao: SubscriptionDAOs
+) {
+    val categories: Flow<List<Category>> = categoryDao
+        .observeAll()
+        .map { entities ->
+            entities.map { entity ->
+                val icon = IconMapper.nameToVector(entity.iconName)
+                entity.toCategory(icon = icon)
+            }
+        }
 
-    val categories: StateFlow<List<Category>> = _categories.asStateFlow()
+    /**
+     *   Calcola statistiche categorie basandosi sulle subscriptions
+     */
+    suspend fun getCategoriesWithStats(subscriptions: List<Subscription>): List<Category> {
+        val allCategories = categoryDao.getAll()
+        val group = subscriptions.groupBy { it.category }
 
-    // Calcola statistiche categorie basandosi sulle subscriptions
-    fun getCategoriesWithStats(subscriptions: List<Subscription>): List<Category> {
-        val groups = subscriptions.groupBy { it.category }
-        return _categories.value.map { category ->
-            val subs = groups[category.name] ?: emptyList()
-            category.copy(
+        return allCategories.map { entity ->
+            val icon = IconMapper.nameToVector(entity.iconName)
+            val subs = group[entity.name] ?: emptyList()
+
+            entity.toCategory(
+                icon = icon,
                 count = subs.size,
                 total = subs.sumOf { it.price }
             )
@@ -48,12 +62,17 @@ class CategoryRepository() {
         icon: ImageVector,
         gradientIndex: Int
     ) {
-        if (_categories.value.any { it.name.equals(name, ignoreCase = true) }) {
-            throw IllegalArgumentException("Categoria già esistente")
-        }
+        val iconName = IconMapper.vectorToName(icon)
 
-        val newCategory = Category(name, 0, 0.0, icon, budget, description, gradientIndex)
-        _categories.value = _categories.value + newCategory
+        val entity = CategoryEntity(
+            name = name,
+            iconName = iconName,
+            budget = budget,
+            description = description,
+            gradientIndex
+        )
+
+        categoryDao.insert(entity)
     }
 
     suspend fun updateCategory(
@@ -64,27 +83,30 @@ class CategoryRepository() {
         icon: ImageVector,
         gradientIndex: Int
     ) {
-        _categories.value = _categories.value.map { category ->
-            if (category.name == oldName) {
-                category.copy(
-                    name = name,
-                    budget = budget,
-                    description = description,
-                    icon = icon,
-                    gradientIndex = gradientIndex
-                )
-            } else {
-                category
-            }
-        }
+        val iconName = IconMapper.vectorToName(icon)
+
+        if (oldName != name) { /* Todo */ }
+
+        val entity = CategoryEntity(
+            name = name,
+            iconName = iconName,
+            budget = budget,
+            description = description,
+            gradientIndex = gradientIndex
+        )
+
+        categoryDao.update(entity)
     }
 
     suspend fun deleteCategory(categoryName: String) {
-        _categories.value = _categories.value.filterNot { it.name == categoryName }
+        return categoryDao.deleteByName(categoryName)
     }
 
-    fun getCategoryNames(): List<String> = _categories.value.map { it.name }
+    fun getCategoryNames(): Flow<List<String>> {
+        return categories.map { list -> list.map { it.name } }
+    }
 
-    fun categoryExists(name: String): Boolean =
-        _categories.value.any { it.name.equals(name, ignoreCase = true) }
+    suspend fun categoryExists(name: String): Boolean {
+        return categoryDao.exist(name)
+    }
 }
