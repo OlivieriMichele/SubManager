@@ -28,5 +28,4 @@ Lista delle Funzioni principali:
  - Andamento ultimi 5 mesi
  - statisticche finali (abbonamento e categoria più costoso) + potenziale risparmio 
  - Abbonamenti in scadenza
- - Vedi tutti (upgrade in filtro per visualizzare)
  - Insight prendi colori per categoria
