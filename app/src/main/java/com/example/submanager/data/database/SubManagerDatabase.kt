@@ -51,43 +51,12 @@ abstract class SubManagerDatabase : RoomDatabase() {
 
             private suspend fun prepopulateDatabase(categoryDAOs: CategoryDAOs){
                 val defaultCategories = listOf(
-                    CategoryEntity(
-                        name = "Intrattenimento",
-                        iconName = "Tv",
-                        budget = 20.0,
-                        description = "",
-                        gradientIndex = 0
-                    ),
-                    CategoryEntity(
-                        name = "Software",
-                        iconName = "Code",
-                        budget = 50.0,
-                        description = "",
-                        gradientIndex = 1
-                    ),
-                    CategoryEntity(
-                        name = "Fitness",
-                        iconName = "FitnessCenter",
-                        budget = 40.0,
-                        description = "",
-                        gradientIndex = 2
-                    ),
-                    CategoryEntity(
-                        name = "Shopping",
-                        iconName = "ShoppingCart",
-                        budget = 50.0,
-                        description = "",
-                        gradientIndex = 0
-                    ),
-                    CategoryEntity(
-                        name = "Casa",
-                        iconName = "AccountBalance",
-                        budget = 400.0,
-                        description = "Generiche spese per la casa",
-                        gradientIndex = 0
-                    )
+                    CategoryEntity("Intrattenimento", "Tv", 20.0, "", 0),
+                    CategoryEntity("Software", "Code", 50.0, "", 1),
+                    CategoryEntity("Fitness", "FitnessCenter", 40.0, "", 2),
+                    CategoryEntity("Shopping", "ShoppingCart", 50.0, "", 0),
+                    CategoryEntity("Casa", "AccountBalance", 400.0, "Generiche spese per la casa", 0)
                 )
-
                 categoryDAOs.insertAll(defaultCategories)
             }
         }

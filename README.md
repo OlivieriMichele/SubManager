@@ -21,3 +21,12 @@ Lista delle Funzioni principali:
   <img src="screenshot/Screenshot_4_SubManager.jpg" width="250" />
   <img src="screenshot/Screenshot_5_SubManager.jpg" width="250" />
 </p>
+
+## Todo
+ - Notifiche
+ - Autenticazione
+ - Andamento ultimi 5 mesi
+ - statisticche finali (abbonamento e categoria più costoso) + potenziale risparmio 
+ - Abbonamenti in scadenza
+ - Vedi tutti (upgrade in filtro per visualizzare)
+ - Insight prendi colori per categoria

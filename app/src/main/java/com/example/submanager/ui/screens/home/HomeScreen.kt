@@ -98,7 +98,7 @@ fun HomeScreen(
                     TextButton(onClick = { /* TODO: Vedi tutti */ }) {
                         Text(
                             text = "Vedi tutti",
-                            color = Color(0xFF60A5FA), //Todo: use colorScheme
+                            color = Color(0xFF60A5FA),
                             fontSize = 14.sp
                         )
                     }
