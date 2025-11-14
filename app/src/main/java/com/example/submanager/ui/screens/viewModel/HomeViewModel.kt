@@ -96,8 +96,8 @@ class HomeViewModel(
         }
 
         override fun sortByNameAsc() {
-            _filterName.update { "Nome Z-A" }
-            _filterFunction.update { { subs -> subs.sortedByDescending { it.name.lowercase() } }}
+            _filterName.update { "Nome A-Z" }
+            _filterFunction.update { { subs -> subs.sortedBy { it.name.lowercase() } }}
         }
 
         override fun sortByNameDesc() {
@@ -112,7 +112,7 @@ class HomeViewModel(
 
         override fun sortByPriceDesc() {
             _filterName.update { "Prezzo Decrescente" }
-            _filterFunction.update { { subs -> subs.sortedByDescending { it.price } }}
+            _filterFunction.update { { subs -> subs.sortedByDescending { it.price } } }
         }
     }
 
