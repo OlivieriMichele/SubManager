@@ -52,7 +52,6 @@ abstract class SubManagerDatabase : RoomDatabase() {
             private suspend fun prepopulateDatabase(categoryDAOs: CategoryDAOs){
                 val defaultCategories = listOf(
                     CategoryEntity("Intrattenimento", "Tv", 20.0, "", 0),
-                    CategoryEntity("Software", "Code", 50.0, "", 1),
                     CategoryEntity("Fitness", "FitnessCenter", 40.0, "", 2),
                     CategoryEntity("Shopping", "ShoppingCart", 50.0, "", 0),
                     CategoryEntity("Casa", "AccountBalance", 400.0, "Generiche spese per la casa", 0)
