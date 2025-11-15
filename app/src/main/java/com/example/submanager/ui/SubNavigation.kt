@@ -39,7 +39,6 @@ sealed interface Screen {
     @Serializable data object Insights : Screen
 }
 
-// Extension function per ottenere la schermata corrente in modo type-safe
 fun NavBackStackEntry.getCurrentScreen(): Screen? {
     return destination.route?.let { route ->
         when {
@@ -60,11 +59,14 @@ fun NavBackStackEntry.getCurrentScreen(): Screen? {
 @Composable
 fun SubNavigation(
     navController: NavHostController,
-    modifier: Modifier,
-    startDestination: Screen = Screen.Login
+    modifier: Modifier = Modifier
 ) {
+    val authViewModel = koinViewModel<AuthViewModel>()
     val subscriptionViewModel = koinViewModel<SubscriptionViewModel>()
     val categoryViewModel = koinViewModel<CategoryViewModel>()
+
+    val authState by authViewModel.state.collectAsStateWithLifecycle()
+    val startDestination = if (authState.isAuthenticated) Screen.Home else Screen.Login
 
     NavHost(
         navController = navController,
@@ -73,11 +75,8 @@ fun SubNavigation(
     ) {
         // Login
         composable<Screen.Login> {
-            val authViewModel = koinViewModel<AuthViewModel>()
-            val state by authViewModel.state.collectAsStateWithLifecycle()
-
-            LaunchedEffect(state.isAuthenticated) {
-                if (state.isAuthenticated) {
+            LaunchedEffect(authState.isAuthenticated) {
+                if (authState.isAuthenticated) {
                     navController.navigate(Screen.Home) {
                         popUpTo(Screen.Login) { inclusive = true }
                     }
@@ -85,7 +84,7 @@ fun SubNavigation(
             }
 
             LoginScreen(
-                state = state,
+                state = authState,
                 actions = authViewModel.actions,
                 onRegisterClick = { navController.navigate(Screen.Register) }
             )
@@ -93,11 +92,8 @@ fun SubNavigation(
 
         // SignIn Screen
         composable<Screen.Register> {
-            val authViewModel = koinViewModel<AuthViewModel>()
-            val state by authViewModel.state.collectAsStateWithLifecycle()
-
-            LaunchedEffect(state.isAuthenticated) {
-                if (state.isAuthenticated) {
+            LaunchedEffect(authState.isAuthenticated) {
+                if (authState.isAuthenticated) {
                     navController.navigate(Screen.Home) {
                         popUpTo(Screen.Register) { inclusive = true }
                     }
@@ -105,7 +101,7 @@ fun SubNavigation(
             }
 
             SignInScreen(
-                state = state,
+                state = authState,
                 actions = authViewModel.actions,
                 onBackClick = { navController.popBackStack() }
             )
@@ -170,7 +166,6 @@ fun SubNavigation(
             val route = backStackEntry.toRoute<Screen.ViewSubscription>()
             val state by subscriptionViewModel.state.collectAsStateWithLifecycle()
 
-            // Carica la subscription quando entri nella schermata
             LaunchedEffect(route.subscriptionId) {
                 subscriptionViewModel.actions.loadSubscription(route.subscriptionId)
             }

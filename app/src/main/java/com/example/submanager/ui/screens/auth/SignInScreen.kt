@@ -40,7 +40,7 @@ fun SignInScreen(
                 Spacer(modifier = Modifier.weight(1f))
             }
 
-            Spacer(modifier = Modifier.height(20.dp))
+            Spacer(modifier = Modifier.height(10.dp))
 
             AuthLogo()
             Spacer(modifier = Modifier.height(32.dp))
@@ -50,7 +50,7 @@ fun SignInScreen(
                 subtitle = "Inizia a gestire i tuoi abbonamenti"
             )
 
-            Spacer(modifier = Modifier.height(40.dp))
+            Spacer(modifier = Modifier.height(48.dp))
 
             EmailField(
                 value = state.email,

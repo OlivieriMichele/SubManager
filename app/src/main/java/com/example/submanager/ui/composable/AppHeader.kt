@@ -34,6 +34,7 @@ import com.example.submanager.ui.composable.components.DeleteButton
 import com.example.submanager.ui.composable.components.DeleteConfirmationDialog
 import com.example.submanager.ui.composable.components.HeaderActionButtons
 import com.example.submanager.ui.composable.components.ThemeSelectionDialog
+import com.example.submanager.ui.screens.viewModel.AuthViewModel
 import com.example.submanager.ui.screens.viewModel.ThemeViewModel
 import org.koin.androidx.compose.koinViewModel
 
@@ -43,6 +44,7 @@ fun AppHeader(
     navController: NavController,
     modifier: Modifier = Modifier
 ) {
+    val authViewModel = koinViewModel<AuthViewModel>() //Todo imporve
     val themeViewModel = koinViewModel<ThemeViewModel>()
     val themeState by themeViewModel.state.collectAsStateWithLifecycle()
 
@@ -137,7 +139,12 @@ fun AppHeader(
                 HeaderActionButtons(
                     currentTheme = themeState.theme,
                     onThemeClick = { showThemeDialog = true },
-                    onNotificationsClick = { /* TODO: gestire notifiche */ }
+                    onNotificationsClick = {
+                        authViewModel.actions.logout()
+                        navController.navigate(Screen.Login) {
+                            popUpTo(0) { inclusive = true }
+                        }
+                    }
                 )
             }
 
