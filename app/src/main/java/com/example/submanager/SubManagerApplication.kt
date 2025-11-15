@@ -2,6 +2,7 @@ package com.example.submanager
 
 import android.app.Application
 import com.example.submanager.di.appModule
+import com.google.firebase.FirebaseApp
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
@@ -10,6 +11,8 @@ class SubManagerApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
+
+        FirebaseApp.initializeApp(this)
 
         startKoin {
             androidLogger()

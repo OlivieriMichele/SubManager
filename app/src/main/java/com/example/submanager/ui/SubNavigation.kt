@@ -10,6 +10,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
+import com.example.submanager.ui.screens.auth.LoginScreen
+import com.example.submanager.ui.screens.auth.SignInScreen
 import com.example.submanager.ui.screens.categories.CategoryDetailScreen
 import com.example.submanager.ui.screens.categories.CategoryScreen
 import com.example.submanager.ui.screens.categories.NewCategoryScreen
@@ -17,6 +19,7 @@ import com.example.submanager.ui.screens.home.HomeScreen
 import com.example.submanager.ui.screens.insights.InsigthsScreen
 import com.example.submanager.ui.screens.subscription.AddSubscriptionScreen
 import com.example.submanager.ui.screens.subscription.ViewSubscriptionScreen
+import com.example.submanager.ui.screens.viewModel.AuthViewModel
 import com.example.submanager.ui.screens.viewModel.CategoryViewModel
 import com.example.submanager.ui.screens.viewModel.HomeViewModel
 import com.example.submanager.ui.screens.viewModel.InsightsViewModel
@@ -25,6 +28,8 @@ import kotlinx.serialization.Serializable
 import org.koin.androidx.compose.koinViewModel
 
 sealed interface Screen {
+    @Serializable data object Login : Screen
+    @Serializable data object Register : Screen
     @Serializable data object Home : Screen
     @Serializable data object Categories : Screen
     @Serializable data class CategoryDetail(val categoryName: String) : Screen
@@ -38,6 +43,8 @@ sealed interface Screen {
 fun NavBackStackEntry.getCurrentScreen(): Screen? {
     return destination.route?.let { route ->
         when {
+            route.contains("Login") -> Screen.Login
+            route.contains("Register") -> Screen.Register
             route.contains("Home") -> Screen.Home
             route.contains("Categories") && !route.contains("CategoryDetail") -> Screen.Categories
             route.contains("CategoryDetail") -> toRoute<Screen.CategoryDetail>()
@@ -53,16 +60,57 @@ fun NavBackStackEntry.getCurrentScreen(): Screen? {
 @Composable
 fun SubNavigation(
     navController: NavHostController,
-    modifier: Modifier
+    modifier: Modifier,
+    startDestination: Screen = Screen.Login
 ) {
     val subscriptionViewModel = koinViewModel<SubscriptionViewModel>()
     val categoryViewModel = koinViewModel<CategoryViewModel>()
 
     NavHost(
         navController = navController,
-        startDestination = Screen.Home,
+        startDestination = startDestination,
         modifier = modifier
     ) {
+        // Login
+        composable<Screen.Login> {
+            val authViewModel = koinViewModel<AuthViewModel>()
+            val state by authViewModel.state.collectAsStateWithLifecycle()
+
+            LaunchedEffect(state.isAuthenticated) {
+                if (state.isAuthenticated) {
+                    navController.navigate(Screen.Home) {
+                        popUpTo(Screen.Login) { inclusive = true }
+                    }
+                }
+            }
+
+            LoginScreen(
+                state = state,
+                actions = authViewModel.actions,
+                onRegisterClick = { navController.navigate(Screen.Register) }
+            )
+        }
+
+        // SignIn Screen
+        composable<Screen.Register> {
+            val authViewModel = koinViewModel<AuthViewModel>()
+            val state by authViewModel.state.collectAsStateWithLifecycle()
+
+            LaunchedEffect(state.isAuthenticated) {
+                if (state.isAuthenticated) {
+                    navController.navigate(Screen.Home) {
+                        popUpTo(Screen.Register) { inclusive = true }
+                    }
+                }
+            }
+
+            SignInScreen(
+                state = state,
+                actions = authViewModel.actions,
+                onBackClick = { navController.popBackStack() }
+            )
+        }
+
         // Home Screen
         composable<Screen.Home> {
             val homeViewModel = koinViewModel<HomeViewModel>()

@@ -5,21 +5,23 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.submanager.data.models.Theme
+import com.example.submanager.ui.Screen
 import com.example.submanager.ui.SubNavigation
-import com.example.submanager.ui.getCurrentScreen
 import com.example.submanager.ui.composable.AppFloatingActionButton
 import com.example.submanager.ui.composable.AppHeader
-import com.example.submanager.ui.screens.viewModel.CategoryViewModel
-import com.example.submanager.ui.screens.viewModel.SubscriptionViewModel
+import com.example.submanager.ui.getCurrentScreen
+import com.example.submanager.ui.screens.viewModel.AuthViewModel
 import com.example.submanager.ui.screens.viewModel.ThemeViewModel
 import com.example.submanager.ui.theme.SubManagerTheme
 import org.koin.androidx.compose.koinViewModel
@@ -29,11 +31,18 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            val subscriptionViewModel = koinViewModel<SubscriptionViewModel>()
-            val categoryViewModel = koinViewModel<CategoryViewModel>()
             val themeViewModel = koinViewModel<ThemeViewModel>()
+            val authViewModel = koinViewModel<AuthViewModel>()
+
             val themeState by themeViewModel.state.collectAsStateWithLifecycle()
+            val authState by authViewModel.state.collectAsStateWithLifecycle()
             val navController = rememberNavController()
+
+            // Controlla autenticazione all'avvio
+            LaunchedEffect(Unit) {
+                authViewModel.actions.checkAuth()
+            }
+
             val darkTheme = when (themeState.theme) {
                 Theme.Dark -> true
                 Theme.Light -> false
@@ -44,24 +53,32 @@ class MainActivity : ComponentActivity() {
                 val currentBackStackEntry by navController.currentBackStackEntryAsState()
                 val currentScreen = currentBackStackEntry?.getCurrentScreen()
 
+                val showBars = currentScreen !is Screen.Login && currentScreen !is Screen.Register
+
                 Scaffold(
                     containerColor = MaterialTheme.colorScheme.background,
                     topBar = {
-                        AppHeader(
-                            screen = currentScreen,
-                            navController = navController
-                        )
+                        if (showBars) {
+                            AppHeader(
+                                screen = currentScreen,
+                                navController = navController
+                            )
+                        }
                     },
                     floatingActionButton = {
-                        AppFloatingActionButton(
-                            screen = currentScreen,
-                            navController = navController
-                        )
+                        if (showBars) {
+                            AppFloatingActionButton(
+                                screen = currentScreen,
+                                navController = navController
+                            )
+                        }
                     }
                 ) { innerPadding ->
                     SubNavigation(
-                        navController,
-                        Modifier.padding(innerPadding))
+                        navController = navController,
+                        modifier = Modifier.padding(if (showBars) innerPadding else PaddingValues()),
+                        startDestination = if (authState.isAuthenticated) Screen.Home else Screen.Login
+                    )
                 }
             }
         }
