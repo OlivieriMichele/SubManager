@@ -1,5 +1,6 @@
 package com.example.submanager.data.repositories
 
+import com.example.submanager.utils.SecureCredentialManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthException
 import kotlinx.coroutines.tasks.await
@@ -10,11 +11,16 @@ data class AuthResult(
 )
 
 class AuthRepository(
-    private val auth: FirebaseAuth
+    private val auth: FirebaseAuth,
+    private val credentialsManager: SecureCredentialManager
 ) {
-    suspend fun login(email: String, password: String): AuthResult {
+    suspend fun login(email: String, password: String, saveBiometric: Boolean): AuthResult {
         return try {
             auth.signInWithEmailAndPassword(email, password).await()
+            if (saveBiometric){
+                credentialsManager.saveCredential(email, password)
+                credentialsManager.setBiometricEnabled(true)
+            }
             AuthResult(isSuccess = true)
         } catch (e: FirebaseAuthException) {
             AuthResult(isSuccess = false, errorMessage = mapError(e))
@@ -37,6 +43,38 @@ class AuthRepository(
     suspend fun logout() {
         auth.signOut()
     }
+
+    suspend fun loginWithBiometric(): Result<Boolean> {
+        return try {
+            val email = credentialsManager.getEmail()
+            val password = credentialsManager.getPassword()
+            if (email == null || password == null)
+                return Result.failure(Exception("Credenziali non salvate"))
+
+            auth.signInWithEmailAndPassword(email, password).await()
+            Result.success(true)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    fun hasStoredCredentials(): Boolean {
+        return credentialsManager.hasStoreCredentials()
+    }
+
+    fun getStoredEmail(): String? {
+        return credentialsManager.getEmail()
+    }
+
+    fun isBiometricEnabled(): Boolean {
+        return credentialsManager.isBiometricEnabled()
+    }
+
+    fun disableBiometric() {
+        credentialsManager.clearCredentials()
+    }
+
+    fun getCurrentUser() = auth.currentUser
 
     suspend fun isAuthenticated(): Boolean {
         return auth.currentUser != null

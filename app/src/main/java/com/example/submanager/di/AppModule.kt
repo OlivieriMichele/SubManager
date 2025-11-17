@@ -14,6 +14,7 @@ import com.example.submanager.ui.screens.viewModel.CategoryViewModel
 import com.example.submanager.ui.screens.viewModel.HomeViewModel
 import com.example.submanager.ui.screens.viewModel.InsightsViewModel
 import com.example.submanager.ui.screens.viewModel.SubscriptionViewModel
+import com.example.submanager.utils.SecureCredentialManager
 import com.google.firebase.auth.FirebaseAuth
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -30,6 +31,7 @@ val appModule = module {
     // DataStore per preferences
     single { get<Context>().dataStore }
     single { PreferencesManager(get()) }
+    single { SecureCredentialManager(androidContext()) }
 
     // Firebase
     single { FirebaseAuth.getInstance() }
@@ -45,7 +47,7 @@ val appModule = module {
     single { SubscriptionRepository(get()) }
     single { CategoryRepository(get(),get()) } // riceve subscriptionDao
     single { ThemeRepository(get()) } // riceve subscription e category Dao
-    single { AuthRepository(get()) }
+    single { AuthRepository(get(), get()) }
 
     // ViewModels
     viewModel { AuthViewModel(get()) }

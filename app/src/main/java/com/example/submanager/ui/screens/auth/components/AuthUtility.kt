@@ -6,6 +6,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.Fingerprint
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
@@ -143,6 +144,50 @@ fun ErrorText(message: String?) {
             color = MaterialTheme.colorScheme.error,
             fontSize = 13.sp,
             modifier = Modifier.padding(vertical = 8.dp)
+        )
+    }
+}
+
+@Composable
+fun Fingerprint(onClick: () -> Unit, enabled: Boolean) {
+    // Divisore
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Divider(modifier = Modifier.weight(1f))
+        Text(
+            text = "oppure",
+            modifier = Modifier.padding(horizontal = 16.dp),
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            fontSize = 13.sp
+        )
+        Divider(modifier = Modifier.weight(1f))
+    }
+
+    Spacer(modifier = Modifier.height(24.dp))
+
+    // Face ID Button
+    OutlinedButton(
+        onClick = { onClick() },
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(56.dp),
+        shape = RoundedCornerShape(12.dp),
+        colors = ButtonDefaults.outlinedButtonColors(
+            contentColor = Color(0xFF6366F1)
+        )
+    ) {
+        Icon(
+            imageVector = Icons.Default.Fingerprint,
+            contentDescription = "Face ID",
+            modifier = Modifier.size(20.dp)
+        )
+        Spacer(modifier = Modifier.width(8.dp))
+        Text(
+            text = "Accedi con Finger ID",
+            fontSize = 15.sp,
+            fontWeight = FontWeight.Medium
         )
     }
 }

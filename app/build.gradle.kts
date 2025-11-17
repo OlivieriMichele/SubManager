@@ -43,6 +43,9 @@ android {
 }
 
 dependencies {
+    implementation(libs.androidx.biometric)
+    implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.security.crypto)
     // Firebase
     implementation(platform(libs.firebase.bom.v3270))
     implementation(libs.com.google.firebase.firebase.auth.ktx)

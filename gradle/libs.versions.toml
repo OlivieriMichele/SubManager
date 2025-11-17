@@ -1,6 +1,8 @@
 [versions]
 accompanistSystemuicontroller = "<latest_version>"
 agp = "8.7.3"
+appcompat = "1.7.1"
+biometric = "1.2.0-alpha05"
 datastorePreferences = "1.1.7"
 firebaseBom = "34.6.0"
 firebaseBomVersion = "32.7.0"
@@ -20,12 +22,16 @@ runtimeAndroid = "1.9.0"
 ksp = "2.0.0-1.0.24"
 room = "2.6.1"
 firebaseAuthKtx = "24.0.1"
+securityCrypto = "1.1.0"
 
 [libraries]
 accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanistSystemuicontroller" }
+androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
+androidx-biometric = { module = "androidx.biometric:biometric", version.ref = "biometric" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastorePreferences" }
 androidx-lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycleRuntimeKtx" }
+androidx-security-crypto = { module = "androidx.security:security-crypto", version.ref = "securityCrypto" }
 com-google-firebase-firebase-auth-ktx = { module = "com.google.firebase:firebase-auth-ktx" }
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
 firebase-bom-v3270 = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBomVersion" }
