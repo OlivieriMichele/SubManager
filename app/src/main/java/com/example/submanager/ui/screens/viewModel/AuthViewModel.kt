@@ -17,8 +17,8 @@ data class AuthState(
     val email: String = "",
     val password: String = "",
     val confirmPassword: String = "",
-    val rememberMe: Boolean = false, // ✅ Semplificato: un solo flag
-    val canUseBiometric: Boolean = false // ✅ Combinazione di hasSavedCredentials + biometricAvailable
+    val rememberMe: Boolean = false,
+    val canUseBiometric: Boolean = false
 )
 
 interface AuthActions {
@@ -28,11 +28,11 @@ interface AuthActions {
     fun login()
     fun register()
     fun logout()
-    fun checkAuth()
     fun loginWithBiometric()
     fun toggleRememberMe()
     fun checkBiometricAvailability(isAvailable: Boolean)
     fun onBiometricResult(result: BiometricAuthManager.BiometricResult)
+    fun disableBiometric()
 }
 
 class AuthViewModel(
@@ -47,15 +47,13 @@ class AuthViewModel(
     }
 
     private fun loadSavedCredentials() {
-        val hasCredentials = repository.hasStoredCredentials()
         val storedEmail = repository.getStoredEmail()
         val biometricEnabled = repository.isBiometricEnabled()
 
         _state.update {
             it.copy(
                 email = storedEmail ?: "",
-                rememberMe = biometricEnabled,
-                // canUseBiometric sarà aggiornato quando checkBiometricAvailability viene chiamato
+                rememberMe = biometricEnabled
             )
         }
     }
@@ -89,19 +87,10 @@ class AuthViewModel(
             viewModelScope.launch {
                 val current = _state.value
 
-                when {
-                    current.email.isBlank() -> {
-                        _state.update { it.copy(error = "Inserisci l'email") }
-                        return@launch
-                    }
-                    !current.email.contains("@") -> {
-                        _state.update { it.copy(error = "Email non valida") }
-                        return@launch
-                    }
-                    current.password.isBlank() -> {
-                        _state.update { it.copy(error = "Inserisci la password") }
-                        return@launch
-                    }
+                val validationError = validateLoginInput(current)
+                if (validationError != null) {
+                    _state.update { it.copy(error = validationError) }
+                    return@launch
                 }
 
                 _state.update { it.copy(isLoading = true, error = null) }
@@ -137,23 +126,10 @@ class AuthViewModel(
             viewModelScope.launch {
                 val current = _state.value
 
-                when {
-                    current.email.isBlank() -> {
-                        _state.update { it.copy(error = "Inserisci l'email") }
-                        return@launch
-                    }
-                    !current.email.contains("@") -> {
-                        _state.update { it.copy(error = "Email non valida") }
-                        return@launch
-                    }
-                    current.password.length < 6 -> {
-                        _state.update { it.copy(error = "Password minimo 6 caratteri") }
-                        return@launch
-                    }
-                    current.password != current.confirmPassword -> {
-                        _state.update { it.copy(error = "Le password non coincidono") }
-                        return@launch
-                    }
+                val validationError = validateRegisterInput(current)
+                if (validationError != null) {
+                    _state.update { it.copy(error = validationError) }
+                    return@launch
                 }
 
                 _state.update { it.copy(isLoading = true, error = null) }
@@ -181,20 +157,19 @@ class AuthViewModel(
         override fun logout() {
             viewModelScope.launch {
                 repository.logout()
-                _state.update { it.copy(isAuthenticated = false) }
-            }
-        }
-
-        override fun checkAuth() {
-            viewModelScope.launch {
-                val isAuth = repository.isAuthenticated()
-                _state.update { it.copy(isAuthenticated = isAuth) }
+                _state.update {
+                    it.copy(
+                        isAuthenticated = false,
+                        password = "",
+                        confirmPassword = ""
+                    )
+                }
             }
         }
 
         override fun loginWithBiometric() {
-            // La UI mostrerà il prompt biometrico nativo
-        }
+            // Il prompt biometrico viene gestito dalla UI
+        } // todo elimina
 
         override fun onBiometricResult(result: BiometricAuthManager.BiometricResult) {
             viewModelScope.launch {
@@ -220,41 +195,45 @@ class AuthViewModel(
                         }
                     }
                     is BiometricAuthManager.BiometricResult.Error -> {
-                        _state.update {
-                            it.copy(
-                                isLoading = false,
-                                error = result.message
-                            )
-                        }
+                        _state.update { it.copy(error = result.message) }
                     }
                     is BiometricAuthManager.BiometricResult.Failed -> {
-                        _state.update {
-                            it.copy(
-                                isLoading = false,
-                                error = "Impronta non riconosciuta"
-                            )
-                        }
+                        _state.update { it.copy(error = "Impronta non riconosciuta") }
                     }
                     is BiometricAuthManager.BiometricResult.Unavailable -> {
-                        _state.update {
-                            it.copy(
-                                isLoading = false,
-                                error = "Biometria non disponibile"
-                            )
-                        }
+                        _state.update { it.copy(error = "Biometria non disponibile") }
                     }
                 }
             }
         }
+
+        override fun disableBiometric() {
+            repository.disableBiometric()
+            _state.update {
+                it.copy(
+                    canUseBiometric = false,
+                    rememberMe = false
+                )
+            }
+        }
     }
 
-    fun disableBiometric() {
-        repository.disableBiometric()
-        _state.update {
-            it.copy(
-                canUseBiometric = false,
-                rememberMe = false
-            )
+    private fun validateLoginInput(state: AuthState): String? {
+        return when {
+            state.email.isBlank() -> "Inserisci l'email"
+            !state.email.contains("@") -> "Email non valida"
+            state.password.isBlank() -> "Inserisci la password"
+            else -> null
+        }
+    }
+
+    private fun validateRegisterInput(state: AuthState): String? {
+        return when {
+            state.email.isBlank() -> "Inserisci l'email"
+            !state.email.contains("@") -> "Email non valida"
+            state.password.length < 6 -> "Password minimo 6 caratteri"
+            state.password != state.confirmPassword -> "Le password non coincidono"
+            else -> null
         }
     }
 }

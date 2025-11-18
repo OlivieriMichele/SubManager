@@ -1,7 +1,6 @@
 package com.example.submanager
 
 import android.os.Bundle
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -19,24 +18,18 @@ import com.example.submanager.ui.SubNavigation
 import com.example.submanager.ui.composable.AppFloatingActionButton
 import com.example.submanager.ui.composable.AppHeader
 import com.example.submanager.ui.getCurrentScreen
-import com.example.submanager.ui.screens.viewModel.AuthViewModel
 import com.example.submanager.ui.screens.viewModel.ThemeViewModel
 import com.example.submanager.ui.theme.SubManagerTheme
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
 class MainActivity : FragmentActivity() {
-    private var authViewModel: AuthViewModel? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
         setContent {
             val themeViewModel = koinViewModel<ThemeViewModel>()
-            authViewModel = koinViewModel<AuthViewModel>()
-
             val themeState by themeViewModel.state.collectAsStateWithLifecycle()
             val navController = rememberNavController()
 
@@ -71,13 +64,6 @@ class MainActivity : FragmentActivity() {
                     )
                 }
             }
-        }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        CoroutineScope(Dispatchers.Main).launch {
-            authViewModel?.actions?.logout()
         }
     }
 }

@@ -123,13 +123,18 @@ fun AuthButton(
 ) {
     Button(
         onClick = onClick,
-        modifier = Modifier.fillMaxWidth().height(56.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(56.dp),
         shape = RoundedCornerShape(12.dp),
         colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF6366F1)),
         enabled = enabled && !isLoading
     ) {
         if (isLoading) {
-            CircularProgressIndicator(modifier = Modifier.size(24.dp), color = Color.White)
+            CircularProgressIndicator(
+                modifier = Modifier.size(24.dp),
+                color = Color.White
+            )
         } else {
             Text(text, fontSize = 16.sp, fontWeight = FontWeight.SemiBold)
         }
@@ -149,45 +154,80 @@ fun ErrorText(message: String?) {
 }
 
 @Composable
-fun Fingerprint(onClick: () -> Unit, enabled: Boolean) {
-    // Divisore
+fun Fingerprint(
+    onClick: () -> Unit,
+    enabled: Boolean
+) {
     Row(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Divider(modifier = Modifier.weight(1f))
+        HorizontalDivider(modifier = Modifier.weight(1f))
         Text(
             text = "oppure",
             modifier = Modifier.padding(horizontal = 16.dp),
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             fontSize = 13.sp
         )
-        Divider(modifier = Modifier.weight(1f))
+        HorizontalDivider(modifier = Modifier.weight(1f))
     }
 
-    Spacer(modifier = Modifier.height(24.dp))
-
-    // Face ID Button
     OutlinedButton(
-        onClick = { onClick() },
+        onClick = onClick,
         modifier = Modifier
             .fillMaxWidth()
             .height(56.dp),
         shape = RoundedCornerShape(12.dp),
         colors = ButtonDefaults.outlinedButtonColors(
             contentColor = Color(0xFF6366F1)
-        )
+        ),
+        enabled = enabled
     ) {
         Icon(
             imageVector = Icons.Default.Fingerprint,
-            contentDescription = "Face ID",
+            contentDescription = "Fingerprint",
             modifier = Modifier.size(20.dp)
         )
         Spacer(modifier = Modifier.width(8.dp))
         Text(
-            text = "Accedi con Finger ID",
+            text = "Accedi con impronta",
             fontSize = 15.sp,
             fontWeight = FontWeight.Medium
+        )
+    }
+}
+
+@Composable
+fun BiometricToggle(
+    checked: Boolean,
+    onCheckedChange: (Boolean) -> Unit,
+    enabled: Boolean = true
+) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = "Ricorda accesso",
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            fontSize = 13.sp
+        )
+
+        Switch(
+            checked = checked,
+            onCheckedChange = onCheckedChange,
+            enabled = enabled,
+            colors = SwitchDefaults.colors(
+                checkedThumbColor = Color.White,
+                checkedTrackColor = Color(0xFF6366F1),
+                uncheckedThumbColor = Color.White,
+                uncheckedTrackColor = MaterialTheme.colorScheme.outline
+            ),
+            modifier = Modifier.height(24.dp)
         )
     }
 }

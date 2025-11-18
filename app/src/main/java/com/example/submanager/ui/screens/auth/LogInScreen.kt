@@ -27,11 +27,12 @@ fun LoginScreen(
         activity?.let { BiometricAuthManager(it) }
     }
 
+    val isBiometricAvailable = remember {
+        biometricManager?.isBiometricAvailable() ?: false
+    }
+
     LaunchedEffect(Unit) {
-        biometricManager?.let { manager ->
-            val isAvailable = manager.isBiometricAvailable()
-            actions.checkBiometricAvailability(isAvailable)
-        }
+        actions.checkBiometricAvailability(isBiometricAvailable)
     }
 
     Box(
@@ -72,25 +73,6 @@ fun LoginScreen(
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            if (biometricManager?.isBiometricAvailable() == true) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Checkbox(
-                        checked = state.rememberMe,
-                        onCheckedChange = { actions.toggleRememberMe() },
-                        enabled = !state.isLoading
-                    )
-                    Text(
-                        text = "Ricordami per accesso biometrico",
-                        style = MaterialTheme.typography.bodyMedium,
-                        modifier = Modifier.padding(start = 8.dp)
-                    )
-                }
-                Spacer(modifier = Modifier.height(16.dp))
-            }
-
             ErrorText(state.error)
 
             AuthButton(
@@ -114,6 +96,15 @@ fun LoginScreen(
             }
 
             Spacer(modifier = Modifier.weight(1f))
+
+            if (isBiometricAvailable) {
+                BiometricToggle(
+                    checked = state.rememberMe,
+                    onCheckedChange = { actions.toggleRememberMe() },
+                    enabled = !state.isLoading
+                )
+                Spacer(modifier = Modifier.height(12.dp))
+            }
 
             TextButton(onClick = onRegisterClick) {
                 Text("Non hai un account? Registrati")

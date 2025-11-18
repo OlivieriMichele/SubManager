@@ -44,9 +44,9 @@ class SecureCredentialManager(context: Context) {
         return getEmail() != null && getPassword() != null
     }
 
-    fun setBiometricEnabled(enaboled: Boolean) {
+    fun setBiometricEnabled(enabled: Boolean) {
         sharedPreferences.edit().apply {
-            putBoolean(KEY_BIOMETRIC_ENABLED, enaboled)
+            putBoolean(KEY_BIOMETRIC_ENABLED, enabled)
             apply()
         }
     }
