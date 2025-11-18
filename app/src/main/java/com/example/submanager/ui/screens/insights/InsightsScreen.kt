@@ -81,7 +81,7 @@ fun InsigthsScreen(
             }
 
             item {
-                Spacer(modifier = Modifier.height(100.dp)) // Spazio per Bottom Nav
+                Spacer(modifier = Modifier.height(80.dp))
             }
         }
     }

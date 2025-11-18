@@ -12,6 +12,7 @@ import androidx.fragment.app.FragmentActivity
 import com.example.submanager.ui.screens.auth.components.*
 import com.example.submanager.ui.screens.viewModel.AuthActions
 import com.example.submanager.ui.screens.viewModel.AuthState
+import com.example.submanager.ui.theme.AccentColors
 import com.example.submanager.utils.BiometricAuthManager
 
 @Composable
@@ -84,10 +85,7 @@ fun LoginScreen(
             if (state.canUseBiometric) {
                 Fingerprint(
                     onClick = {
-                        biometricManager?.authenticate(
-                            title = "Accesso con impronta",
-                            subtitle = "Usa la tua impronta per accedere"
-                        ) { result ->
+                        biometricManager?.authenticate() { result ->
                             actions.onBiometricResult(result)
                         }
                     },
@@ -107,7 +105,8 @@ fun LoginScreen(
             }
 
             TextButton(onClick = onRegisterClick) {
-                Text("Non hai un account? Registrati")
+                Text("Non hai un account?", color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text(" Registrati", color = AccentColors.mainGradientStart)
             }
 
             Spacer(modifier = Modifier.height(16.dp))

@@ -22,6 +22,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.submanager.ui.theme.AccentColors
 
 @Composable
 fun AuthLogo(modifier: Modifier = Modifier) {
@@ -30,7 +31,9 @@ fun AuthLogo(modifier: Modifier = Modifier) {
             .size(100.dp)
             .background(
                 brush = Brush.linearGradient(
-                    colors = listOf(Color(0xFF6366F1), Color(0xFF8B5CF6))
+                    colors = listOf(
+                        AccentColors.mainGradientStart,
+                        AccentColors.mainGradientEnd)
                 ),
                 shape = RoundedCornerShape(24.dp)
             ),
@@ -125,9 +128,19 @@ fun AuthButton(
         onClick = onClick,
         modifier = Modifier
             .fillMaxWidth()
-            .height(56.dp),
-        shape = RoundedCornerShape(12.dp),
-        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF6366F1)),
+            .height(56.dp)
+            .background(
+                brush = Brush.linearGradient(
+                    colors = listOf(
+                        AccentColors.mainGradientStart,
+                        AccentColors.mainGradientEnd),
+                ),
+                shape = RoundedCornerShape(12.dp)
+            ),
+        colors = ButtonDefaults.buttonColors(
+            containerColor = Color.Transparent,
+            disabledContainerColor = Color.LightGray.copy(alpha = 0.5f) // Colore per lo stato disabilitato
+        ),
         enabled = enabled && !isLoading
     ) {
         if (isLoading) {
@@ -188,13 +201,14 @@ fun Fingerprint(
         Icon(
             imageVector = Icons.Default.Fingerprint,
             contentDescription = "Fingerprint",
-            modifier = Modifier.size(20.dp)
+            modifier = Modifier.size(24.dp)
         )
         Spacer(modifier = Modifier.width(8.dp))
         Text(
             text = "Accedi con impronta",
             fontSize = 15.sp,
-            fontWeight = FontWeight.Medium
+            fontWeight = FontWeight.Medium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
         )
     }
 }
@@ -214,7 +228,7 @@ fun BiometricToggle(
             text = "Ricorda accesso",
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
-            fontSize = 13.sp
+            fontSize = 15.sp
         )
 
         Switch(
@@ -223,11 +237,11 @@ fun BiometricToggle(
             enabled = enabled,
             colors = SwitchDefaults.colors(
                 checkedThumbColor = Color.White,
-                checkedTrackColor = Color(0xFF6366F1),
+                checkedTrackColor = AccentColors.mainGradientStart,
                 uncheckedThumbColor = Color.White,
                 uncheckedTrackColor = MaterialTheme.colorScheme.outline
             ),
-            modifier = Modifier.height(24.dp)
+            modifier = Modifier.height(16.dp)
         )
     }
 }
