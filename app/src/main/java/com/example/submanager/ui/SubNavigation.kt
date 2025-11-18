@@ -17,12 +17,14 @@ import com.example.submanager.ui.screens.categories.CategoryScreen
 import com.example.submanager.ui.screens.categories.NewCategoryScreen
 import com.example.submanager.ui.screens.home.HomeScreen
 import com.example.submanager.ui.screens.insights.InsigthsScreen
+import com.example.submanager.ui.screens.profile.ProfileScreen
 import com.example.submanager.ui.screens.subscription.AddSubscriptionScreen
 import com.example.submanager.ui.screens.subscription.ViewSubscriptionScreen
 import com.example.submanager.ui.screens.viewModel.AuthViewModel
 import com.example.submanager.ui.screens.viewModel.CategoryViewModel
 import com.example.submanager.ui.screens.viewModel.HomeViewModel
 import com.example.submanager.ui.screens.viewModel.InsightsViewModel
+import com.example.submanager.ui.screens.viewModel.ProfileViewModel
 import com.example.submanager.ui.screens.viewModel.SubscriptionViewModel
 import kotlinx.serialization.Serializable
 import org.koin.androidx.compose.koinViewModel
@@ -31,6 +33,7 @@ sealed interface Screen {
     @Serializable data object Login : Screen
     @Serializable data object Register : Screen
     @Serializable data object Home : Screen
+    @Serializable data object Profile : Screen
     @Serializable data object Categories : Screen
     @Serializable data class CategoryDetail(val categoryName: String) : Screen
     @Serializable data object AddSubscription : Screen
@@ -45,6 +48,7 @@ fun NavBackStackEntry.getCurrentScreen(): Screen? {
             route.contains("Login") -> Screen.Login
             route.contains("Register") -> Screen.Register
             route.contains("Home") -> Screen.Home
+            route.contains("Profile") -> Screen.Profile
             route.contains("Categories") && !route.contains("CategoryDetail") -> Screen.Categories
             route.contains("CategoryDetail") -> toRoute<Screen.CategoryDetail>()
             route.contains("AddSubscription") -> Screen.AddSubscription
@@ -120,6 +124,21 @@ fun SubNavigation(
                     navController.navigate(Screen.ViewSubscription(subscriptionId))
                 },
                 onNavigateToInsights = { navController.navigate(Screen.Insights) }
+            )
+        }
+
+        // Profile Screen
+        composable<Screen.Profile> {
+            val profileViewModel = koinViewModel<ProfileViewModel>()
+            val themeViewModel = koinViewModel<ProfileViewModel>()
+
+            ProfileScreen(
+                authState = authState,
+                authActions = authViewModel.actions,
+                themeState = themeViewModel.getTheme(),
+                onThemeToggle = { profileViewModel.toggleAutoTheme(themeViewModel.themeState.theme) },
+                onThemeChange = { profileViewModel.changeManualTheme(it) },
+                onNotificationsToggle = { /* TODO */ }
             )
         }
 

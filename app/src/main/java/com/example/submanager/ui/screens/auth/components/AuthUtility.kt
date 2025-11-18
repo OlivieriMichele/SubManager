@@ -128,19 +128,9 @@ fun AuthButton(
         onClick = onClick,
         modifier = Modifier
             .fillMaxWidth()
-            .height(56.dp)
-            .background(
-                brush = Brush.linearGradient(
-                    colors = listOf(
-                        AccentColors.mainGradientStart,
-                        AccentColors.mainGradientEnd),
-                ),
-                shape = RoundedCornerShape(12.dp)
-            ),
-        colors = ButtonDefaults.buttonColors(
-            containerColor = Color.Transparent,
-            disabledContainerColor = Color.LightGray.copy(alpha = 0.5f) // Colore per lo stato disabilitato
-        ),
+            .height(56.dp),
+        shape = RoundedCornerShape(12.dp),
+        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF6366F1)),
         enabled = enabled && !isLoading
     ) {
         if (isLoading) {
