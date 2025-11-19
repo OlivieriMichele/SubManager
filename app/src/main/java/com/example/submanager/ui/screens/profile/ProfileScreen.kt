@@ -13,22 +13,21 @@ import com.example.submanager.ui.screens.profile.components.ProfileCard
 import com.example.submanager.ui.screens.profile.components.SecuritySection
 import com.example.submanager.ui.screens.viewModel.AuthActions
 import com.example.submanager.ui.screens.viewModel.AuthState
+import com.example.submanager.ui.screens.viewModel.ThemeAction
 import com.example.submanager.ui.screens.viewModel.ThemeState
 
 @Composable
 fun ProfileScreen(
     authState: AuthState,
     authActions: AuthActions,
-    themeState: ThemeState,
-    onThemeToggle: () -> Unit,
-    onThemeChange: (Theme) -> Unit,
+    themeAction: ThemeAction,
     onNotificationsToggle: () -> Unit,
 ) {
     var showClearBiometricDialog by remember { mutableStateOf(false) }
     var notificationsEnabled by remember { mutableStateOf(true) }
 
-    val isAutoTheme = themeState.theme == Theme.System
-    val currentManualTheme = if (!isAutoTheme) themeState.theme else Theme.Light
+    val isAutoTheme = themeAction.getThemeState().theme == Theme.System
+    val currentManualTheme = if (!isAutoTheme) themeAction.getThemeState().theme else Theme.Light
 
     if (showClearBiometricDialog) {
         ClearBiometricDialog(
@@ -56,8 +55,8 @@ fun ProfileScreen(
             isAutoTheme = isAutoTheme,
             currentManualTheme = currentManualTheme,
             notificationsEnabled = notificationsEnabled,
-            onThemeToggle = onThemeToggle,
-            onThemeChange = onThemeChange,
+            onThemeToggle = { themeAction.toggleAutoTheme(themeAction.getThemeState().theme) },
+            onThemeChange = { themeAction.changeManualTheme(themeAction.getThemeState().theme) },
             onNotificationsToggle = {
                 notificationsEnabled = !notificationsEnabled
                 onNotificationsToggle()

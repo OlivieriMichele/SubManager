@@ -26,6 +26,7 @@ import com.example.submanager.ui.screens.viewModel.HomeViewModel
 import com.example.submanager.ui.screens.viewModel.InsightsViewModel
 import com.example.submanager.ui.screens.viewModel.ProfileViewModel
 import com.example.submanager.ui.screens.viewModel.SubscriptionViewModel
+import com.example.submanager.ui.screens.viewModel.ThemeViewModel
 import kotlinx.serialization.Serializable
 import org.koin.androidx.compose.koinViewModel
 
@@ -129,15 +130,12 @@ fun SubNavigation(
 
         // Profile Screen
         composable<Screen.Profile> {
-            val profileViewModel = koinViewModel<ProfileViewModel>()
-            val themeViewModel = koinViewModel<ProfileViewModel>()
+            val themeViewModel = koinViewModel<ThemeViewModel>()
 
             ProfileScreen(
                 authState = authState,
                 authActions = authViewModel.actions,
-                themeState = themeViewModel.getTheme(),
-                onThemeToggle = { profileViewModel.toggleAutoTheme(themeViewModel.themeState.theme) },
-                onThemeChange = { profileViewModel.changeManualTheme(it) },
+                themeAction = themeViewModel.actions,
                 onNotificationsToggle = { /* TODO */ }
             )
         }

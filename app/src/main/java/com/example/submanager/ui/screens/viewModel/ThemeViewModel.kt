@@ -11,6 +11,12 @@ import kotlinx.coroutines.launch
 
 data class ThemeState(val theme: Theme)
 
+interface ThemeAction {
+    fun toggleAutoTheme(currentTheme: Theme)
+    fun changeManualTheme(theme: Theme)
+    fun getThemeState(): ThemeState
+}
+
 class ThemeViewModel(
     private val themeRepository: ThemeRepository
 ) : ViewModel() {
@@ -27,4 +33,29 @@ class ThemeViewModel(
         themeRepository.setTheme(theme)
     }
 
+    val actions = object : ThemeAction {
+        override fun getThemeState(): ThemeState{
+            val theme = state.value
+            return theme
+        }
+
+        override fun toggleAutoTheme(currentTheme: Theme) {
+            viewModelScope.launch {
+                val newTheme = if (currentTheme == Theme.System) {
+                    Theme.Light // Passa a manuale con Light come default
+                } else {
+                    Theme.System // Passa ad automatico
+                }
+                themeRepository.setTheme(newTheme)
+            }
+        }
+
+        override fun changeManualTheme(theme: Theme) {
+            if (theme != Theme.System) {
+                viewModelScope.launch {
+                    themeRepository.setTheme(theme)
+                }
+            }
+        }
+    }
 }
