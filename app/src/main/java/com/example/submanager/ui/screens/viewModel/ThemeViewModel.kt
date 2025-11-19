@@ -13,8 +13,7 @@ data class ThemeState(val theme: Theme)
 
 interface ThemeAction {
     fun toggleAutoTheme(currentTheme: Theme)
-    fun changeManualTheme(theme: Theme)
-    fun getThemeState(): ThemeState
+    fun changeManualTheme(newTheme: Theme)
 }
 
 class ThemeViewModel(
@@ -34,27 +33,20 @@ class ThemeViewModel(
     }
 
     val actions = object : ThemeAction {
-        override fun getThemeState(): ThemeState{
-            val theme = state.value
-            return theme
-        }
 
         override fun toggleAutoTheme(currentTheme: Theme) {
             viewModelScope.launch {
-                val newTheme = if (currentTheme == Theme.System) {
-                    Theme.Light // Passa a manuale con Light come default
+                if (currentTheme == Theme.System) {
+                    changeTheme(Theme.Dark)
                 } else {
-                    Theme.System // Passa ad automatico
+                    changeTheme(Theme.System)
                 }
-                themeRepository.setTheme(newTheme)
             }
         }
 
-        override fun changeManualTheme(theme: Theme) {
-            if (theme != Theme.System) {
-                viewModelScope.launch {
-                    themeRepository.setTheme(theme)
-                }
+        override fun changeManualTheme(newTheme: Theme) {
+            if (newTheme != Theme.System) {
+                changeTheme(newTheme)
             }
         }
     }

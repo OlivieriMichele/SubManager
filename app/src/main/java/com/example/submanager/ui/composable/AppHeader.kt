@@ -10,9 +10,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -44,7 +46,7 @@ fun AppHeader(
     navController: NavController,
     modifier: Modifier = Modifier
 ) {
-    val authViewModel = koinViewModel<AuthViewModel>() //Todo imporve
+    // val authViewModel = koinViewModel<AuthViewModel>() //Todo imporve
     val themeViewModel = koinViewModel<ThemeViewModel>()
     val themeState by themeViewModel.state.collectAsStateWithLifecycle()
 
@@ -136,6 +138,7 @@ fun AppHeader(
 
             // Home Actions
             if (showHomeActions) {
+                /* delete old button
                 HeaderActionButtons(
                     currentTheme = themeState.theme,
                     onThemeClick = { showThemeDialog = true },
@@ -145,6 +148,10 @@ fun AppHeader(
                             popUpTo(0) { inclusive = true }
                         }
                     }
+                )
+                */
+                ProfileButton(
+                    onClick = { navController.navigate(Screen.Profile) }
                 )
             }
 
@@ -179,6 +186,25 @@ private fun CircularBackButton(
             contentDescription = "Indietro",
             tint = MaterialTheme.colorScheme.onSurface,
             modifier = Modifier.size(20.dp)
+        )
+    }
+}
+
+@Composable
+private fun ProfileButton(
+    onClick: () -> Unit
+) {
+    IconButton(
+        onClick = onClick,
+        modifier = Modifier
+            .size(40.dp)
+            .background(MaterialTheme.colorScheme.surface, CircleShape)
+    ) {
+        Icon(
+            imageVector = Icons.Default.Person,
+            contentDescription = "Profile",
+            tint = MaterialTheme.colorScheme.onSurface,
+            modifier = Modifier.size(18.dp)
         )
     }
 }

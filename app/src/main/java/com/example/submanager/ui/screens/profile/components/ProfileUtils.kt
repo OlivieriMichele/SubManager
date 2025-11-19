@@ -47,7 +47,13 @@ fun SettingItem(
                 MaterialTheme.colorScheme.outlineVariant.copy(alpha = if (enabled) 1f else 0.3f),
                 RoundedCornerShape(12.dp)
             )
-            .clickable(enabled = onClick != null && enabled) { onClick?.invoke() }
+            .then(
+                if (onClick != null && enabled) {
+                    Modifier.clickable { onClick() }
+                } else {
+                    Modifier
+                }
+            )
             .padding(horizontal = 16.dp, vertical = 12.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
