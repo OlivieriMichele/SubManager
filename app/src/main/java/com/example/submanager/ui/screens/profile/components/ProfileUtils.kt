@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -29,7 +30,7 @@ fun SectionTitle(text: String) {
 
 @Composable
 fun SettingItem(
-    icon: String,
+    icon: ImageVector,
     title: String,
     subtitle: String,
     enabled: Boolean = true,
@@ -57,9 +58,10 @@ fun SettingItem(
             .padding(horizontal = 16.dp, vertical = 12.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(
-            text = icon,
-            fontSize = 24.sp,
+
+        Icon(
+            imageVector = icon,
+            contentDescription = "",
             modifier = Modifier.padding(end = 12.dp)
         )
 

@@ -1,6 +1,7 @@
 package com.example.submanager.ui.screens.profile.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -8,12 +9,14 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Lock
-import androidx.compose.material3.Button
+import androidx.compose.material.icons.filled.Contrast
+import androidx.compose.material.icons.filled.DarkMode
+import androidx.compose.material.icons.filled.Fingerprint
+import androidx.compose.material.icons.filled.Mode
+import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -31,61 +34,75 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.submanager.data.models.Theme
 import com.example.submanager.ui.screens.viewModel.AuthState
+import com.example.submanager.ui.theme.AccentColors
 
 @Composable
 fun ProfileCard(authState: AuthState) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(16.dp),
+        border = CardDefaults.outlinedCardBorder(),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant
+            containerColor = MaterialTheme.colorScheme.surface
         )
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(20.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Box(
-                modifier = Modifier
-                    .size(80.dp)
-                    .clip(CircleShape)
-                    .background(MaterialTheme.colorScheme.primary),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = getInitials(authState.email),
-                    fontSize = 32.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onPrimary
-                )
+        Box(modifier = Modifier.fillMaxWidth()) {
+            Column (
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ){
+                Box(
+                    modifier = Modifier
+                        .size(80.dp)
+                        .clip(CircleShape)
+                        .background(MaterialTheme.colorScheme.primary), //Todo linear gradient
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Text(
+                        text = getInitials(authState.email),
+                        fontSize = 32.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.onPrimary
+                    )
+                }
             }
 
-            Spacer(modifier = Modifier.height(12.dp))
-
-            Text(
-                text = getUserName(authState.email),
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onSurface
-            )
-
-            Text(
-                text = authState.email,
-                fontSize = 14.sp,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            TextButton(
-                onClick = { /* TODO */ },
-                colors = ButtonDefaults.textButtonColors(
-                    contentColor = MaterialTheme.colorScheme.primary
-                )
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(20.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text("✏️ Modifica Profilo")
+                Spacer(modifier = Modifier.height(12.dp))
+
+                Text(
+                    text = getUserName(authState.email),
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+
+                Text(
+                    text = authState.email,
+                    fontSize = 14.sp,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                TextButton(
+                    onClick = { /* TODO */ },
+                    colors = ButtonDefaults.textButtonColors(
+                        contentColor = AccentColors.mainGradientStart
+                    )
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Mode,
+                        contentDescription = null,
+                        modifier = Modifier.size(20.dp)
+                    )
+                    Text("Modifica profilo", fontSize = 14.sp)
+                }
             }
         }
     }
@@ -104,7 +121,7 @@ fun PreferencesSection(
     Spacer(modifier = Modifier.height(12.dp))
 
     SettingItem(
-        icon = "🌓",
+        icon = Icons.Default.Contrast,
         title = "Tema Automatico",
         subtitle = if (isAutoTheme) "Attivo" else "Manuale",
         trailing = {
@@ -116,7 +133,7 @@ fun PreferencesSection(
     )
 
     SettingItem(
-        icon = "🎨",
+        icon = Icons.Default.DarkMode,
         title = "Tema Manuale",
         subtitle = if (currentManualTheme == Theme.Light) "Light" else "Dark",
         enabled = !isAutoTheme,
@@ -132,7 +149,7 @@ fun PreferencesSection(
     )
 
     SettingItem(
-        icon = "🔔",
+        icon = Icons.Default.Notifications,
         title = "Notifiche",
         subtitle = "Ricevi promemoria rinnovi",
         trailing = {
@@ -154,17 +171,17 @@ fun SecuritySection(
     Spacer(modifier = Modifier.height(12.dp))
 
     SettingItem(
-        icon = "🔐",
+        icon = Icons.Default.Fingerprint,
         title = "Face ID / Touch ID",
         subtitle = if (authState.canUseBiometric) "Attivo" else "Disattivo",
         trailing = {
             Switch(
                 checked = authState.canUseBiometric,
-                onCheckedChange = { onBiometricToggle() }
+                onCheckedChange = { onClearBiometricData() }
             )
         }
     )
-
+    /*
     if (authState.canUseBiometric) {
         Spacer(modifier = Modifier.height(8.dp))
 
@@ -188,4 +205,5 @@ fun SecuritySection(
             Text("Elimina Credenziali Biometriche")
         }
     }
+     */
 }
