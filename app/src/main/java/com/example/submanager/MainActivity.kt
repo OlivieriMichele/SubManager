@@ -60,6 +60,7 @@ class MainActivity : FragmentActivity() {
                 ) { innerPadding ->
                     SubNavigation(
                         navController = navController,
+                        themeViewModel = themeViewModel,
                         modifier = Modifier.padding(innerPadding)
                     )
                 }

@@ -170,19 +170,24 @@ fun PreferencesSection(
     )
 
     SettingItem(
-        icon = Icons.Default.LightMode,
+        icon = if (currentManualTheme == Theme.Light) Icons.Default.LightMode else  Icons.Default.DarkMode,
         iconTint = AccentColors.mainGradientEnd,
         title = "Tema Manuale",
         subtitle = if (currentManualTheme == Theme.Light) "Light" else "Dark",
         enabled = !isAutoTheme,
-        onClick = {
-            if (!isAutoTheme) {
-                val newTheme = if (currentManualTheme == Theme.Light) Theme.Dark else Theme.Light
-                onThemeChange(newTheme)
-            }
-        },
         trailing = {
-            ChevronRightIcon(enabled = !isAutoTheme)
+            Switch(
+                checked = currentManualTheme == Theme.Dark,
+                onCheckedChange = {
+                    if (!isAutoTheme) {
+                        val newTheme = if (currentManualTheme == Theme.Light) Theme.Dark else Theme.Light
+                        onThemeChange(newTheme)
+                    }
+                },
+                colors = SwitchDefaults.colors(
+                    checkedTrackColor = AccentColors.darkIndigo
+                )
+            )
         }
     )
 

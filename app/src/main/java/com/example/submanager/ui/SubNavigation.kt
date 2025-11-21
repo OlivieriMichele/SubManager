@@ -63,6 +63,7 @@ fun NavBackStackEntry.getCurrentScreen(): Screen? {
 @Composable
 fun SubNavigation(
     navController: NavHostController,
+    themeViewModel: ThemeViewModel,
     modifier: Modifier = Modifier
 ) {
     val authViewModel = koinViewModel<AuthViewModel>()
@@ -129,7 +130,6 @@ fun SubNavigation(
 
         // Profile Screen
         composable<Screen.Profile> {
-            val themeViewModel = koinViewModel<ThemeViewModel>()
             val themeState by themeViewModel.state.collectAsStateWithLifecycle()
 
             ProfileScreen(

@@ -39,8 +39,8 @@ fun ProfileScreen(
     var showClearBiometricDialog by remember { mutableStateOf(false) }
     var notificationsEnabled by remember { mutableStateOf(true) }
 
-    val isAutoTheme = themeState.theme == Theme.System
-    val currentManualTheme = if (!isAutoTheme) themeState.theme else Theme.Light
+    val isAutoTheme = themeState.isAutoTheme
+    val currentManualTheme = themeState.manualTheme
 
     if (showClearBiometricDialog) {
         ClearBiometricDialog(
@@ -69,7 +69,7 @@ fun ProfileScreen(
             isAutoTheme = isAutoTheme,
             currentManualTheme = currentManualTheme,
             notificationsEnabled = notificationsEnabled,
-            onThemeToggle = { themeAction.toggleAutoTheme(themeState.theme) },
+            onThemeToggle = { themeAction.toggleAutoTheme() },
             onThemeChange = { newTheme ->
                 themeAction.changeManualTheme(newTheme)
             },

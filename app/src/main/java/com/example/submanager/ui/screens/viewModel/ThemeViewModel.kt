@@ -9,10 +9,14 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
-data class ThemeState(val theme: Theme)
+data class ThemeState(
+    val theme: Theme,           // Tema attuale salvato
+    val isAutoTheme: Boolean,   // true se System
+    val manualTheme: Theme      // Ultimo tema manuale (Light/Dark)
+)
 
 interface ThemeAction {
-    fun toggleAutoTheme(currentTheme: Theme)
+    fun toggleAutoTheme()
     fun changeManualTheme(newTheme: Theme)
 }
 
@@ -20,12 +24,20 @@ class ThemeViewModel(
     private val themeRepository: ThemeRepository
 ) : ViewModel() {
 
+    private var lastManualTheme: Theme = Theme.Dark
+
     val state = themeRepository.theme
-        .map{ ThemeState(it) }
+        .map{ currentTheme ->
+            val isAuto = currentTheme == Theme.System
+            if(!isAuto) lastManualTheme = currentTheme
+            ThemeState(currentTheme, isAuto,
+                if(isAuto) lastManualTheme else currentTheme
+            )
+        }
         .stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(),
-        initialValue = ThemeState(Theme.System)
+        initialValue = ThemeState(Theme.System, isAutoTheme = true, manualTheme = Theme.Dark)
     )
 
     fun changeTheme(theme: Theme) = viewModelScope.launch {
@@ -34,10 +46,11 @@ class ThemeViewModel(
 
     val actions = object : ThemeAction {
 
-        override fun toggleAutoTheme(currentTheme: Theme) {
+        override fun toggleAutoTheme() {
             viewModelScope.launch {
-                if (currentTheme == Theme.System) {
-                    changeTheme(Theme.Dark)
+                val currentState = state.value
+                if (currentState.isAutoTheme) {
+                    changeTheme(lastManualTheme)
                 } else {
                     changeTheme(Theme.System)
                 }
@@ -45,8 +58,11 @@ class ThemeViewModel(
         }
 
         override fun changeManualTheme(newTheme: Theme) {
-            if (newTheme != Theme.System) {
-                changeTheme(newTheme)
+            viewModelScope.launch {
+                if (newTheme != Theme.System) {
+                    lastManualTheme = newTheme
+                    changeTheme(newTheme)
+                }
             }
         }
     }
