@@ -137,7 +137,13 @@ fun SubNavigation(
                 authActions = authViewModel.actions,
                 themeState = themeState,
                 themeAction = themeViewModel.actions,
-                onNotificationsToggle = { /* TODO */ }
+                onNotificationsToggle = { /* TODO */ },
+                onLogout = {
+                    authViewModel.actions.logout()
+                    navController.navigate(Screen.Login) {
+                        popUpTo(0) { inclusive = true }
+                    }
+                }
             )
         }
 

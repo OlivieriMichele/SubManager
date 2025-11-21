@@ -14,7 +14,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -34,9 +34,7 @@ import androidx.navigation.NavController
 import com.example.submanager.ui.Screen
 import com.example.submanager.ui.composable.components.DeleteButton
 import com.example.submanager.ui.composable.components.DeleteConfirmationDialog
-import com.example.submanager.ui.composable.components.HeaderActionButtons
 import com.example.submanager.ui.composable.components.ThemeSelectionDialog
-import com.example.submanager.ui.screens.viewModel.AuthViewModel
 import com.example.submanager.ui.screens.viewModel.ThemeViewModel
 import org.koin.androidx.compose.koinViewModel
 
@@ -57,6 +55,7 @@ fun AppHeader(
     // Screen configuration
     val title = when (screen) {
         Screen.Home -> "I Miei Abbonamenti"
+        Screen.Profile -> "Profilo"
         Screen.AddSubscription -> "Nuovo Abbonamento"
         Screen.Categories -> "Categorie"
         Screen.NewCategory -> "Nuova Categoria"

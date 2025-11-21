@@ -1,4 +1,4 @@
-package com.example.submanager.ui.screens.home
+package com.example.submanager.ui.screens.home.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border

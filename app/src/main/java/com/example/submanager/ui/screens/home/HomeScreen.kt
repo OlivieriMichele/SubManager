@@ -17,6 +17,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.example.submanager.ui.screens.home.components.CategoriesButton
+import com.example.submanager.ui.screens.home.components.MainCard
+import com.example.submanager.ui.screens.home.components.StatsCards
 import com.example.submanager.ui.screens.home.components.SubscriptionListHeader
 import com.example.submanager.ui.screens.viewModel.HomeActions
 import com.example.submanager.ui.screens.viewModel.HomeState

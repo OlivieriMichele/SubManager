@@ -1,34 +1,43 @@
 package com.example.submanager.ui.screens.profile.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Contrast
 import androidx.compose.material.icons.filled.DarkMode
 import androidx.compose.material.icons.filled.Fingerprint
+import androidx.compose.material.icons.filled.LightMode
+import androidx.compose.material.icons.filled.Logout
 import androidx.compose.material.icons.filled.Mode
 import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
+import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -46,17 +55,23 @@ fun ProfileCard(authState: AuthState) {
             containerColor = MaterialTheme.colorScheme.surface
         )
     ) {
-        Box(modifier = Modifier.fillMaxWidth()) {
-            Column (
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
-            ){
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(20.dp)
+        ) {
+            // Row con Avatar e Info
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                // Avatar circolare
                 Box(
                     modifier = Modifier
                         .size(80.dp)
                         .clip(CircleShape)
-                        .background(MaterialTheme.colorScheme.primary), //Todo linear gradient
-                    contentAlignment = Alignment.Center,
+                        .background(brush = Brush.linearGradient(listOf(AccentColors.mainGradientStart, AccentColors.mainGradientEnd))),
+                    contentAlignment = Alignment.Center
                 ) {
                     Text(
                         text = getInitials(authState.email),
@@ -65,44 +80,63 @@ fun ProfileCard(authState: AuthState) {
                         color = MaterialTheme.colorScheme.onPrimary
                     )
                 }
+
+                Spacer(modifier = Modifier.width(16.dp))
+
+                // Colonna con info
+                Column(
+                    modifier = Modifier.weight(1f)
+                ) {
+                    // Nome utente
+                    Text(
+                        text = getUserName(authState.email),
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+
+                    Spacer(modifier = Modifier.height(2.dp))
+
+                    // Email
+                    Text(
+                        text = authState.email,
+                        fontSize = 13.sp,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
             }
 
-            Column(
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Bottone Modifica Profilo (full width con border)
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(20.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
+                    .height(44.dp)
+                    .clip(RoundedCornerShape(8.dp))
+                    .background(MaterialTheme.colorScheme.surface)
+                    .border(
+                        width = 1.dp,
+                        color = MaterialTheme.colorScheme.outlineVariant,
+                        shape = RoundedCornerShape(8.dp)
+                    )
+                    .padding(horizontal = 12.dp, vertical = 8.dp)
             ) {
-                Spacer(modifier = Modifier.height(12.dp))
-
-                Text(
-                    text = getUserName(authState.email),
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onSurface
+                Icon(
+                    imageVector = Icons.Default.Mode,
+                    contentDescription = null,
+                    tint = AccentColors.mainGradientStart,
+                    modifier = Modifier.size(18.dp)
                 )
-
+                Spacer(modifier = Modifier.width(6.dp))
                 Text(
-                    text = authState.email,
+                    text = "Modifica Profilo",
                     fontSize = 14.sp,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    color = AccentColors.mainGradientStart,
+                    fontWeight = FontWeight.Medium
                 )
-
-                Spacer(modifier = Modifier.height(8.dp))
-
-                TextButton(
-                    onClick = { /* TODO */ },
-                    colors = ButtonDefaults.textButtonColors(
-                        contentColor = AccentColors.mainGradientStart
-                    )
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Mode,
-                        contentDescription = null,
-                        modifier = Modifier.size(20.dp)
-                    )
-                    Text("Modifica profilo", fontSize = 14.sp)
-                }
             }
         }
     }
@@ -127,13 +161,17 @@ fun PreferencesSection(
         trailing = {
             Switch(
                 checked = isAutoTheme,
-                onCheckedChange = { onThemeToggle() }
+                onCheckedChange = { onThemeToggle() },
+                colors = SwitchDefaults.colors(
+                    checkedTrackColor = AccentColors.mainGradientEnd
+                )
             )
         }
     )
 
     SettingItem(
-        icon = Icons.Default.DarkMode,
+        icon = Icons.Default.LightMode,
+        iconTint = AccentColors.mainGradientEnd,
         title = "Tema Manuale",
         subtitle = if (currentManualTheme == Theme.Light) "Light" else "Dark",
         enabled = !isAutoTheme,
@@ -150,12 +188,16 @@ fun PreferencesSection(
 
     SettingItem(
         icon = Icons.Default.Notifications,
+        iconTint = AccentColors.mainGradientStart,
         title = "Notifiche",
         subtitle = "Ricevi promemoria rinnovi",
         trailing = {
             Switch(
                 checked = notificationsEnabled,
-                onCheckedChange = { onNotificationsToggle() }
+                onCheckedChange = { onNotificationsToggle() },
+                colors = SwitchDefaults.colors(
+                    checkedTrackColor = AccentColors.mainGradientStart
+                )
             )
         }
     )
@@ -164,7 +206,6 @@ fun PreferencesSection(
 @Composable
 fun SecuritySection(
     authState: AuthState,
-    onBiometricToggle: () -> Unit,
     onClearBiometricData: () -> Unit
 ) {
     SectionTitle("SICUREZZA")
@@ -172,38 +213,50 @@ fun SecuritySection(
 
     SettingItem(
         icon = Icons.Default.Fingerprint,
+        iconTint = Color(0xFF5DE361), // Verde
         title = "Face ID / Touch ID",
         subtitle = if (authState.canUseBiometric) "Attivo" else "Disattivo",
         trailing = {
             Switch(
                 checked = authState.canUseBiometric,
-                onCheckedChange = { onClearBiometricData() }
+                onCheckedChange = { onClearBiometricData() },
+                colors = SwitchDefaults.colors(
+                    checkedTrackColor = Color(0xFF4AB74E)
+                )
             )
         }
     )
-    /*
-    if (authState.canUseBiometric) {
-        Spacer(modifier = Modifier.height(8.dp))
+}
 
-        Button(
-            onClick = onClearBiometricData,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(56.dp),
-            shape = RoundedCornerShape(12.dp),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = MaterialTheme.colorScheme.errorContainer,
-                contentColor = MaterialTheme.colorScheme.error
-            )
-        ) {
-            Icon(
-                imageVector = Icons.Default.Lock,
-                contentDescription = null,
-                modifier = Modifier.size(20.dp)
-            )
-            Spacer(modifier = Modifier.width(8.dp))
-            Text("Elimina Credenziali Biometriche")
-        }
+@Composable
+fun LogoutSection(
+    onLogout: () -> Unit
+) {
+    SectionTitle("ACCOUNT")
+    Spacer(modifier = Modifier.height(12.dp))
+
+    Button(
+        onClick = onLogout,
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(56.dp),
+        shape = RoundedCornerShape(12.dp),
+        colors = ButtonDefaults.buttonColors(
+            containerColor = MaterialTheme.colorScheme.surface,
+            contentColor = AccentColors.darkIndigo
+        ),
+        border = ButtonDefaults.outlinedButtonBorder
+    ) {
+        Icon(
+            imageVector = Icons.Default.Logout,
+            contentDescription = null,
+            modifier = Modifier.size(20.dp)
+        )
+        Spacer(modifier = Modifier.width(8.dp))
+        Text(
+            text = "Esci dall'account",
+            fontSize = 16.sp,
+            fontWeight = FontWeight.Medium
+        )
     }
-     */
 }

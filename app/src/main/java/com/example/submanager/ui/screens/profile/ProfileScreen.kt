@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -16,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.submanager.data.models.Theme
 import com.example.submanager.ui.screens.profile.components.ClearBiometricDialog
+import com.example.submanager.ui.screens.profile.components.LogoutSection
 import com.example.submanager.ui.screens.profile.components.PreferencesSection
 import com.example.submanager.ui.screens.profile.components.ProfileCard
 import com.example.submanager.ui.screens.profile.components.SecuritySection
@@ -31,6 +34,7 @@ fun ProfileScreen(
     themeState: ThemeState,
     themeAction: ThemeAction,
     onNotificationsToggle: () -> Unit,
+    onLogout: () -> Unit
 ) {
     var showClearBiometricDialog by remember { mutableStateOf(false) }
     var notificationsEnabled by remember { mutableStateOf(true) }
@@ -52,6 +56,7 @@ fun ProfileScreen(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
+            .verticalScroll(rememberScrollState())
             .padding(horizontal = 24.dp)
     ) {
         Spacer(modifier = Modifier.height(16.dp))
@@ -78,10 +83,15 @@ fun ProfileScreen(
 
         SecuritySection(
             authState = authState,
-            onBiometricToggle = { authActions.toggleRememberMe() },
             onClearBiometricData = { showClearBiometricDialog = true }
         )
 
-        Spacer(modifier = Modifier.height(80.dp))
+        Spacer(modifier = Modifier.height(24.dp))
+
+        LogoutSection(
+            onLogout = onLogout
+        )
+
+        Spacer(modifier = Modifier.height(40.dp))
     }
 }
