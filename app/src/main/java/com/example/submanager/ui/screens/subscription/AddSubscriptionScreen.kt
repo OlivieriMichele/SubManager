@@ -1,6 +1,7 @@
 package com.example.submanager.ui.screens.subscription
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import com.example.submanager.ui.screens.viewModel.SubscriptionActions
 import com.example.submanager.ui.screens.viewModel.SubscriptionFormState
 
@@ -9,7 +10,10 @@ fun AddSubscriptionScreen(
     state: SubscriptionFormState,
     actions: SubscriptionActions
 ) {
-    actions.setEditMode(true)
+    LaunchedEffect(Unit) {
+        actions.resetForm()
+        actions.setEditMode(true)
+    }
     SubscriptionFormScreen(
         state = state,
         actions = actions

@@ -115,18 +115,6 @@ fun ClearBiometricDialog(
     )
 }
 
-@Composable
-fun ChevronRightIcon(enabled: Boolean = true) {
-    Icon(
-        imageVector = Icons.Default.ChevronRight,
-        contentDescription = null,
-        tint = if (enabled)
-            MaterialTheme.colorScheme.onSurfaceVariant
-        else
-            MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.3f)
-    )
-}
-
 fun getInitials(email: String): String {
     val name = email.substringBefore("@")
     return if (name.length >= 2) {
