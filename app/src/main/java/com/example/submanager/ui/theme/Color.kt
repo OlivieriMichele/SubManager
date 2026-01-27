@@ -52,10 +52,14 @@ object AccentColors {
     val darkPink = Color(0xFFF9A8D4) // pink-300
 
     // Colori per le icone (Subscription Card)
-    val pastelPurple = Color(0xFFAF88D5)// Netflix
-    val pastelBlue = Color(0xFFA5C4FF)// Spotify
-    val pastelIndigo = Color(0xFFC9BEE8)// Adobe CC
-    val pastelPink = Color(0xFFC29BB0)// Amazon Prime
-    val pastelYellow = Color(0xFFB4BE9F)// GitHub Pro
-    val pastelGreen = Color(0xFF338057) // Planet Fitness
+    val pastelPurple = Color(0xFF9341D2)
+    val magenta = Color(0xFFB4418E)
+    val pastelBlue = Color(0xFF1184A7)
+    val azure = Color(0xFF15A2A2)
+    val bue = Color(0xFF264653)
+    val pastelIndigo = Color(0xFFA793DC)
+    val pastelPink = Color(0xFFBD7099)
+    val pastelYellow = Color(0xFFEFB366)
+    val pastelGreen = Color(0xFF8AB17D)
+    val cerulean = Color(0xff43AA8B)
 }
