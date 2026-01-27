@@ -59,6 +59,8 @@ dependencies {
     implementation(libs.koin.androidx.compose)
     implementation(libs.androidx.datastore.preferences)
     implementation(libs.androidx.lifecycle.runtime.compose)
+    // Notifications
+    implementation("androidx.work:work-runtime-ktx:2.9.0")
 
     implementation("androidx.navigation:navigation-compose:2.8.9")
     implementation("io.ktor:ktor-serialization-kotlinx-json:2.3.8")

@@ -44,7 +44,7 @@ val appModule = module {
     single { get<SubManagerDatabase>().categoryDao() }
 
     // Repositories
-    single { SubscriptionRepository(get()) }
+    single { SubscriptionRepository(get(), androidContext()) }
     single { CategoryRepository(get(),get()) } // riceve subscriptionDao
     single { ThemeRepository(get()) } // riceve subscription e category Dao
     single { AuthRepository(get(), get()) }

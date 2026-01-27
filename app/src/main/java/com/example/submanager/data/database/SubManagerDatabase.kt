@@ -10,6 +10,7 @@ import com.example.submanager.ui.theme.AccentColors
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 import kotlin.concurrent.Volatile
 
 @Database(
@@ -64,22 +65,18 @@ abstract class SubManagerDatabase : RoomDatabase() {
                 categoryDAOs.insertAll(defaultCategories)
 
                 val subscriptions = listOf(
-                    // --- INTRATTENIMENTO ---
-                    SubscriptionEntity(0, "Netflix", 13.99, AccentColors.pastelPurple.toArgb(), 2024-6-15, "Intrattenimento"),
-                    SubscriptionEntity(0, "Disney+", 8.99, AccentColors.cerulean.toArgb(), 2024-6-20, "Intrattenimento"),
-                    SubscriptionEntity(0, "Spotify", 11.99, AccentColors.pastelGreen.toArgb(), 2024-6-5, "Intrattenimento"),
+                    // --- GENNAIO 2026 ---
+                    SubscriptionEntity(0, "Netflix", 13.99, AccentColors.pastelPurple.toArgb(), LocalDate.of(2026, 1, 15).toEpochDay(), "Intrattenimento"),
+                    SubscriptionEntity(0, "Disney+", 8.99, AccentColors.cerulean.toArgb(), LocalDate.of(2026, 1, 20).toEpochDay(), "Intrattenimento"),
+                    SubscriptionEntity(0, "Spotify", 11.99, AccentColors.pastelGreen.toArgb(), LocalDate.of(2026, 1, 5).toEpochDay(), "Intrattenimento"),
+                    SubscriptionEntity(0, "Fibra Ottica", 29.90, AccentColors.pastelIndigo.toArgb(), LocalDate.of(2026, 1, 1).toEpochDay(), "Casa"),
+                    SubscriptionEntity(0, "Plus", 13.99, 0xFF003087.toInt(), LocalDate.of(2026, 1, 10).toEpochDay(), "Shopping"),
 
-                    // --- FITNESS ---
-                    SubscriptionEntity(0, "Now Gym", 45.00, AccentColors.pastelYellow.toArgb(), 2024-7-1, "Fitness"),
-                    SubscriptionEntity(0, "Calisthenics Class", 25.00, 0xFF800080.toInt(), 2024-6-12, "Fitness"),
-
-                    // --- SHOPPING ---
-                    SubscriptionEntity(0, "Amazon Prime", 7.99, AccentColors.bue.toArgb(), 2024-6-28, "Shopping"),
-                    SubscriptionEntity(0, "Plus", 13.99, 0xFF003087.toInt(), 2024-6-10, "Shopping"),
-
-                    // --- CASA ---
-                    SubscriptionEntity(0, "Fibra Ottica", 29.90, AccentColors.pastelIndigo.toArgb(), 2024-6-1, "Casa"),
-                    SubscriptionEntity(0, "Affitto", 250.00, AccentColors.azure.toArgb(), 2024-7-1, "Casa")
+                    // --- FEBBRAIO 2026 ---
+                    SubscriptionEntity(0, "Now Gym", 45.00, AccentColors.pastelYellow.toArgb(), LocalDate.of(2026, 2, 1).toEpochDay(), "Fitness"),
+                    SubscriptionEntity(0, "Calisthenics Class", 25.00, AccentColors.magenta.toArgb(), LocalDate.of(2026, 2, 12).toEpochDay(), "Fitness"),
+                    SubscriptionEntity(0, "Amazon Prime", 7.99, AccentColors.bue.toArgb(), LocalDate.of(2026, 2, 28).toEpochDay(), "Shopping"),
+                    SubscriptionEntity(0, "Affitto", 250.00, AccentColors.azure.toArgb(), LocalDate.of(2026, 2, 1).toEpochDay(), "Casa")
                 )
 
                 subscriptionDAOs.insertAll(subscriptions)
