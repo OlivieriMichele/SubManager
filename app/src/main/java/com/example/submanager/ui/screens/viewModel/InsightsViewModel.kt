@@ -59,7 +59,7 @@ class InsightsViewModel(
         val mostExpensiveCat = categoriesWithStats.maxByOrNull { it.total }?.name
 
         // TODO: Calcolare da storico reale quando hai Room DB
-        val lastMonthTotal = 85.85
+        val lastMonthTotal = 420.85
         val percentageChange = if (lastMonthTotal > 0) {
             ((totalMonthly - lastMonthTotal) / lastMonthTotal) * 100
         } else {
@@ -71,11 +71,11 @@ class InsightsViewModel(
 
         // TODO: Caricare da database
         val monthsData = listOf(
-            MonthData("Giu", 87.20),
-            MonthData("Lug", 87.20),
-            MonthData("Ago", 87.20),
-            MonthData("Set", 87.20),
-            MonthData("Ott", 87.20)
+            MonthData("Ago", 320.20),
+            MonthData("Set", 380.20),
+            MonthData("Ott", 430.20),
+            MonthData("Nov", 460.20),
+            MonthData("Dic", 420.20)
         )
 
         InsightsState(

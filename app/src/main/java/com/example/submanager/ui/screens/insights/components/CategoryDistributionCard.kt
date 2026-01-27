@@ -27,12 +27,12 @@ import com.example.submanager.ui.theme.AccentColors
 @Composable
 fun CategoryDistributionCard(categories: List<Category>) {
     val colors = listOf( // Todo: use colorScheme and a separator in the graph
-        AccentColors.pastelPink,
-        AccentColors.pastelGreen,
-        AccentColors.pastelBlue,
-        AccentColors.pastelIndigo,
         AccentColors.pastelPurple,
-        AccentColors.pastelYellow
+        AccentColors.pastelIndigo,
+        AccentColors.cerulean,
+        AccentColors.pastelBlue,
+        AccentColors.pastelGreen,
+        AccentColors.pastelPurple
     )
 
     val total = categories.sumOf { it.total }
@@ -74,12 +74,12 @@ fun CategoryDistributionCard(categories: List<Category>) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(200.dp),
+                .height(150.dp),
             contentAlignment = Alignment.Center
         ) {
             DonutChart(
                 data = categoriesWithPercentage,
-                modifier = Modifier.size(160.dp)
+                modifier = Modifier.size(140.dp)
             )
         }
 
@@ -125,7 +125,7 @@ private fun DonutChart(
 ) {
     Box(
         modifier = modifier.drawBehind {
-            val strokeWidth = 40f
+            val strokeWidth = 60f
             val radius = (size.minDimension - strokeWidth) / 2
             val centerX = size.width / 2
             val centerY = size.height / 2

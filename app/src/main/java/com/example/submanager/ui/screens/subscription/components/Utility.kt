@@ -22,6 +22,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.submanager.ui.theme.AccentColors
 
 @Composable
 fun IconPreview(
@@ -89,11 +90,15 @@ fun ColorPicker(
 // Colori predefiniti
 object SubscriptionColors {
     val availableColors = listOf(
-        Color(0xFFC4B5FD), // Pastel Purple 1
-        Color(0xFFBAE6FD), // Pastel Blue 1
-        Color(0xFFA78BFA), // Pastel Purple 2
-        Color(0xFF93C5FD), // Pastel Blue 2
-        Color(0xFFFBCFE8), // Pink
-        Color(0xFF99F6E4)  // Turquoise
+        AccentColors.pastelPurple,
+        AccentColors.magenta,
+        AccentColors.pastelBlue,
+        AccentColors.azure,
+        AccentColors.bue,
+        AccentColors.pastelIndigo,
+        AccentColors.pastelPink,
+        AccentColors.pastelYellow,
+        AccentColors.pastelGreen,
+        AccentColors.cerulean
     )
 }
