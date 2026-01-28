@@ -64,6 +64,8 @@ fun NavBackStackEntry.getCurrentScreen(): Screen? {
 fun SubNavigation(
     navController: NavHostController,
     themeViewModel: ThemeViewModel,
+    pendingSubscriptionId: Int?,
+    onSubscriptionNavigated: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val authViewModel = koinViewModel<AuthViewModel>()
@@ -72,6 +74,18 @@ fun SubNavigation(
 
     val authState by authViewModel.state.collectAsStateWithLifecycle()
     val startDestination = if (authState.isAuthenticated) Screen.Home else Screen.Login
+
+    // GESTIONE DEEP LINK DA NOTIFICA
+    LaunchedEffect(pendingSubscriptionId, authState.isAuthenticated) {
+        if (pendingSubscriptionId != null && authState.isAuthenticated) {
+            // Naviga alla schermata della subscription
+            navController.navigate(Screen.ViewSubscription(pendingSubscriptionId)) {
+                // Opzionale: pulisci lo stack fino a Home
+                popUpTo(Screen.Home) { inclusive = false }
+            }
+            onSubscriptionNavigated() // Reset del pending ID
+        }
+    }
 
     NavHost(
         navController = navController,

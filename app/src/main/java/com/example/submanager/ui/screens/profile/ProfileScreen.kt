@@ -93,13 +93,13 @@ fun ProfileScreen(
             onClearBiometricData = { showClearBiometricDialog = true }
         )
 
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(12.dp))
 
         Button(
             onClick = {
                 NotificationHelper.showSubscriptionReminderNotification(
                     context = context,
-                    subscriptionId = 999,
+                    subscriptionId = 5,
                     subscriptionName = "Test Netflix",
                     price = 13.99,
                     daysUntilRenewal = 1

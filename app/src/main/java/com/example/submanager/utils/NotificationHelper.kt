@@ -23,6 +23,9 @@ object NotificationHelper {
     private const val CHANNEL_NAME = "Promemoria Abbonamenti"
     private const val CHANNEL_DESCRIPTION = "Notifiche per i rinnovi degli abbonamenti"
 
+    const val ACTION_OPEN_SUBSCRIPTINON = "com.example.submanager.OPEN_SUBSCRIPTION"
+    const val EXTRA_SUBSCRIPTION_ID = "subscription_id"
+
     /**
      * Crea il canale di notifica (richiesto per Android 8.0+)
      */
@@ -62,9 +65,11 @@ object NotificationHelper {
 
         // Intent per aprire l'app quando si clicca la notifica
         val intent = Intent(context, MainActivity::class.java).apply {
-            action = "com.example.submanager.OPEN_SUBSCRIPTION"
-            putExtra("subscription_id", subscriptionId)
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
+            action = ACTION_OPEN_SUBSCRIPTINON
+            putExtra(EXTRA_SUBSCRIPTION_ID, subscriptionId)
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or
+                    Intent.FLAG_ACTIVITY_CLEAR_TOP or
+                    Intent.FLAG_ACTIVITY_SINGLE_TOP
         }
 
         val pendingIntent = PendingIntent.getActivity(
