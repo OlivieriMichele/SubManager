@@ -1,8 +1,12 @@
 package com.example.submanager.ui
 
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavBackStackEntry
@@ -74,16 +78,32 @@ fun SubNavigation(
 
     val authState by authViewModel.state.collectAsStateWithLifecycle()
     val startDestination = if (authState.isAuthenticated) Screen.Home else Screen.Login
+    var savedPendingId by remember { mutableStateOf<Int?>(null) }
 
-    // GESTIONE DEEP LINK DA NOTIFICA
-    LaunchedEffect(pendingSubscriptionId, authState.isAuthenticated) {
-        if (pendingSubscriptionId != null && authState.isAuthenticated) {
-            // Naviga alla schermata della subscription
-            navController.navigate(Screen.ViewSubscription(pendingSubscriptionId)) {
-                // Opzionale: pulisci lo stack fino a Home
-                popUpTo(Screen.Home) { inclusive = false }
+    // Gestione deep link da notifica
+    LaunchedEffect(pendingSubscriptionId) {
+        if (pendingSubscriptionId != null) {
+            Log.d("SubNavigation", "Salvato pending ID: $pendingSubscriptionId")
+            savedPendingId = pendingSubscriptionId
+        }
+    }
+
+    // Naviga SOLO quando l'utente è autenticato e c'è un ID salvato
+    LaunchedEffect(authState.isAuthenticated, savedPendingId) {
+        if (authState.isAuthenticated && savedPendingId != null) {
+            Log.d("SubNavigation", "Navigazione a subscription: $savedPendingId")
+
+            // Aspetta un frame per essere sicuri che NavHost sia pronto
+            kotlinx.coroutines.delay(100)
+
+            navController.navigate(Screen.ViewSubscription(savedPendingId!!)) {
+                // Non pulire lo stack, così l'utente può tornare indietro
+                launchSingleTop = true
             }
-            onSubscriptionNavigated() // Reset del pending ID
+
+            // Reset degli ID
+            savedPendingId = null
+            onSubscriptionNavigated()
         }
     }
 
@@ -94,13 +114,6 @@ fun SubNavigation(
     ) {
         // Login
         composable<Screen.Login> {
-            LaunchedEffect(authState.isAuthenticated) {
-                if (authState.isAuthenticated) {
-                    navController.navigate(Screen.Home) {
-                        popUpTo(Screen.Login) { inclusive = true }
-                    }
-                }
-            }
 
             LoginScreen(
                 state = authState,
@@ -111,14 +124,6 @@ fun SubNavigation(
 
         // SignIn Screen
         composable<Screen.Register> {
-            LaunchedEffect(authState.isAuthenticated) {
-                if (authState.isAuthenticated) {
-                    navController.navigate(Screen.Home) {
-                        popUpTo(Screen.Register) { inclusive = true }
-                    }
-                }
-            }
-
             SignInScreen(
                 state = authState,
                 actions = authViewModel.actions,

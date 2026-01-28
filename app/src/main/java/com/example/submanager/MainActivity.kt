@@ -111,7 +111,7 @@ class MainActivity : FragmentActivity() {
         handleNotificationIntent(intent)
     }
 
-    // ⭐ Estrae l'ID della subscription dall'intent
+    // Estrae l'ID della subscription dall'intent
     private fun handleNotificationIntent(intent: Intent?) {
         if (intent?.action == NotificationHelper.ACTION_OPEN_SUBSCRIPTINON) {
             val subscriptionId = intent.getIntExtra(NotificationHelper.EXTRA_SUBSCRIPTION_ID, -1)

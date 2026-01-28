@@ -99,8 +99,8 @@ fun ProfileScreen(
             onClick = {
                 NotificationHelper.showSubscriptionReminderNotification(
                     context = context,
-                    subscriptionId = 5,
-                    subscriptionName = "Test Netflix",
+                    subscriptionId = 1,
+                    subscriptionName = "Netflix",
                     price = 13.99,
                     daysUntilRenewal = 1
                 )
